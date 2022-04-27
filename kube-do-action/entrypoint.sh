@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxo pipefail
+
 ##############################
 
 PARAM_ACCESS_TOKEN=${1:?"Missing ACCESS_TOKEN"}
@@ -16,3 +18,9 @@ echo "[*] ENABLED=${PARAM_ENABLED}"
 echo "::set-output name=status::OK"
 
 echo "[-] kube-do"
+
+# TODO
+# standard_init_linux.go:228: exec user process caused: no such file or directory
+
+# TODO
+# test locally "act"
