@@ -9,5 +9,8 @@ https://github.com/managedkaos/github-actions-two-actions
 
 --- docker
 
+# see tags
+https://blog.oddbit.com/post/2020-09-25-building-multi-architecture-im
+
 # tags (unauthorized)
 http https://registry.hub.docker.com/v2/hckops/kube-base/tags/list
