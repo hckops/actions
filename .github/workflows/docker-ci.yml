@@ -29,8 +29,7 @@ jobs:
       - name: Build and push kube-base
         uses: docker/build-push-action@v2
         with:
-          context: ./docker
-          file: {context}/Dockerfile.base
+          file: ./docker/Dockerfile.base
           # if false it will only build
           push: false
           tags: ${{ env.REPOSITORY_NAME }}/kube-base:latest
