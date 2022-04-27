@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./docker
-          file: ./Dockerfile.base
+          file: {context}/Dockerfile.base
           # if false it will only build
           push: false
           tags: ${{ env.REPOSITORY_NAME }}/kube-base:latest
