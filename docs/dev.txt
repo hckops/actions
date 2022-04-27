@@ -1,0 +1,13 @@
+--- actions
+
+https://github.com/sdras/awesome-actions
+https://www.philschmid.de/create-custom-github-action-in-4-steps
+
+# examples
+https://github.com/netlify/actions
+https://github.com/managedkaos/github-actions-two-actions
+
+--- docker
+
+# tags (unauthorized)
+http https://registry.hub.docker.com/v2/hckops/kube-base/tags/list
