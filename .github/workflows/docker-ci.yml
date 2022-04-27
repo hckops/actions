@@ -32,5 +32,21 @@ jobs:
           context: ./docker
           file: ./docker/Dockerfile.base
           # if false it will only build
-          push: false
+          push: true
           tags: ${{ env.REPOSITORY_NAME }}/kube-base:latest
+
+      - name: Build and push kube-do
+        uses: docker/build-push-action@v2
+        with:
+          context: ./docker
+          file: ./docker/Dockerfile.do
+          push: true
+          tags: ${{ env.REPOSITORY_NAME }}/kube-do:latest
+
+      - name: Build and push kube-aws
+        uses: docker/build-push-action@v2
+        with:
+          context: ./docker
+          file: ./docker/Dockerfile.aws
+          push: true
+          tags: ${{ env.REPOSITORY_NAME }}/kube-aws:latest
