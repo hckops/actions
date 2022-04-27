@@ -1,0 +1,29 @@
+name: Test Kubernetes DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-kube-*.yml'
+      - 'kube-do-action/**'
+
+jobs:
+  test-kube-do:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      # TODO private repository only
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Test input
+        uses: ./kube-do-action
+        id: test-input
+        with:
+          access-token: TODO_ACCESS_TOKEN
+          config-path: TODO_CONFIG_PATH
+          enabled: false
+
+      - name: Test output
+        run: echo "Output status ${{ steps.test-input.outputs.status }}"

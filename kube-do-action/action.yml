@@ -1,0 +1,26 @@
+name: 'Kubernetes DigitalOcean Cluster'
+description: 'Manage DigitalOcean Kubernetes cluster lifecycle'
+
+inputs:
+  access-token:
+    description: 'Digital Ocean access token'
+    required: true
+  # TODO schema
+  config-path:
+    description: 'Path of the configuration file'
+    required: true
+  enabled:
+    description: 'Dry run'
+    required: false
+    default: true
+outputs:
+  status:
+    description: 'Current status of the cluster'
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.access-token }}
+    - ${{ inputs.config-path }}
+    - ${{ inputs.enabled }}
