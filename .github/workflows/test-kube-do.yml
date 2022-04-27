@@ -19,7 +19,6 @@ jobs:
 
       - name: Test input
         uses: ./kube-do-action
-        context: ./kube-do-action
         id: test-input
         with:
           access-token: TODO_ACCESS_TOKEN
