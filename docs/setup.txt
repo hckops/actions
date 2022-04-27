@@ -1,0 +1,9 @@
+--- setup github actions
+
+# add action secrets
+https://github.com/hckops/actions/settings/secrets/actions
+
+# docker-ci
+# https://hub.docker.com/settings/security
+* DOCKERHUB_USERNAME
+* DOCKERHUB_TOKEN
