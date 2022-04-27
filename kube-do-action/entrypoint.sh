@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euxo pipefail
-
 ##############################
 
 PARAM_ACCESS_TOKEN=${1:?"Missing ACCESS_TOKEN"}
