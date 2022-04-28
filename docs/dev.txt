@@ -10,7 +10,6 @@ https://github.com/managedkaos/github-actions-two-actions
 # local
 https://github.com/nektos/act
 
-
 --- docker
 
 # see tags
@@ -18,3 +17,15 @@ https://blog.oddbit.com/post/2020-09-25-building-multi-architecture-im
 
 # tags (unauthorized)
 http https://registry.hub.docker.com/v2/hckops/kube-base/tags/list
+
+--- git
+
+https://stackoverflow.com/questions/5586383/how-to-diff-one-file-to-an-arbitrary-version-in-git
+https://stackoverflow.com/questions/1125476/retrieve-a-single-file-from-a-repository
+https://stackoverflow.com/questions/3489173/how-to-clone-git-repository-with-specific-revision-changeset
+https://gist.github.com/ssp/1663093
+
+# diff
+git diff main~1:.github/workflows/test-kube-do.yml main:.github/workflows/test-kube-do.yml
+# yaml
+yq -r '.status' examples/kube-do-sample.yaml
