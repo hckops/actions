@@ -1,0 +1,9 @@
+version: 1
+name: do-sample
+provider: digitalocean
+status: UP
+
+config:
+  region: lon1
+  size: s-1vcpu-2gb
+  count: 3
