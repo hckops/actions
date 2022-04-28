@@ -21,8 +21,8 @@ jobs:
         uses: ./kube-do-action
         id: test-input
         with:
-          access-token: TODO_ACCESS_TOKEN
-          config-path: TODO_CONFIG_PATH
+          access-token: ${{ secrets.SECRET_ACCESS_TOKEN }}
+          config-path: ${{ secrets.SECRET_CONFIG_PATH }}
           enabled: false
 
       - name: Test output
