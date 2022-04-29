@@ -25,7 +25,7 @@ function fetch_commit_sha {
   echo $(curl -sSL \
     -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H "Accept: application/vnd.github.v3+json" \
-    ${COMMITS_URL} | jq -r --arg COMMIT_INDEX "${COMMIT_INDEX}" '.[$COMMIT_INDEX].sha')
+    ${COMMITS_URL} | jq -r --arg COMMIT_INDEX "${COMMIT_INDEX}" '.[$COMMIT_INDEX|tonumber].sha')
 }
 
 # param #1: <string>
