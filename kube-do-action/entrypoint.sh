@@ -45,8 +45,8 @@ function download_file {
 
 echo "[+] kube-do"
 
-LATEST_CONFIG_PATH="/tmp/${PARAM_CONFIG_PATH}-latest"
-PREVIOUS_CONFIG_PATH="/tmp/${PARAM_CONFIG_PATH}-previous"
+LATEST_CONFIG_PATH="/tmp/config-latest"
+PREVIOUS_CONFIG_PATH="/tmp/config-previous"
 PREVIOUS_COMMIT=$(previous_commit_sha)
 
 # global
@@ -61,6 +61,7 @@ echo "[*] LATEST_CONFIG_PATH=${LATEST_CONFIG_PATH}"
 echo "[*] PREVIOUS_CONFIG_PATH=${PREVIOUS_CONFIG_PATH}"
 echo "[*] PREVIOUS_COMMIT=${PREVIOUS_COMMIT}"
 
+# TODO default branch ?
 download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
 download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 

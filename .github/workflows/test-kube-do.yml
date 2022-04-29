@@ -22,8 +22,8 @@ jobs:
         id: test-input
         with:
           github-token: ${{ github.token }} # TODO remove, see actions/checkout
-          access-token: ${{ secrets.SECRET_ACCESS_TOKEN }}
-          config-path: ${{ secrets.SECRET_CONFIG_PATH }}
+          access-token: TODO_SECRET_ACCESS_TOKEN
+          config-path: examples/kube-do-sample.yaml
           enabled: false
 
       - name: Test output
