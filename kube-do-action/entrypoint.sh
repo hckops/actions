@@ -60,6 +60,10 @@ PREVIOUS_COMMIT=$(previous_commit_sha)
 download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
 download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
+# TODO debug
+cat ${LATEST_CONFIG_PATH}
+cat ${PREVIOUS_CONFIG_PATH}
+
 # TODO if they are different start/stop cluster
 yq e '.status' ${LATEST_CONFIG_PATH}
 yq e '.status' ${PREVIOUS_CONFIG_PATH
