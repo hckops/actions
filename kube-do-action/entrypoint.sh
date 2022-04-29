@@ -11,28 +11,69 @@ PARAM_ENABLED=${4:?"Missing ENABLED"}
 
 ##############################
 
+# global param: <PARAM_GITHUB_TOKEN>
+# action param: <GITHUB_REPOSITORY>
+# returns SHA
+function previous_commit_sha {
+  local COMMITS_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?per_page=2&page=1"
+  local TMP_OUTPUT="/tmp/commits"
+
+  # downloads the last 2 commits and get the previous sha
+  curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
+    -H "Accept: application/vnd.github.v3+json" \
+    -o ${TMP_OUTPUT} \
+    ${COMMITS_URL}
+
+  # debug
+  cat ${TMP_OUTPUT}
+
+  echo $(cat ${TMP_OUTPUT} | jq -r '.[1].sha')
+}
+
+# param #1: <string>
+# param #2: <string>
+# param #3: <string>
+# global param: <PARAM_GITHUB_TOKEN>
+# action param: <GITHUB_REPOSITORY>
+function download_file {
+  local FILE_PATH=$1
+  local OUTPUT_PATH=$2
+  # default ""
+  local COMMIT_REF=${3:-""}
+
+  curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
+    -H 'Accept: application/vnd.github.v3.raw' \
+    -o /tmp/${OUTPUT_PATH} \
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}?ref=${COMMIT_REF}"
+}
+
+##############################
+
 echo "[+] kube-do"
+
+LATEST_CONFIG_PATH="/tmp/${PARAM_CONFIG_PATH}-latest"
+PREVIOUS_CONFIG_PATH="/tmp/${PARAM_CONFIG_PATH}-previous"
+PREVIOUS_COMMIT=$(previous_commit_sha)
+
+# global
+echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
+# params
 echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
 echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
+# tmp
+echo "[*] LATEST_CONFIG_PATH=${LATEST_CONFIG_PATH}"
+echo "[*] PREVIOUS_CONFIG_PATH=${PREVIOUS_CONFIG_PATH}"
+echo "[*] PREVIOUS_COMMIT=${PREVIOUS_COMMIT}"
 
-printenv
+download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
+download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
-# downloads only the last 2 commits
-curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
-  -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?per_page=2&page=1"
-
-# TODO use the second to last commit sha to download the previous config
-
-curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
-  -H 'Accept: application/vnd.github.v3.raw' \
-  -o /tmp/${PARAM_CONFIG_PATH} \
-  "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${PARAM_CONFIG_PATH}"
-
-pwd
 ls -la /tmp
+# TODO if they are different start/stop cluster
+yq -r '.status' ${LATEST_CONFIG_PATH}
+yq -r '.status' ${PREVIOUS_CONFIG_PATH
 
 echo "::set-output name=status::OK"
 
