@@ -31,3 +31,9 @@ https://gist.github.com/madrobby/9476733
 git diff main~1:.github/workflows/test-kube-do.yml main:.github/workflows/test-kube-do.yml
 # yaml
 yq -r '.status' examples/kube-do-sample.yaml
+
+--- github
+
+https://docs.github.com/en/actions/learn-github-actions/environment-variables
+https://docs.github.com/en/rest/commits/commits
+https://docs.github.com/en/rest/repos/contents
