@@ -61,8 +61,8 @@ download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
 download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
 # TODO if they are different start/stop cluster
-cat ${LATEST_CONFIG_PATH} | yq -r '.status'
-cat ${PREVIOUS_CONFIG_PATH} | yq -r '.status'
+yq e '.status' ${LATEST_CONFIG_PATH}
+yq e '.status' ${PREVIOUS_CONFIG_PATH
 
 echo "::set-output name=status::OK"
 
