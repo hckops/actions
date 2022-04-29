@@ -23,7 +23,9 @@ http https://registry.hub.docker.com/v2/hckops/kube-base/tags/list
 https://stackoverflow.com/questions/5586383/how-to-diff-one-file-to-an-arbitrary-version-in-git
 https://stackoverflow.com/questions/1125476/retrieve-a-single-file-from-a-repository
 https://stackoverflow.com/questions/3489173/how-to-clone-git-repository-with-specific-revision-changeset
+https://stackoverflow.com/questions/18126559/how-can-i-download-a-single-raw-file-from-a-private-github-repo-using-the-comman
 https://gist.github.com/ssp/1663093
+https://gist.github.com/madrobby/9476733
 
 # diff
 git diff main~1:.github/workflows/test-kube-do.yml main:.github/workflows/test-kube-do.yml

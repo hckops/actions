@@ -17,10 +17,15 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 
-git clone --branch=main --depth=1 "https://${PARAM_GITHUB_TOKEN}@github.com/hckops/actions.git" /tmp/action-main
+#git clone --branch=main --depth=1 "https://${PARAM_GITHUB_TOKEN}@github.com/hckops/actions.git" /tmp/action-main
+
+curl -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
+  -H 'Accept: application/vnd.github.v3.raw' \
+  -o /tmp/README.md \
+  -L https://api.github.com/repos/hckops/actions/contents/README.md?ref=main
 
 pwd
-ls -la /tmp/action-main
+ls -la /tmp
 
 echo "::set-output name=status::OK"
 
