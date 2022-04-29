@@ -15,6 +15,8 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 
+git clone --branch=main --depth=1 git@github.com:hckops/actions.git /tmp/action-main
+
 echo "::set-output name=status::OK"
 
 echo "[-] kube-do"
