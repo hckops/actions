@@ -60,10 +60,9 @@ PREVIOUS_COMMIT=$(previous_commit_sha)
 download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
 download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
-ls -la /tmp
 # TODO if they are different start/stop cluster
-yq -r '.status' ${LATEST_CONFIG_PATH}
-yq -r '.status' ${PREVIOUS_CONFIG_PATH
+cat ${LATEST_CONFIG_PATH} | yq -r '.status'
+cat ${PREVIOUS_CONFIG_PATH} | yq -r '.status'
 
 echo "::set-output name=status::OK"
 
