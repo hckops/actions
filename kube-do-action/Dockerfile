@@ -1,9 +1,4 @@
-FROM alpine:3.15
-
-RUN apk upgrade --update && apk --no-cache add \
-  bash \
-  git \
-  curl
+FROM hckops/kube-base
 
 COPY entrypoint.sh /entrypoint.sh
 
