@@ -16,18 +16,12 @@ PARAM_ENABLED=${4:?"Missing ENABLED"}
 # returns SHA
 function previous_commit_sha {
   local COMMITS_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?per_page=2&page=1"
-  local TMP_OUTPUT="/tmp/commits"
 
-  # downloads the last 2 commits and get the previous sha
-  curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
+  # downloads the last 2 commits and extracts the previous sha
+  echo $(curl -sSL \
+    -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H "Accept: application/vnd.github.v3+json" \
-    -o ${TMP_OUTPUT} \
-    ${COMMITS_URL}
-
-  # debug
-  cat ${TMP_OUTPUT}
-
-  echo $(cat ${TMP_OUTPUT} | jq -r '.[1].sha')
+    ${COMMITS_URL} | jq -r '.[1].sha')
 }
 
 # param #1: <string>
