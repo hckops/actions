@@ -34,20 +34,17 @@ function download_file {
   local OUTPUT_PATH=$2
   # default ""
   local COMMIT_REF=${3:-""}
-  echo "[*] COMMIT_REF=${COMMIT_REF}"
+  echo "[-] OUTPUT_PATH=${OUTPUT_PATH} | COMMIT_REF=${COMMIT_REF}"
 
   curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H 'Accept: application/vnd.github.v3.raw' \
-    -o "/tmp/${OUTPUT_PATH}" \
+    -o ${OUTPUT_PATH} \
     "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}?ref=${COMMIT_REF}"
 }
 
 ##############################
 
 echo "[+] kube-do"
-
-PREVIOUS_COMMIT=$(previous_commit_sha)
-
 # global
 echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
 # params
@@ -56,8 +53,12 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 
-download_file ${PARAM_CONFIG_PATH} "latest"
-download_file ${PARAM_CONFIG_PATH} "previous" ${PREVIOUS_COMMIT}
+LATEST_CONFIG_PATH="/tmp/latest"
+PREVIOUS_CONFIG_PATH="/tmp/previous"
+PREVIOUS_COMMIT=$(previous_commit_sha)
+
+download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH}
+download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
 ls -la /tmp
 # TODO if they are different start/stop cluster
