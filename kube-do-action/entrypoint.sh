@@ -35,9 +35,9 @@ function download_file {
   # default ""
   local COMMIT_REF=${3:-""}
 
-  curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
+  curl -L -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H 'Accept: application/vnd.github.v3.raw' \
-    -o /tmp/${OUTPUT_PATH} \
+    -o "/tmp/${OUTPUT_PATH}" \
     "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}?ref=${COMMIT_REF}"
 }
 
