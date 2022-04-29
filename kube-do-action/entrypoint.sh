@@ -17,7 +17,7 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 
-git clone --branch=main --depth=1 "https://${GITHUB_TOKEN}@github.com/hckops/actions.git" /tmp/action-main
+git clone --branch=main --depth=1 "https://${PARAM_GITHUB_TOKEN}@github.com/hckops/actions.git" /tmp/action-main
 
 pwd
 ls -la /tmp/action-main

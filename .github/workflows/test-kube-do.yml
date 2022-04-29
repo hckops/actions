@@ -21,6 +21,7 @@ jobs:
         uses: ./kube-do-action
         id: test-input
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # TODO remove, see actions/checkout
           access-token: ${{ secrets.SECRET_ACCESS_TOKEN }}
           config-path: ${{ secrets.SECRET_CONFIG_PATH }}
           enabled: false
