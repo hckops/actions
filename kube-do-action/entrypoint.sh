@@ -64,12 +64,13 @@ function doctl_cluster {
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
 
-      # add --wait to pause until ready
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --count ${CLUSTER_COUNT} \
         --region ${CLUSTER_REGION} \
-        --size ${CLUSTER_SIZE}
+        --size ${CLUSTER_SIZE} \
+        --tags "kube-do-action" \
+        --wait false
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
