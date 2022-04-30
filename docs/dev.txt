@@ -10,6 +10,9 @@ https://github.com/managedkaos/github-actions-two-actions
 # local
 https://github.com/nektos/act
 
+# install
+curl -sSL https://github.com/nektos/act/releases/download/v0.2.26/act_Linux_x86_64.tar.gz | sudo tar -xzf - -C /usr/local/bin
+
 --- docker
 
 # see tags
