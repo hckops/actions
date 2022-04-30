@@ -1,7 +1,7 @@
 version: 1
 name: do-sample
 provider: digitalocean
-status: UP
+status: DOWN
 
 # TODO add tags
 # TODO flag to wait creation (default false)

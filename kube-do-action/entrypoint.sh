@@ -48,6 +48,7 @@ function download_file {
 # param #1: <string>
 # param #2: <string>
 # global param: <PARAM_ACCESS_TOKEN>
+# action param: <GITHUB_REPOSITORY>
 function doctl_cluster {
   local PARAM_ACTION=$1
   local CONFIG_PATH=$2
@@ -69,7 +70,7 @@ function doctl_cluster {
         --count ${CLUSTER_COUNT} \
         --region ${CLUSTER_REGION} \
         --size ${CLUSTER_SIZE} \
-        --tags "kube-do-action" \
+        --tag "repository:${GITHUB_REPOSITORY}" \
         --wait false
     ;;
     "delete")
@@ -111,10 +112,10 @@ if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "[*] Action enabled"
 
   if [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
-    # TODO check status of the cluster
+    # TODO check real status of the cluster
     echo "[*] Cluster is already ${CURRENT_STATUS}"
   else
-    echo "[*] Updating cluster status to ${CURRENT_STATUS}"
+    echo "[*] Update cluster status to ${CURRENT_STATUS}"
 
     [[ ${CURRENT_STATUS} == "UP" ]] && \
       doctl_cluster "create" ${CURRENT_CONFIG_PATH}
