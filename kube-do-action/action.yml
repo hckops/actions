@@ -27,6 +27,8 @@ inputs:
 outputs:
   status:
     description: 'Current status of the cluster'
+  config:
+    description: 'Name of the kubeconfig file'
 
 runs:
   using: docker

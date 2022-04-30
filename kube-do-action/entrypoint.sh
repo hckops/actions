@@ -59,12 +59,6 @@ function doctl_cluster {
   echo "[-] ACTION=${PARAM_ACTION}"
   echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
 
-  # TODO override default?
-  #local KUBE_CONFIG="${HOME}/.kube/${REPOSITORY_NAME}-kubeconfig.yaml"
-  local KUBE_CONFIG_DIR="${HOME}/.kube"
-  local KUBE_CONFIG="${KUBE_CONFIG_DIR}/config"
-  echo "[-] KUBE_CONFIG=${KUBE_CONFIG}"
-
   case ${PARAM_ACTION} in
     "create")
       local CLUSTER_COUNT=$(yq e '.config.count' ${CONFIG_PATH})
@@ -85,10 +79,15 @@ function doctl_cluster {
         --wait=${PARAM_WAIT}
     ;;
     "config")
-      mkdir -p ${KUBE_CONFIG_DIR}
+      local KUBE_CONFIG="${REPOSITORY_NAME}-kubeconfig.yaml"
+      echo "[-] KUBE_CONFIG=${KUBE_CONFIG}"
 
+      # save it the root directory
       doctl kubernetes cluster kubeconfig show ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} > ${KUBE_CONFIG}
+      
+      # returns config name
+      echo "::set-output name=config::${KUBE_CONFIG}"
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
