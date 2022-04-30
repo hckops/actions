@@ -14,6 +14,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      # required because it's not in the marketplace
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Provision
         uses: ./kube-do-action
         id: provision
