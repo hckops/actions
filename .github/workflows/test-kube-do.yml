@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/test-kube-*.yml'
+      - 'examples/kube-*.yaml'
       - 'kube-do-action/**'
 
 # TODO notification
