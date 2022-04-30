@@ -4,7 +4,7 @@ set -euo pipefail
 
 ##############################
 
-PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
+PARAM_GITHUB_TOKEN=${ACTIONS_RUNTIME_TOKEN}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
 PARAM_ENABLED=${4:?"Missing ENABLED"}
@@ -131,7 +131,7 @@ if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "::set-output name=status::${CURRENT_STATUS}"
 else
   echo "[*] Action disabled"
-  echo "::set-output name=status::${PREVIOUS_CONFIG_PATH}"
+  echo "::set-output name=status::${PREVIOUS_STATUS}"
 fi
 
 echo "[-] kube-do"
