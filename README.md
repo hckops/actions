@@ -18,7 +18,7 @@ docker run --rm hckops/kube-base /bin/bash -c <kubectl|helm|argocd>
 docker run --rm --name hck-kube -it hckops/kube-<base|aws|do>
 ```
 
-***How to test action locally***
+***How to test action locally*** TODO
 
 * [act](https://github.com/nektos/act)
 
