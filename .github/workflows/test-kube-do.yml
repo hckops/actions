@@ -8,6 +8,7 @@ on:
       - '.github/workflows/test-kube-*.yml'
       - 'kube-do-action/**'
 
+# TODO notification
 jobs:
   test-kube-do:
     name: Test

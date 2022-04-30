@@ -64,16 +64,12 @@ function doctl_cluster {
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
 
+      # add --wait to pause until ready
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --count ${CLUSTER_COUNT} \
         --region ${CLUSTER_REGION} \
-        --size ${CLUSTER_SIZE} \
-        --wait
-    ;;
-    "config")
-      doctl kubernetes cluster kubeconfig save ${CLUSTER_NAME} \
-        --access-token ${PARAM_ACCESS_TOKEN}
+        --size ${CLUSTER_SIZE}
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
@@ -113,16 +109,14 @@ PREVIOUS_STATUS=$(yq e '.status' ${PREVIOUS_CONFIG_PATH})
 if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "[*] Action enabled"
 
-  if [[ ${CURRENT_STATUS} == ${PREVIOUS_CONFIG_PATH} ]]; then
+  if [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
     # TODO check status of the cluster
     echo "[*] Cluster is already ${CURRENT_STATUS}"
   else
     echo "[*] Updating cluster status to ${CURRENT_STATUS}"
 
     [[ ${CURRENT_STATUS} == "UP" ]] && \
-      doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
-      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
-      kubectl get nodes
+      doctl_cluster "create" ${CURRENT_CONFIG_PATH}
 
     [[ ${CURRENT_STATUS} == "DOWN" ]] && \
       doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
