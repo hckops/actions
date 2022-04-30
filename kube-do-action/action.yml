@@ -6,20 +6,24 @@ inputs:
   # How to create a PAT
   # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
   github-token:
-    description: 'GitHub token to download this repository'
+    description: 'GitHub token required to download the cluster configurations when the repository is private'
     required: true
   access-token:
-    description: 'Digital Ocean access token'
+    description: 'Digital Ocean access token required to provision clusters'
     required: true
   # TODO configuration file schema
   # https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html
   config-path:
-    description: 'Path of the configuration file'
+    description: 'Path to the configuration file'
     required: true
   enabled:
-    description: 'Dry run'
+    description: 'Dry run if set to false'
     required: false
     default: true
+  wait:
+    description: 'Wait for the cluster to be provisioned before exit'
+    required: false
+    default: false
 outputs:
   status:
     description: 'Current status of the cluster'
@@ -32,3 +36,4 @@ runs:
     - ${{ inputs.access-token }}
     - ${{ inputs.config-path }}
     - ${{ inputs.enabled }}
+    - ${{ inputs.wait }}

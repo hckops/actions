@@ -8,6 +8,7 @@ PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
 PARAM_ENABLED=${4:?"Missing ENABLED"}
+PARAM_WAIT=${5:?"Missing WAIT"}
 
 ##############################
 
@@ -48,6 +49,7 @@ function download_file {
 # param #1: <string>
 # param #2: <string>
 # global param: <PARAM_ACCESS_TOKEN>
+# global param: <PARAM_WAIT>
 # action param: <GITHUB_REPOSITORY>
 function doctl_cluster {
   local PARAM_ACTION=$1
@@ -73,7 +75,7 @@ function doctl_cluster {
         --region ${CLUSTER_REGION} \
         --size ${CLUSTER_SIZE} \
         --tag ${CLUSTER_TAGS} \
-        --wait=false
+        --wait=${PARAM_WAIT}
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
@@ -97,6 +99,7 @@ echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
 echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
+echo "[*] WAIT=${PARAM_WAIT}"
 
 CURRENT_CONFIG_PATH="/tmp/current"
 CURRENT_COMMIT=$(fetch_commit_sha)
@@ -113,22 +116,27 @@ PREVIOUS_STATUS=$(yq e '.status' ${PREVIOUS_CONFIG_PATH})
 if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "[*] Action enabled"
 
+  # TODO check real status of the cluster before
   if [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
-    # TODO check real status of the cluster
     echo "[*] Cluster is already ${CURRENT_STATUS}"
+    # returns UP or DOWN
+    echo "::set-output name=status::${CURRENT_STATUS}"
   else
     echo "[*] Update cluster status to ${CURRENT_STATUS}"
 
+    # returns CREATE
     [[ ${CURRENT_STATUS} == "UP" ]] && \
-      doctl_cluster "create" ${CURRENT_CONFIG_PATH}
+      doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
+      echo "::set-output name=status::CREATE"
 
+    # returns DELETE
     [[ ${CURRENT_STATUS} == "DOWN" ]] && \
       doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
+      echo "::set-output name=status::DELETE"
   fi
-
-  echo "::set-output name=status::${CURRENT_STATUS}"
 else
   echo "[*] Action disabled"
+  # returns UP or DOWN
   echo "::set-output name=status::${PREVIOUS_STATUS}"
 fi
 

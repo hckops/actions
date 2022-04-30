@@ -1,34 +1,27 @@
-name: Test Kubernetes DigitalOcean
+name: test-kube
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/test-kube-*.yml'
+      - '.github/workflows/test-kube.yml'
       - 'examples/kube-*.yaml'
       - 'kube-do-action/**'
 
-# TODO notification
 jobs:
   test-kube-do:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      # TODO private repository only
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # TODO add tmp shared path to save kubeconfig (bootstrap)
-      - name: Test input
+      - name: Provision
         uses: ./kube-do-action
-        id: test-input
+        id: provision
         with:
           github-token: ${{ github.token }}
           access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           config-path: examples/kube-do-sample.yaml
           # action is disabled
           enabled: false
-
-      - name: Test output
-        run: echo "Output status ${{ steps.test-input.outputs.status }}"
+      - name: Status
+        run: echo "Cluster status ${{ steps.provision.outputs.status }}"
