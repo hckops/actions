@@ -55,15 +55,18 @@ function doctl_cluster {
   local PARAM_ACTION=$1
   local CONFIG_PATH=$2
   local CLUSTER_NAME=$(yq e '.name' ${CONFIG_PATH})
+  local REPOSITORY_NAME=$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')
+  local KUBE_CONFIG="${HOME}/${REPOSITORY_NAME}-kubeconfig.yaml"
   echo "[-] ACTION=${PARAM_ACTION}"
   echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
+  echo "[-] KUBE_CONFIG=${KUBE_CONFIG}"
 
   case ${PARAM_ACTION} in
     "create")
       local CLUSTER_COUNT=$(yq e '.config.count' ${CONFIG_PATH})
       local CLUSTER_REGION=$(yq e '.config.region' ${CONFIG_PATH})
       local CLUSTER_SIZE=$(yq e '.config.size' ${CONFIG_PATH})
-      local CLUSTER_TAGS="repository:$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')"
+      local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
@@ -76,6 +79,10 @@ function doctl_cluster {
         --size ${CLUSTER_SIZE} \
         --tag ${CLUSTER_TAGS} \
         --wait=${PARAM_WAIT}
+    ;;
+    "config")
+      doctl kubernetes cluster kubeconfig show ${CLUSTER_NAME} \
+        --access-token ${PARAM_ACCESS_TOKEN} > ${KUBE_CONFIG}
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
@@ -127,11 +134,12 @@ if [[ ${PARAM_ENABLED} == "true" ]]; then
     # returns CREATE
     [[ ${CURRENT_STATUS} == "UP" ]] && \
       doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
+      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
       echo "::set-output name=status::CREATE"
 
     # returns DELETE
     [[ ${CURRENT_STATUS} == "DOWN" ]] && \
-      doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
+      doctl_cluster "delete" ${CURRENT_CONFIG_PATH} && \
       echo "::set-output name=status::DELETE"
   fi
 else
