@@ -56,9 +56,13 @@ function doctl_cluster {
   local CONFIG_PATH=$2
   local CLUSTER_NAME=$(yq e '.name' ${CONFIG_PATH})
   local REPOSITORY_NAME=$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')
-  local KUBE_CONFIG="${HOME}/${REPOSITORY_NAME}-kubeconfig.yaml"
   echo "[-] ACTION=${PARAM_ACTION}"
   echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
+
+  # TODO override default?
+  #local KUBE_CONFIG="${HOME}/.kube/${REPOSITORY_NAME}-kubeconfig.yaml"
+  local KUBE_CONFIG_DIR="${HOME}/.kube"
+  local KUBE_CONFIG="${KUBE_CONFIG_DIR}/config"
   echo "[-] KUBE_CONFIG=${KUBE_CONFIG}"
 
   case ${PARAM_ACTION} in
@@ -81,6 +85,8 @@ function doctl_cluster {
         --wait=${PARAM_WAIT}
     ;;
     "config")
+      mkdir -p ${KUBE_CONFIG_DIR}
+
       doctl kubernetes cluster kubeconfig show ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} > ${KUBE_CONFIG}
     ;;
