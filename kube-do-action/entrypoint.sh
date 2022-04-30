@@ -71,7 +71,7 @@ function doctl_cluster {
         --region ${CLUSTER_REGION} \
         --size ${CLUSTER_SIZE} \
         --tag "repository:${GITHUB_REPOSITORY}" \
-        --wait false
+        --wait=false
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
