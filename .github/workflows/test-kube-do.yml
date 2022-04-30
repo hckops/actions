@@ -17,14 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # TODO add tmp shared path to save kubeconfig (bootstrap)
       - name: Test input
         uses: ./kube-do-action
         id: test-input
         with:
-          github-token: ${{ github.token }} # TODO remove, see actions/checkout
-          access-token: TODO_SECRET_ACCESS_TOKEN
+          github-token: ${{ github.token }}
+          access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           config-path: examples/kube-do-sample.yaml
-          enabled: false
+          enabled: true
 
       - name: Test output
         run: echo "Output status ${{ steps.test-input.outputs.status }}"

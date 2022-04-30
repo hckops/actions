@@ -4,7 +4,7 @@ set -euo pipefail
 
 ##############################
 
-PARAM_GITHUB_TOKEN=${ACTIONS_RUNTIME_TOKEN}
+PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
 PARAM_ENABLED=${4:?"Missing ENABLED"}
@@ -135,7 +135,3 @@ else
 fi
 
 echo "[-] kube-do"
-
-# >>> TRY to use ACTIONS_RUNTIME_TOKEN instead of PARAM_GITHUB_TOKEN
-# TODO add tmp shared path to save kubeconfig (bootstrap)
-# TODO cluster config spec
