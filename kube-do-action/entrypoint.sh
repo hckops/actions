@@ -61,16 +61,18 @@ function doctl_cluster {
       local CLUSTER_COUNT=$(yq e '.config.count' ${CONFIG_PATH})
       local CLUSTER_REGION=$(yq e '.config.region' ${CONFIG_PATH})
       local CLUSTER_SIZE=$(yq e '.config.size' ${CONFIG_PATH})
+      local CLUSTER_TAGS="repository:$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')"
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
+      echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
 
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --count ${CLUSTER_COUNT} \
         --region ${CLUSTER_REGION} \
         --size ${CLUSTER_SIZE} \
-        --tag "repository:${GITHUB_REPOSITORY}" \
+        --tag ${CLUSTER_TAGS} \
         --wait=false
     ;;
     "delete")
