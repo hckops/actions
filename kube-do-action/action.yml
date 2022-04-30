@@ -2,6 +2,7 @@ name: 'Kubernetes DigitalOcean Cluster'
 description: 'Manage DigitalOcean Kubernetes cluster lifecycle'
 
 inputs:
+  # TODO remove
   github-token:
     description: 'GitHub token to download this repository'
     required: true

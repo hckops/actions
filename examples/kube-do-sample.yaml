@@ -4,6 +4,6 @@ provider: digitalocean
 status: UP
 
 config:
+  count: 3
   region: lon1
   size: s-1vcpu-2gb
-  count: 3

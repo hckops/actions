@@ -18,10 +18,10 @@ PARAM_ENABLED=${4:?"Missing ENABLED"}
 function fetch_commit_sha {
   # default latest (index 0)
   local COMMIT_INDEX=${1:-"0"}
-  # fetch the last 2 commits only
+  # fetch last 2 commits only
   local COMMITS_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?per_page=2&page=1"
 
-  # extracts the commit sha
+  # extract commit sha
   echo $(curl -sSL \
     -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H "Accept: application/vnd.github.v3+json" \
@@ -35,14 +35,56 @@ function fetch_commit_sha {
 # action param: <GITHUB_REPOSITORY>
 function download_file {
   local FILE_PATH=$1
-  local OUTPUT_PATH=$2
+  local TMP_PATH=$2
   local COMMIT_REF=$3
-  echo "[-] OUTPUT_PATH=${OUTPUT_PATH} | COMMIT_REF=${COMMIT_REF}"
+  echo "[-] TMP_PATH=${TMP_PATH} | COMMIT_REF=${COMMIT_REF}"
 
   curl -sSL -H "Authorization: token ${PARAM_GITHUB_TOKEN}" \
     -H 'Accept: application/vnd.github.v3.raw' \
-    -o ${OUTPUT_PATH} \
+    -o ${TMP_PATH} \
     "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}?ref=${COMMIT_REF}"
+}
+
+# param #1: <string>
+# param #2: <string>
+# global param: <PARAM_ACCESS_TOKEN>
+function doctl_cluster {
+  local PARAM_ACTION=$1
+  local CONFIG_PATH=$2
+  local CLUSTER_NAME=$(yq e '.name' ${CONFIG_PATH})
+  echo "[-] ACTION=${PARAM_ACTION}"
+  echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
+
+  case ${PARAM_ACTION} in
+    "create")
+      local CLUSTER_COUNT=$(yq e '.config.count' ${CONFIG_PATH})
+      local CLUSTER_REGION=$(yq e '.config.region' ${CONFIG_PATH})
+      local CLUSTER_SIZE=$(yq e '.config.size' ${CONFIG_PATH})
+      echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
+      echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
+      echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
+
+      doctl kubernetes cluster create ${CLUSTER_NAME} \
+        --access-token ${PARAM_ACCESS_TOKEN} \
+        --count ${CLUSTER_COUNT} \
+        --region ${CLUSTER_REGION} \
+        --size ${CLUSTER_SIZE} \
+        --wait
+    ;;
+    "config")
+      doctl kubernetes cluster kubeconfig save ${CLUSTER_NAME} \
+        --access-token ${PARAM_ACCESS_TOKEN}
+    ;;
+    "delete")
+      doctl kubernetes cluster delete ${CLUSTER_NAME} \
+        --access-token ${PARAM_ACCESS_TOKEN} \
+        --force
+    ;;
+    *)
+      echo "ERROR: unknown command"
+      exit 1
+    ;;
+  esac
 }
 
 ##############################
@@ -56,18 +98,44 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 
-LATEST_CONFIG_PATH="/tmp/latest"
-LATEST_COMMIT=$(fetch_commit_sha)
+CURRENT_CONFIG_PATH="/tmp/current"
+CURRENT_COMMIT=$(fetch_commit_sha)
 PREVIOUS_CONFIG_PATH="/tmp/previous"
 PREVIOUS_COMMIT=$(fetch_commit_sha 1)
 
-download_file ${PARAM_CONFIG_PATH} ${LATEST_CONFIG_PATH} ${LATEST_COMMIT}
+# download config revisions for comparison
+download_file ${PARAM_CONFIG_PATH} ${CURRENT_CONFIG_PATH} ${CURRENT_COMMIT}
 download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
-# TODO if they are different start/stop cluster
-yq e '.status' ${LATEST_CONFIG_PATH}
-yq e '.status' ${PREVIOUS_CONFIG_PATH}
+CURRENT_STATUS=$(yq e '.status' ${CURRENT_CONFIG_PATH})
+PREVIOUS_STATUS=$(yq e '.status' ${PREVIOUS_CONFIG_PATH})
 
-echo "::set-output name=status::OK"
+if [[ ${PARAM_ENABLED} == "true" ]]; then
+  echo "[*] Action enabled"
+
+  if [[ ${CURRENT_STATUS} == ${PREVIOUS_CONFIG_PATH} ]]; then
+    # TODO check status of the cluster
+    echo "[*] Cluster is already ${CURRENT_STATUS}"
+  else
+    echo "[*] Updating cluster status to ${CURRENT_STATUS}"
+
+    [[ ${CURRENT_STATUS} == "UP" ]] && \
+      doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
+      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
+      kubectl get nodes
+
+    [[ ${CURRENT_STATUS} == "DOWN" ]] && \
+      doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
+  fi
+
+  echo "::set-output name=status::${CURRENT_STATUS}"
+else
+  echo "[*] Action disabled"
+  echo "::set-output name=status::${PREVIOUS_CONFIG_PATH}"
+fi
 
 echo "[-] kube-do"
+
+# >>> TRY to use ACTIONS_RUNTIME_TOKEN instead of PARAM_GITHUB_TOKEN
+# TODO add tmp shared path to save kubeconfig (bootstrap)
+# TODO cluster config spec
