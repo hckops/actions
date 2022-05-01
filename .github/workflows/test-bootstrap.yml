@@ -1,0 +1,26 @@
+name: test-bootstrap
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-bootstrap.yml'
+      - 'bootstrap-action/**'
+
+jobs:
+  test-bootstrap:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "Invalid kubeconfig"
+        run: |
+          echo "test: 1" > config.yaml
+
+      - name: Bootstrap
+        uses: ./bootstrap
+        with:
+          kubeconfig: ./config.yaml
