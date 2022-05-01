@@ -82,12 +82,12 @@ function doctl_cluster {
       local KUBE_CONFIG="${REPOSITORY_NAME}-kubeconfig.yaml"
       echo "[-] KUBE_CONFIG=${KUBE_CONFIG}"
 
-      # save it the root directory
+      # save it in the root directory
       doctl kubernetes cluster kubeconfig show ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} > ${KUBE_CONFIG}
       
-      # returns config name
-      echo "::set-output name=config::${KUBE_CONFIG}"
+      # returns kubeconfig path
+      echo "::set-output name=kubeconfig::${KUBE_CONFIG}"
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
