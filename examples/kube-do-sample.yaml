@@ -4,7 +4,6 @@ provider: digitalocean
 status: DOWN
 
 # TODO add tags
-# TODO flag to wait creation (default false)
 config:
   count: 1
   region: lon1

@@ -11,10 +11,10 @@ inputs:
   access-token:
     description: 'Digital Ocean access token required to provision clusters'
     required: true
-  # TODO configuration file schema
+  # TODO cluster configuration file schema (multi-privider)
   # https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html
   config-path:
-    description: 'Path to the configuration file'
+    description: 'Path to the cluster configuration file'
     required: true
   enabled:
     description: 'Dry run if set to false'
@@ -26,9 +26,9 @@ inputs:
     default: false
 outputs:
   status:
-    description: 'Current status of the cluster: CREATE|DELETE|UP|DOWN'
-  config:
-    description: 'Name of the kubeconfig file i.e. ORG-REPO-kubeconfig.yaml'
+    description: 'Current status of the cluster: [CREATE|DELETE|UP|DOWN]'
+  kubeconfig:
+    description: 'Path to kubeconfig file e.g. ./ORG-REPO-kubeconfig.yaml'
 
 runs:
   using: docker

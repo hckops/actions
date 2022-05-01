@@ -1,5 +1,17 @@
 # actions
 
+### discord-action
+
+> TODO
+
+```bash
+DISCORD_WEBHOOK_URL="INVALID_URL"
+make discord-create webhook=${DISCORD_WEBHOOK_URL} message=test
+
+docker build -t hckops/discord-action ./discord-action
+docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "docker"
+```
+
 ### kube-do-action
 
 > TODO
@@ -12,16 +24,13 @@ docker run --rm \
   "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" "false" "false"
 ```
 
-### discord-action
+### bootstrap-action
 
 > TODO
 
 ```bash
-DISCORD_WEBHOOK_URL="INVALID_URL"
-make discord-create webhook=${DISCORD_WEBHOOK_URL} message=test
-
-docker build -t hckops/discord-action ./discord-action
-docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "docker"
+docker build -t hckops/bootstrap-action ./bootstrap-action
+docker run --rm hckops/bootstrap-action
 ```
 
 ## Development

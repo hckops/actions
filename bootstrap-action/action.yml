@@ -1,0 +1,13 @@
+name: 'Bootstrap'
+description: 'Bootstrap platform'
+
+inputs:
+  kubeconfig:
+    description: 'Path to kubeconfig file e.g. ./ORG-REPO-kubeconfig.yaml'
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.kubeconfig }}
