@@ -26,9 +26,9 @@ inputs:
     default: false
 outputs:
   status:
-    description: 'Current status of the cluster'
+    description: 'Current status of the cluster: CREATE|DELETE|UP|DOWN'
   config:
-    description: 'Name of the kubeconfig file'
+    description: 'Name of the kubeconfig file i.e. ORG-REPO-kubeconfig.yaml'
 
 runs:
   using: docker

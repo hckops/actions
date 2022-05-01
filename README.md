@@ -2,7 +2,9 @@
 
 ### kube-do-action
 
-* [example](.github/workflows/test-kube-do.yml)
+> TODO
+
+### discord-action
 
 > TODO
 

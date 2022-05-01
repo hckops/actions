@@ -11,3 +11,7 @@ https://github.com/hckops/actions/settings/secrets/actions
 # doctl-gh
 # https://cloud.digitalocean.com/account/api/tokens
 * DIGITALOCEAN_ACCESS_TOKEN
+
+# hckbot | hckbot-messages
+# Server Settings > Integrations > Webhooks
+* DISCORD_WEBHOOK_URL

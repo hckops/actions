@@ -14,7 +14,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      # required because it's not in the marketplace
+      # required because it's not in the marketplace and to access cluster definition
       - name: Checkout
         uses: actions/checkout@v3
       - name: Provision
@@ -26,5 +26,7 @@ jobs:
           config-path: examples/kube-do-sample.yaml
           # action is disabled
           enabled: false
-      - name: Status
-        run: echo "Cluster status ${{ steps.provision.outputs.status }}"
+      - name: Output
+        run: |
+          echo "Status ${{ steps.provision.outputs.status }}"
+          echo "Config ${{ steps.provision.outputs.config }}"

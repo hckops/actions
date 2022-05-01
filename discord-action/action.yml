@@ -1,0 +1,21 @@
+name: 'Discord'
+description: 'Interact with Discord API'
+
+inputs:
+  action:
+    description: 'Supported actions: [create-message]'
+    required: true
+  webhook-url:
+    description: 'Webhook URL of Discord server'
+    required: true
+  message:
+    description: 'Content of the message'
+    required: false
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.action }}
+    - ${{ inputs.webhook-url }}
+    - ${{ inputs.message }}

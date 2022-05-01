@@ -1,0 +1,25 @@
+name: test-discord
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-discord.yml'
+      - 'discord-action/**'
+
+jobs:
+  test-discord:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Set message content"
+        id: message
+        run: echo "::set-output content=GitHub test @ $(echo date)"
+        shell: bash
+      - name: "Create message"
+        uses: ./discord-action
+        with:
+          action: create-message
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: ${{ steps.message.outputs.content }}

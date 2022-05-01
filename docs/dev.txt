@@ -40,3 +40,8 @@ yq -r '.status' examples/kube-do-sample.yaml
 https://docs.github.com/en/actions/learn-github-actions/environment-variables
 https://docs.github.com/en/rest/commits/commits
 https://docs.github.com/en/rest/repos/contents
+
+--- discord
+
+https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+https://discord.com/developers/docs/resources/channel
