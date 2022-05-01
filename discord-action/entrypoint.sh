@@ -17,6 +17,8 @@ case ${PARAM_ACTION} in
   # https://discord.com/developers/docs/resources/channel#create-message
   "create-message")
     PARAM_MESSAGE=${3:-"EMPTY_MESSAGE"}
+    echo "[*] MESSAGE=${PARAM_MESSAGE}"
+
     curl -sS \
       -H "Content-Type: application/json" \
       -d '{"content":"'${PARAM_MESSAGE}'"}' \

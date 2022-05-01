@@ -17,6 +17,7 @@ jobs:
       # required because it's not in the marketplace and to access cluster definition
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Provision
         uses: ./kube-do-action
         id: provision
@@ -26,6 +27,7 @@ jobs:
           config-path: examples/kube-do-sample.yaml
           # action is disabled
           enabled: false
+
       - name: Output
         run: |
           echo "Status ${{ steps.provision.outputs.status }}"

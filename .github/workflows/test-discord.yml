@@ -15,13 +15,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: "Set message content"
         id: message
-        run: echo "::set-output content=github-test"
-        shell: bash
+        run: |
+          echo "::set-output content=github-test"
+
       - name: "Create message"
         uses: ./discord-action
         with:
           action: create-message
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: ${{ steps.message.outputs.content }}
+          message: "discord-action: ${{ steps.message.outputs.content }}"
