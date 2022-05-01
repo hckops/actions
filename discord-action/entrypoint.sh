@@ -21,7 +21,7 @@ case ${PARAM_ACTION} in
 
     curl -sS \
       -H "Content-Type: application/json" \
-      -d '{"content":"'${PARAM_MESSAGE}'"}' \
+      -d '{"content":"'"${PARAM_MESSAGE}"'"}' \
       ${PARAM_WEBHOOK_URL}
   ;;
   *)
