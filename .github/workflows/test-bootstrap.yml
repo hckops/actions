@@ -21,6 +21,6 @@ jobs:
           echo "test: 1" > config.yaml
 
       - name: Bootstrap
-        uses: ./bootstrap
+        uses: ./bootstrap-action
         with:
           kubeconfig: ./config.yaml
