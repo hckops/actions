@@ -26,4 +26,4 @@ jobs:
         with:
           action: create-message
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: "discord-action: ${{ steps.message.outputs.content }}"
+          message: 'discord-action: ${{ steps.message.outputs.content }}'
