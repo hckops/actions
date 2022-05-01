@@ -36,3 +36,9 @@ docker-publish: require-docker check-param-version docker-login docker-build
 .PHONY: docker-clean
 docker-clean: require-docker
 	./scripts/docker_apply.sh "clean" "*"
+
+##############################
+
+.PHONY: discord-create
+discord-create: require-curl check-param-webhook check-param-message
+	./discord-action/entrypoint.sh "create-message" ${webhook} ${message}

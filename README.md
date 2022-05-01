@@ -8,6 +8,14 @@
 
 > TODO
 
+```bash
+DISCORD_WEBHOOK_URL="INVALID_URL"
+make discord-create webhook=${DISCORD_WEBHOOK_URL} message=test
+
+docker build -t hckops/discord-action ./discord-action
+docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "docker"
+```
+
 ## Development
 
 ***How to build and publish images manually***
