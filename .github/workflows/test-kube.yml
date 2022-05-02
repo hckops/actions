@@ -27,6 +27,7 @@ jobs:
           config-path: examples/kube-do-sample.yaml
           # action is disabled
           enabled: false
+          wait: false
 
       - name: Output
         run: |

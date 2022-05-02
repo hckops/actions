@@ -28,7 +28,7 @@ outputs:
   status:
     description: 'Current status of the cluster: [CREATE|DELETE|UP|DOWN]'
   kubeconfig:
-    description: 'Path to kubeconfig file e.g. ./ORG-REPO-kubeconfig.yaml'
+    description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
 
 runs:
   using: docker

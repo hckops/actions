@@ -3,7 +3,7 @@ description: 'Bootstrap platform'
 
 inputs:
   kubeconfig:
-    description: 'Path to kubeconfig file e.g. ./ORG-REPO-kubeconfig.yaml'
+    description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
 
 runs:
