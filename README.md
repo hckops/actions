@@ -49,10 +49,10 @@ docker run --rm \
 ```
 
 TODOs
-[ ] make it properly configurable: cluster definition `ClusterConfig`
-[ ] make it schedulable: run action to reconcile cluster drift status
-[ ] try to remove `github-token` from inputs
-[ ] implementation: shell vs ???
+- [ ] make it properly configurable: cluster definition `ClusterConfig`
+- [ ] make it schedulable: run action to reconcile cluster drift status
+- [ ] try to remove `github-token` from inputs
+- [ ] implementation: shell vs ???
 
 ### bootstrap-action
 
@@ -60,6 +60,20 @@ TODOs
 
 > TODO
 
+Required secrets
+* `GITOPS_SSH_KEY`
+    ```bash
+    TODO
+    ```
+* `ARGOCD_ADMIN_PASSWORD`
+    - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
+    - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
+    - Example to ***do NOT use in production***
+        * user `admin`
+        * password `argocd`
+        * secret `$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2`
+
+How to test it locally
 ```bash
 docker build -t hckops/bootstrap-action ./bootstrap-action
 docker run --rm hckops/bootstrap-action
@@ -80,6 +94,10 @@ docker run --rm hckops/bootstrap-action
     webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
     message: "Hello World"
 ```
+
+Required secret
+* `DISCORD_WEBHOOK_URL`
+    - [Intro to Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 How to test it locally
 ```bash

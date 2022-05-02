@@ -2,12 +2,28 @@ name: 'Bootstrap'
 description: 'Bootstrap platform'
 
 inputs:
+  gitops-ssh-key:
+    description: 'TODO'
+    required: true
+  argocd-admin-password:
+    description: 'TODO'
+    required: true
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
+  chart-path:
+    description: 'TODO'
+    required: true
+  version:
+    description: 'Repository target revision e.g. branch, SHA, tag'
+    required: false
 
 runs:
   using: docker
   image: Dockerfile
   args:
+    - ${{ inputs.gitops-ssh-key }}
+    - ${{ inputs.argocd-admin-password }}
     - ${{ inputs.kubeconfig }}
+    - ${{ inputs.chart-path }}
+    - ${{ inputs.version }}

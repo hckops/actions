@@ -41,6 +41,9 @@ https://docs.github.com/en/actions/learn-github-actions/environment-variables
 https://docs.github.com/en/rest/commits/commits
 https://docs.github.com/en/rest/repos/contents
 
+# markdown
+https://dothanhlong.org/advanced-formatting-in-github-markdown
+
 --- discord
 
 https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
