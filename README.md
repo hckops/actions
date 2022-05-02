@@ -110,6 +110,8 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 
 ### Docker images
 
+[![docker-ci](https://github.com/hckops/actions/actions/workflows/docker-ci.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/docker-ci.yml)
+
 * [DockerHub](https://hub.docker.com/u/hckops)
 
 ```bash
