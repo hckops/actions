@@ -31,10 +31,9 @@ For a working example see [kube-template](https://github.com/hckops/kube-templat
     wait: true
 ```
 
-Required secret
-* `DIGITALOCEAN_ACCESS_TOKEN`
-    - [How to Create a Personal Access Token](https://docs.digitalocean.com/reference/api/create-personal-access-token)
-    - Create a [Personal Access Token](https://cloud.digitalocean.com/account/api/tokens)
+Requires `DIGITALOCEAN_ACCESS_TOKEN` secret
+* [How to Create a Personal Access Token](https://docs.digitalocean.com/reference/api/create-personal-access-token)
+* Create a [Personal Access Token](https://cloud.digitalocean.com/account/api/tokens)
 
 How to test it locally
 ```bash
@@ -60,12 +59,13 @@ TODOs
 
 > TODO
 
-Required secrets
-* `GITOPS_SSH_KEY`
+Requires
+* `GITOPS_SSH_KEY` secret
+    - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
     ```bash
     TODO
     ```
-* `ARGOCD_ADMIN_PASSWORD`
+* `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
     - Example to ***do NOT use in production***
@@ -95,9 +95,8 @@ docker run --rm hckops/bootstrap-action
     message: "Hello World"
 ```
 
-Required secret
-* `DISCORD_WEBHOOK_URL`
-    - [Intro to Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+Requires `DISCORD_WEBHOOK_URL` secret
+* [Intro to Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 How to test it locally
 ```bash
@@ -108,9 +107,13 @@ docker build -t hckops/discord-action ./discord-action
 docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "docker"
 ```
 
+## Development
+
 ### Docker images
 
 [![docker-ci](https://github.com/hckops/actions/actions/workflows/docker-ci.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/docker-ci.yml)
+
+> Actions base images
 
 * [DockerHub](https://hub.docker.com/u/hckops)
 
