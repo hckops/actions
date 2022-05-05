@@ -29,6 +29,10 @@ cd ${PARAM_CHART_PATH}
 # download chart locally: "--dependency-update" fails
 helm dependency update
 
+pwd
+ls -lah
+printenv
+
 # manually apply "argocd-config" chart and "argocd" dependency with crds
 helm template ${CHART_NAME} \
   --include-crds \

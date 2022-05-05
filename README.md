@@ -48,8 +48,10 @@ docker run --rm \
 ```
 
 TODOs
-- [ ] make it properly configurable: cluster definition `ClusterConfig`
-- [ ] make it schedulable: run action to reconcile cluster drift status
+- [ ] validate cluster definition `ClusterConfig`
+- [ ] scheduler
+    * reconcile cluster drift status
+    * check if forgot to delete development clusters (add flag) after working hours
 - [ ] try to remove `github-token` from inputs
 - [ ] implementation: shell vs ???
 
