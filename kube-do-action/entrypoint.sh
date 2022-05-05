@@ -130,6 +130,12 @@ PREVIOUS_STATUS=$(yq e '.status' ${PREVIOUS_CONFIG_PATH})
 if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "[*] Action enabled"
 
+  # init kubeconfig only
+  # returns CREATE
+  [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} == "true" ]] && \
+    doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
+    echo "::set-output name=status::CREATE"
+
   # TODO check real status of the cluster before
   if [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
     echo "[*] Cluster is already ${CURRENT_STATUS}"
@@ -142,12 +148,6 @@ if [[ ${PARAM_ENABLED} == "true" ]]; then
     # returns CREATE
     [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} != "true" ]] && \
       doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
-      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
-      echo "::set-output name=status::CREATE"
-
-    # init kubeconfig only
-    # returns CREATE
-    [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} == "true" ]] && \
       doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
       echo "::set-output name=status::CREATE"
 
