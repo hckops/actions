@@ -59,16 +59,30 @@ TODOs
 
 > TODO
 
+```bash
+TODO
+```
+
 Requires
 * `GITOPS_SSH_KEY` secret
     - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
     ```bash
-    TODO
+    # generate ssh key pair
+    ssh-keygen -t rsa -b 4096 -C "gitops@example.com" -N '' -f /tmp/id_rsa_gitops
+
+    # add public key to a github user account with access to the repo
+    cat /tmp/id_rsa_gitops.pub | xclip -selection clipboard
+
+    # create secret with private key
+    cat /tmp/id_rsa_gitops | xclip -selection clipboard
+
+    # cleanup
+    rm /tmp/id_rsa_gitops*
     ```
 * `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
-    - Example to ***do NOT use in production***
+    - Example to ***do NOT use it in production***
         * user `admin`
         * password `argocd`
         * secret `$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2`
