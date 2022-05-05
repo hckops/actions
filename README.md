@@ -44,7 +44,7 @@ docker build -t hckops/kube-do-action ./kube-do-action
 docker run --rm \
   -e GITHUB_REPOSITORY="INVALID_GITHUB_REPOSITORY" \
   hckops/kube-do-action \
-  "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" "false" "false"
+  "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" "false" "false" "false"
 ```
 
 TODOs
@@ -90,6 +90,7 @@ Requires
 How to test it locally
 ```bash
 docker build -t hckops/bootstrap-action ./bootstrap-action
+# TODO
 docker run --rm hckops/bootstrap-action
 ```
 

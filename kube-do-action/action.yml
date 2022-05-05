@@ -24,6 +24,10 @@ inputs:
     description: 'Wait for the cluster to be provisioned before exit'
     required: false
     default: false
+  skip:
+    description: 'Ignore provisioning. If cluster status is UP download kubeconfig: useful for development'
+    required: false
+    default: false
 outputs:
   status:
     description: 'Current status of the cluster: [CREATE|DELETE|UP|DOWN]'
@@ -39,3 +43,4 @@ runs:
     - ${{ inputs.config-path }}
     - ${{ inputs.enabled }}
     - ${{ inputs.wait }}
+    - ${{ inputs.skip }}

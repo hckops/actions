@@ -9,6 +9,7 @@ PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
 PARAM_ENABLED=${4:?"Missing ENABLED"}
 PARAM_WAIT=${5:?"Missing WAIT"}
+PARAM_SKIP=${6:?"Missing SKIP"}
 
 ##############################
 
@@ -112,6 +113,7 @@ echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 echo "[*] WAIT=${PARAM_WAIT}"
+echo "[*] SKIP=${PARAM_SKIP}"
 
 CURRENT_CONFIG_PATH="/tmp/current"
 CURRENT_COMMIT=$(fetch_commit_sha)
@@ -136,12 +138,20 @@ if [[ ${PARAM_ENABLED} == "true" ]]; then
   else
     echo "[*] Update cluster status to ${CURRENT_STATUS}"
 
+    # create cluster and init kubeconfig
     # returns CREATE
-    [[ ${CURRENT_STATUS} == "UP" ]] && \
+    [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} != "true" ]] && \
       doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
       doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
       echo "::set-output name=status::CREATE"
 
+    # init kubeconfig only
+    # returns CREATE
+    [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} == "true" ]] && \
+      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
+      echo "::set-output name=status::CREATE"
+
+    # delete cluster
     # returns DELETE
     [[ ${CURRENT_STATUS} == "DOWN" ]] && \
       doctl_cluster "delete" ${CURRENT_CONFIG_PATH} && \
