@@ -51,7 +51,7 @@ TODOs
 - [ ] validate cluster definition `ClusterConfig`
 - [ ] scheduler
     * reconcile cluster drift status
-    * check if forgot to delete development clusters (add flag) after working hours
+    * delete development clusters (add flag) after working hours
 - [ ] try to remove `github-token` from inputs
 - [ ] implementation: shell vs ???
 
@@ -70,21 +70,21 @@ Requires
     - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
     ```bash
     # generate ssh key pair
-    ssh-keygen -t rsa -b 4096 -C "gitops@example.com" -N '' -f /tmp/id_rsa_gitops
+    ssh-keygen -t ed25519 -C "gitops@example.com" -N '' -f /tmp/id_ed25519_gitops
 
     # add public key to a github user account with access to the repo
-    cat /tmp/id_rsa_gitops.pub | xclip -selection clipboard
+    cat /tmp/id_ed25519_gitops.pub | xclip -selection clipboard
 
     # create secret with private key
-    cat /tmp/id_rsa_gitops | xclip -selection clipboard
+    cat /tmp/id_ed25519_gitops | xclip -selection clipboard
 
     # cleanup
-    rm /tmp/id_rsa_gitops*
+    rm /tmp/id_ed25519_gitops*
     ```
 * `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
-    - Example to ***do NOT use it in production***
+    - Example to ***do NOT use in production***
         * user `admin`
         * password `argocd`
         * secret `$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2`
