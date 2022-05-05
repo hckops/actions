@@ -25,23 +25,19 @@ CHART_NAME="argocd"
 # add helm repository
 helm repo add argo  "https://argoproj.github.io/argo-helm"
 
-cd ${PARAM_CHART_PATH}
-# download chart locally: "--dependency-update" fails
-helm dependency update
-
 pwd
-ls -lah
-printenv
+ls -la
 
 # manually apply "argocd-config" chart and "argocd" dependency with crds
 helm template ${CHART_NAME} \
   --include-crds \
+  --dependency-update \
   --namespace ${NAMESPACE} \
   --values "values.yaml" \
   --values "values-bootstrap.yaml" \
   --set repository.targetRevision=${PARAM_VERSION} \
   --set argocd.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
   --set argocd.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
-  ./ | kubectl --kubeconfig ${PARAM_KUBECONFIG} apply --namespace ${NAMESPACE} -f -
+  ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} apply --namespace ${NAMESPACE} -f -
 
 echo "[-] bootstrap"
