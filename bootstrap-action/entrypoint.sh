@@ -25,6 +25,9 @@ CHART_NAME="argocd"
 # add helm repository
 helm repo add argo  "https://argoproj.github.io/argo-helm"
 
+# download chart locally: "--dependency-update" fails
+helm dependency update ${PARAM_CHART_PATH}
+
 # manually apply "argocd-config" chart and "argocd" dependency with crds
 helm template ${CHART_NAME} \
   --include-crds \
