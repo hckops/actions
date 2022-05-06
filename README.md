@@ -1,5 +1,7 @@
 # actions
 
+For a working example see [kube-template](https://github.com/hckops/kube-template/blob/main/.github/workflows/kube-do.yml)
+
 ### kube-do-action
 
 [![test-kube](https://github.com/hckops/actions/actions/workflows/test-kube.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube.yml)
@@ -21,7 +23,7 @@ config:
   count: 1
 ```
 
-For a working example see [kube-template](https://github.com/hckops/kube-template/blob/main/.github/workflows/kube-do.yml)
+Example
 ```bash
 - name: Provision
   uses: hckops/actions/kube-do-action@main
@@ -61,13 +63,14 @@ TODOs
 
 > Bootstrap a platform using ArgoCD and GitOps
 
+Example
 ```bash
 - name: Bootstrap
   uses: hckops/actions/bootstrap-action@main
   with:
     gitops-ssh-key: ${{ secrets.GITOPS_SSH_KEY }}
     argocd-admin-password: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
-    kubeconfig: ${{ steps.provision.outputs.kubeconfig }}
+    kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
     chart-path: ./charts/argocd-config
     version: HEAD
 ```
@@ -99,7 +102,7 @@ Requires
 How to test it locally
 ```bash
 docker build -t hckops/bootstrap-action ./bootstrap-action
-# TODO
+# TODO parameters
 docker run --rm hckops/bootstrap-action
 ```
 
@@ -109,7 +112,7 @@ docker run --rm hckops/bootstrap-action
 
 > Interact with Discord API
 
-*Create message*
+Example of *Create message*
 ```bash
 - name: Notification
   uses: hckops/actions/discord-action@main
