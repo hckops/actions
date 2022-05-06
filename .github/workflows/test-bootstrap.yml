@@ -21,6 +21,8 @@ jobs:
           echo "test: 1" > config.yaml
 
       - name: Bootstrap
+        # disabled
+        if: ${{ false }}
         uses: ./bootstrap-action
         with:
           gitops-ssh-key: INVALID_SSH_KEY
