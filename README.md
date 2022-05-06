@@ -59,10 +59,17 @@ TODOs
 
 [![test-bootstrap](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml)
 
-> TODO
+> Bootstrap a platform using ArgoCD and GitOps
 
 ```bash
-TODO
+- name: Bootstrap
+  uses: hckops/actions/bootstrap-action@main
+  with:
+    gitops-ssh-key: ${{ secrets.GITOPS_SSH_KEY }}
+    argocd-admin-password: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
+    kubeconfig: ${{ steps.provision.outputs.kubeconfig }}
+    chart-path: ./charts/argocd-config
+    version: HEAD
 ```
 
 Requires

@@ -1,18 +1,18 @@
 name: 'Bootstrap'
-description: 'Bootstrap platform'
+description: 'Bootstrap a platform using ArgoCD and GitOps'
 
 inputs:
   gitops-ssh-key:
-    description: 'TODO'
+    description: 'Private SSH key to access the repository from the cluster'
     required: true
   argocd-admin-password:
-    description: 'TODO'
+    description: 'ArgoCD admin password'
     required: true
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
   chart-path:
-    description: 'TODO'
+    description: 'Path to Helm v3 chart'
     required: true
   version:
     description: 'Repository target revision e.g. branch, SHA, tag'
