@@ -57,7 +57,7 @@ function doctl_cluster {
   local CONFIG_PATH=$2
   local CLUSTER_NAME=$(yq e '.name' ${CONFIG_PATH})
   local REPOSITORY_NAME=$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')
-  echo "[-] ACTION=${PARAM_ACTION}"
+  echo "[-] DOCTL_ACTION=${PARAM_ACTION}"
   echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
 
   case ${PARAM_ACTION} in
@@ -126,36 +126,34 @@ download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
 CURRENT_STATUS=$(yq e '.status' ${CURRENT_CONFIG_PATH})
 PREVIOUS_STATUS=$(yq e '.status' ${PREVIOUS_CONFIG_PATH})
+echo "[-] CURRENT_STATUS=${CURRENT_STATUS}"
+echo "[-] PREVIOUS_STATUS=${PREVIOUS_STATUS}"
 
 if [[ ${PARAM_ENABLED} == "true" ]]; then
   echo "[*] Action enabled"
 
-  # init kubeconfig only
-  # returns CREATE
-  [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} == "true" ]] && \
-    doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
+  if [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} == "true" ]]; then
+    # init kubeconfig only
+    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
     echo "::set-output name=status::CREATE"
 
-  # TODO check real status of the cluster before
-  if [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
+  # TODO should check cluster real status
+  elif [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
+    # do nothing
     echo "[*] Cluster is already ${CURRENT_STATUS}"
     # returns UP or DOWN
     echo "::set-output name=status::${CURRENT_STATUS}"
-  else
-    echo "[*] Update cluster status to ${CURRENT_STATUS}"
 
+  elif [[ ${CURRENT_STATUS} == "UP" ]]; then
     # create cluster and init kubeconfig
-    # returns CREATE
-    [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP} != "true" ]] && \
-      doctl_cluster "create" ${CURRENT_CONFIG_PATH} && \
-      doctl_cluster "config" ${CURRENT_CONFIG_PATH} && \
-      echo "::set-output name=status::CREATE"
+    doctl_cluster "create" ${CURRENT_CONFIG_PATH}
+    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
+    echo "::set-output name=status::CREATE"
 
+  elif [[ ${CURRENT_STATUS} == "DOWN" ]]; then
     # delete cluster
-    # returns DELETE
-    [[ ${CURRENT_STATUS} == "DOWN" ]] && \
-      doctl_cluster "delete" ${CURRENT_CONFIG_PATH} && \
-      echo "::set-output name=status::DELETE"
+    doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
+    echo "::set-output name=status::DELETE"
   fi
 else
   echo "[*] Action disabled"

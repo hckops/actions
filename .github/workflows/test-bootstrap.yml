@@ -23,4 +23,8 @@ jobs:
       - name: Bootstrap
         uses: ./bootstrap-action
         with:
+          gitops-ssh-key: INVALID_SSH_KEY
+          argocd-admin-password: INVALID_ADMIN_PASSWORD
           kubeconfig: ./config.yaml
+          chart-path: INVALID_PATH
+          version: HEAD
