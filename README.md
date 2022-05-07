@@ -61,7 +61,7 @@ TODOs
 
 [![test-bootstrap](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml)
 
-> Bootstrap a platform using ArgoCD
+> Bootstrap a platform with ArgoCD
 
 Example
 ```bash
