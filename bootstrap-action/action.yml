@@ -1,5 +1,5 @@
 name: 'Bootstrap'
-description: 'Bootstrap a platform using ArgoCD and GitOps'
+description: 'Bootstrap a platform using ArgoCD'
 
 inputs:
   gitops-ssh-key:
