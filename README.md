@@ -46,7 +46,8 @@ docker build -t hckops/kube-do-action ./kube-do-action
 docker run --rm \
   -e GITHUB_REPOSITORY="INVALID_GITHUB_REPOSITORY" \
   hckops/kube-do-action \
-  "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" "false" "false" "false"
+  "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" \
+  "false" "false" "false"
 ```
 
 TODOs
@@ -94,16 +95,14 @@ Requires
 * `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
-    - Example to ***do NOT use in production***
-        * user `admin`
-        * password `argocd`
-        * secret `$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2`
 
-How to test it locally
+How to test it locally on minikube
 ```bash
-docker build -t hckops/bootstrap-action ./bootstrap-action
-# TODO parameters
-docker run --rm hckops/bootstrap-action
+# see "scripts/local.sh"
+make bootstrap
+
+# admin|argocd
+kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
 ### discord-action
@@ -156,4 +155,21 @@ How to build and publish images manually
 make docker-build
 make docker-publish version=v0.1.0 token=<ACCESS_TOKEN>
 make docker-clean
+```
+
+### minikube
+
+* [Documentation](https://minikube.sigs.k8s.io)
+
+```bash
+# install 
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo dpkg -i minikube_latest_amd64.deb
+
+# local cluster
+minikube start --driver=docker --embed-certs
+minikube delete --all
+
+# verify status
+kubectl get nodes
 ```

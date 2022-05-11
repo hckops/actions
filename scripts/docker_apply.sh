@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# https://www.mulle-kybernetik.com/modern-bash-scripting/state-euxo-pipefail.html
 set -euo pipefail
 
 CURRENT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)
