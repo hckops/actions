@@ -41,7 +41,7 @@ docker-clean: require-docker
 
 .PHONY: bootstrap
 bootstrap: require-helm require-kubectl
-	./scripts/local.sh "bootstrap"
+	./scripts/local.sh "bootstrap" ${kube}
 
 .PHONY: discord-create
 discord-create: require-curl check-param-webhook check-param-message

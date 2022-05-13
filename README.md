@@ -1,5 +1,10 @@
 # actions
 
+* [kube-do](#kube-do-action)
+* [bootstrap](#bootstrap-action)
+* [discord](#discord-action)
+* [development](#development)
+
 For a working example see [kube-template](https://github.com/hckops/kube-template/blob/main/.github/workflows/kube-do.yml)
 
 ### kube-do-action
@@ -100,6 +105,8 @@ How to test it locally on minikube
 ```bash
 # see "scripts/local.sh"
 make bootstrap
+# default cluster
+make bootstrap kube="template"
 
 # admin|argocd
 kubectl port-forward svc/argocd-server -n argocd 8080:443

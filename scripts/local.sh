@@ -10,16 +10,19 @@ cd ${CURRENT_PATH}
 ##############################
 
 PARAM_ACTION=${1:?"Missing ACTION"}
+PARAM_KUBE=${2:-"template"}
 
 # admin|argocd
 ARGOCD_ADMIN_PASSWORD='$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2'
 MINIKUBE_CONFIG="${HOME}/.kube/config"
-CHART_PATH="${ROOT_PATH}/../kube-template/charts/argocd-config"
+CHART_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/charts/argocd-config"
 
 ##############################
 
 echo "[+] local"
 echo "[*] ACTION=${PARAM_ACTION}"
+echo "[*] KUBE=${PARAM_KUBE}"
+echo "[*] CHART_PATH=${CHART_PATH}"
 
 case ${PARAM_ACTION} in
   "bootstrap")
