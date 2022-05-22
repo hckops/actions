@@ -12,6 +12,8 @@ cd ${CURRENT_PATH}
 PARAM_ACTION=${1:?"Missing ACTION"}
 PARAM_KUBE=${2:-"template"}
 
+# https://www.devglan.com/online-tools/bcrypt-hash-generator
+# https://www.browserling.com/tools/bcrypt
 # admin|argocd
 ARGOCD_ADMIN_PASSWORD='$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2'
 MINIKUBE_CONFIG="${HOME}/.kube/config"
