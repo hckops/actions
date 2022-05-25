@@ -164,6 +164,10 @@ make docker-publish version=v0.1.0 token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
+TODOs
+- action to publish on git tag
+- `latest` tag might cause issues: see `bootstrap` and `kube-do` dockerfile
+
 ### minikube
 
 * [Documentation](https://minikube.sigs.k8s.io)
