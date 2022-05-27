@@ -21,6 +21,7 @@ PARAM_ORACLE_FINGERPRINT=${6:?"Missing ORACLE_FINGERPRINT"}
 function init_secret {
   local NAMESPACE="kube-secrets"
 
+  # chart is in the root path
   helm template \
     --values chart/values.yaml \
     --set operator=${PARAM_OPERATOR} \
@@ -28,7 +29,7 @@ function init_secret {
     --set edgelevel.lastpass.password="${PARAM_LASTPASS_PASSWORD}" \
     --set externalSecrets.oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
     --set externalSecrets.oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
-    chart/ | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f
+    /chart | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f
 }
 
 ##############################
