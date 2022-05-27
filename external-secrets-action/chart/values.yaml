@@ -1,0 +1,6 @@
+# supported providers: [oracle|TODO]
+provider: INVALID_PROVIDER
+
+oracle:
+  privateKey: INVALID_PRIVATE_KEY
+  fingerprint: INVALID_FINGERPRINT

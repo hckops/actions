@@ -2,6 +2,7 @@
 
 * [kube-do](#kube-do-action)
 * [bootstrap](#bootstrap-action)
+* [external-secrets](#external-secrets)
 * [discord](#discord-action)
 * [development](#development)
 
@@ -111,6 +112,12 @@ make bootstrap kube="template"
 # admin|argocd
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
+
+### TODO external-secrets-[INIT|ROOT|MASTER]-action
+
+* [External Secrets Operator](https://external-secrets.io)
+
+> TODO
 
 ### discord-action
 
