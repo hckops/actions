@@ -43,6 +43,9 @@ echo "[-] LASTPASS_PASSWORD=${PARAM_LASTPASS_PASSWORD}"
 echo "[-] ORACLE_PRIVATE_KEY=${PARAM_ORACLE_PRIVATE_KEY}"
 echo "[-] ORACLE_FINGERPRINT=${PARAM_ORACLE_FINGERPRINT}"
 
+pwd
+ls -lah
+
 # TODO dry run in ci: "test-kube-secrets.yml" should only print "helm template"
 init_secret
 
