@@ -26,7 +26,7 @@ function bootstrap {
     --set repository.targetRevision=${PARAM_VERSION} \
     --set argocd.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set argocd.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
-    ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} apply --namespace ${NAMESPACE} -f -
+    ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
 ##############################
