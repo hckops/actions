@@ -1,4 +1,4 @@
-# supported operators: [external-secrets-oracle|edgelevel-lastpass]
+# supported operators: [edgelevel-lastpass|external-secrets-oracle]
 operator: INVALID_OPERATOR
 
 externalSecrets:

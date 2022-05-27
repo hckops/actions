@@ -8,15 +8,24 @@ inputs:
   operator:
     description: 'Supported operators: [edgelevel-lastpass|external-secrets-oracle]'
     required: true
-  # TODO >>> LASTPASS
+  # LASTPASS
+  edgelevel-lastpass-username:
+    description: 'TODO'
+    required: false
+    default: 'INVALID_USERNAME'
+  edgelevel-lastpass-password:
+    description: 'TODO'
+    required: false
+    default: 'INVALID_PASSWORD'
   # ORACLE
   external-secrets-oracle-private-key:
     description: 'TODO'
     required: false
-    default: 'INVALID_ORACLE_PRIVATE_KEY'
+    default: 'INVALID_PRIVATE_KEY'
   external-secrets-oracle-fingerprint:
     description: 'TODO'
-    required: 'INVALID_ORACLE_FINGERPRINT'
+    required: false
+    default: 'INVALID_FINGERPRINT'
 
 runs:
   using: docker
@@ -24,5 +33,7 @@ runs:
   args:
     - ${{ inputs.kubeconfig }}
     - ${{ inputs.provider }}
+    - ${{ inputs.edgelevel-lastpass-username }}
+    - ${{ inputs.edgelevel-lastpass-password }}
     - ${{ inputs.external-secrets-oracle-private-key }}
     - ${{ inputs.external-secrets-oracle-fingerprint }}
