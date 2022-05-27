@@ -29,7 +29,7 @@ function init_secret {
     --set edgelevel.lastpass.password="${PARAM_LASTPASS_PASSWORD}" \
     --set externalSecrets.oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
     --set externalSecrets.oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
-    /chart | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f
+    /chart | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
 ##############################
@@ -43,10 +43,6 @@ echo "[-] LASTPASS_PASSWORD=${PARAM_LASTPASS_PASSWORD}"
 # ORACLE
 echo "[-] ORACLE_PRIVATE_KEY=${PARAM_ORACLE_PRIVATE_KEY}"
 echo "[-] ORACLE_FINGERPRINT=${PARAM_ORACLE_FINGERPRINT}"
-
-pwd
-ls -lah
-ls -la /
 
 # TODO dry run in ci: "test-kube-secrets.yml" should only print "helm template"
 init_secret
