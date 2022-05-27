@@ -19,16 +19,17 @@ PARAM_ORACLE_FINGERPRINT=${6:?"Missing ORACLE_FINGERPRINT"}
 # global param: <PARAM_OPERATOR>
 function init_secret {
   local NAMESPACE="kube-secrets"
-
   # chart is in the root path
+  local CHART_PATH="/chart"
+
   helm template \
-    --values chart/values.yaml \
-    --set operator=${PARAM_OPERATOR} \
+    --values "${CHART_PATH}/values.yaml" \
+    --set operator="${PARAM_OPERATOR}" \
     --set edgelevel.lastpass.username="${PARAM_LASTPASS_USERNAME}" \
     --set edgelevel.lastpass.password="${PARAM_LASTPASS_PASSWORD}" \
     --set externalSecrets.oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
     --set externalSecrets.oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
-    /chart | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
+    ${CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
 ##############################
