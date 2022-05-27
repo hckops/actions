@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: edgelevel-lastpass-root-secret
+  name: edgelevel-lastpass-master-secret
 type: Opaque
 stringData:
   username: {{ .Values.edgelevel.lastpass.username }}
