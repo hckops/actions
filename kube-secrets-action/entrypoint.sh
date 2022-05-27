@@ -45,6 +45,7 @@ echo "[-] ORACLE_FINGERPRINT=${PARAM_ORACLE_FINGERPRINT}"
 
 pwd
 ls -lah
+ls -la /
 
 # TODO dry run in ci: "test-kube-secrets.yml" should only print "helm template"
 init_secret
