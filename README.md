@@ -2,7 +2,7 @@
 
 * [kube-do](#kube-do-action)
 * [bootstrap](#bootstrap-action)
-* [external-secrets](#external-secrets)
+* [kube-secrets](#kube-secrets-action)
 * [discord](#discord-action)
 * [development](#development)
 
@@ -115,10 +115,12 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 ### kube-secrets-action
 
-* [External Secrets Operator](https://external-secrets.io)
-* [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
+[![test-kube-secrets](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml)
 
 > TODO
+
+* [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
+* [External Secrets Operator](https://external-secrets.io)
 
 ### discord-action
 
