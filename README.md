@@ -113,9 +113,10 @@ make bootstrap kube="template"
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
-### TODO external-secrets-[INIT|ROOT|MASTER]-action
+### kube-secrets-action
 
 * [External Secrets Operator](https://external-secrets.io)
+* [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
 
 > TODO
 

@@ -1,0 +1,11 @@
+{{ if eq .Values.operator "edgelevel-lastpass" }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: edgelevel-lastpass-root-secret
+type: Opaque
+stringData:
+  username: {{ .Values.edgelevel.lastpass.username }}
+  password: {{ .Values.edgelevel.lastpass.password }}
+{{ end }}

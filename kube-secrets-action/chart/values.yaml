@@ -1,0 +1,12 @@
+# supported operators: [external-secrets-oracle|edgelevel-lastpass]
+operator: INVALID_OPERATOR
+
+externalSecrets:
+  oracle:
+    privateKey: INVALID_PRIVATE_KEY
+    fingerprint: INVALID_FINGERPRINT
+
+edgelevel:
+  lastpass:
+    username: INVALID_USERNAME
+    password: INVALID_PASSWORD

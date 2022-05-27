@@ -1,21 +1,22 @@
-name: 'ExternalSecrets'
+name: 'Kubernetes Secrets'
 description: 'TODO'
 
 inputs:
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
-  provider:
-    description: 'Supported providers: [oracle|TODO]'
+  operator:
+    description: 'Supported operators: [edgelevel-lastpass|external-secrets-oracle]'
     required: true
+  # TODO >>> LASTPASS
   # ORACLE
-  oracle-private-key:
+  external-secrets-oracle-private-key:
     description: 'TODO'
     required: false
     default: 'INVALID_ORACLE_PRIVATE_KEY'
-  oracle-fingerprint:
+  external-secrets-oracle-fingerprint:
     description: 'TODO'
-    required: 'INVALID_FINGERPRINT'
+    required: 'INVALID_ORACLE_FINGERPRINT'
 
 runs:
   using: docker
@@ -23,5 +24,5 @@ runs:
   args:
     - ${{ inputs.kubeconfig }}
     - ${{ inputs.provider }}
-    - ${{ inputs.oracle-private-key }}
-    - ${{ inputs.oracle-fingerprint }}
+    - ${{ inputs.external-secrets-oracle-private-key }}
+    - ${{ inputs.external-secrets-oracle-fingerprint }}

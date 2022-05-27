@@ -12,7 +12,7 @@ PARAM_PROVIDER=${2:?"Missing PROVIDER"}
 # global param: <PARAM_KUBECONFIG>
 # global param: <PARAM_PROVIDER>
 function init_secret {
-  local NAMESPACE="external-secrets"
+  local NAMESPACE="kube-secrets"
 
   # ORACLE
   local PARAM_ORACLE_PRIVATE_KEY=${3:?"Missing ORACLE_PRIVATE_KEY"}
@@ -23,18 +23,18 @@ function init_secret {
   helm template \
     --values chart/values.yaml \
     --set provider=${PARAM_PROVIDER} \
-    --set oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
-    --set oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
+    --set externalSecrets.oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
+    --set externalSecrets.oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
     chart/ | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f
 }
 
 ##############################
 
-echo "[+] external-secrets"
+echo "[+] kube-secrets"
 echo "[*] PROVIDER=${PARAM_PROVIDER}"
 echo "[*] KUBECONFIG=${PARAM_KUBECONFIG}"
 
 # TODO dry run: test-*.yaml prints only secret but do not apply
 init_secret
 
-echo "[-] external-secrets"
+echo "[-] kube-secrets"
