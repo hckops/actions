@@ -32,7 +32,7 @@ runs:
   image: Dockerfile
   args:
     - ${{ inputs.kubeconfig }}
-    - ${{ inputs.provider }}
+    - ${{ inputs.operator }}
     - ${{ inputs.edgelevel-lastpass-username }}
     - ${{ inputs.edgelevel-lastpass-password }}
     - ${{ inputs.external-secrets-oracle-private-key }}
