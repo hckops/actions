@@ -23,8 +23,8 @@ function init_secret {
   local CHART_PATH="/chart"
 
   helm template \
-    --create-namespace \
     --values "${CHART_PATH}/values.yaml" \
+    --set createNamespace="true" \
     --set operator="${PARAM_OPERATOR}" \
     --set edgelevel.lastpass.username="${PARAM_LASTPASS_USERNAME}" \
     --set edgelevel.lastpass.password="${PARAM_LASTPASS_PASSWORD}" \

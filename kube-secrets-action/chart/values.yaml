@@ -1,3 +1,5 @@
+createNamespace: true
+
 # supported operators: [edgelevel-lastpass|external-secrets-oracle]
 operator: INVALID_OPERATOR
 
