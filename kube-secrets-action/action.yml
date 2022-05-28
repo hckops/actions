@@ -10,7 +10,7 @@ inputs:
     required: false
     default: true
   operator:
-    description: 'Supported operators: [edgelevel-lastpass|external-secrets-oracle]'
+    description: 'Supported operators: [edgelevel-lastpass|external-secrets-akeyless|external-secrets-oracle]'
     required: true
   # LASTPASS
   edgelevel-lastpass-username:
@@ -21,13 +21,26 @@ inputs:
     description: 'LastPass password'
     required: false
     default: 'INVALID_PASSWORD'
+  # AKEYLESS
+  external-secrets-akeyless-access-id:
+    description: 'Akeyless access id'
+    required: false
+    default: 'INVALID_ACCESS_ID'
+  external-secrets-akeyless-access-type:
+    description: 'Akeyless access type'
+    required: false
+    default: 'INVALID_ACCESS_TYPE'
+  external-secrets-akeyless-access-type-param:
+    description: 'Akeyless access type parameter'
+    required: false
+    default: 'INVALID_ACCESS_TYPE_PARAM'
   # ORACLE
   external-secrets-oracle-private-key:
-    description: 'API key'
+    description: 'Oracle API key'
     required: false
     default: 'INVALID_PRIVATE_KEY'
   external-secrets-oracle-fingerprint:
-    description: 'API key fingerprint'
+    description: 'Oracle API key fingerprint'
     required: false
     default: 'INVALID_FINGERPRINT'
 
@@ -40,5 +53,8 @@ runs:
     - ${{ inputs.operator }}
     - ${{ inputs.edgelevel-lastpass-username }}
     - ${{ inputs.edgelevel-lastpass-password }}
+    - ${{ inputs.external-secrets-akeyless-access-id }}
+    - ${{ inputs.external-secrets-akeyless-access-type }}
+    - ${{ inputs.external-secrets-akeyless-access-type-param }}
     - ${{ inputs.external-secrets-oracle-private-key }}
     - ${{ inputs.external-secrets-oracle-fingerprint }}

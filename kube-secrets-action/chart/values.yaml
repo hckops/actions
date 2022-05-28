@@ -1,6 +1,6 @@
 createNamespace: true
 
-# supported operators: [edgelevel-lastpass|external-secrets-oracle]
+# supported operators: [edgelevel-lastpass|external-secrets-akeyless|external-secrets-oracle]
 operator: INVALID_OPERATOR
 
 edgelevel:
@@ -9,6 +9,10 @@ edgelevel:
     password: INVALID_PASSWORD
 
 externalSecrets:
+  akeyless:
+    accessId: INVALID_ACCESS_ID
+    accessType: INVALID_ACCESS_TYPE
+    accessTypeParam: INVALID_ACCESS_TYPE_PARAM
   oracle:
     privateKey: INVALID_PRIVATE_KEY
     fingerprint: INVALID_FINGERPRINT
