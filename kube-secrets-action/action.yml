@@ -1,29 +1,33 @@
 name: 'Kubernetes Secrets'
-description: 'TODO'
+description: 'Init Kubernetes master Secret used by the operator'
 
 inputs:
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
+  enabled:
+    description: 'Dry run if set to false'
+    required: false
+    default: true
   operator:
     description: 'Supported operators: [edgelevel-lastpass|external-secrets-oracle]'
     required: true
   # LASTPASS
   edgelevel-lastpass-username:
-    description: 'TODO'
+    description: 'LastPass username'
     required: false
     default: 'INVALID_USERNAME'
   edgelevel-lastpass-password:
-    description: 'TODO'
+    description: 'LastPass password'
     required: false
     default: 'INVALID_PASSWORD'
   # ORACLE
   external-secrets-oracle-private-key:
-    description: 'TODO'
+    description: 'API key'
     required: false
     default: 'INVALID_PRIVATE_KEY'
   external-secrets-oracle-fingerprint:
-    description: 'TODO'
+    description: 'API key fingerprint'
     required: false
     default: 'INVALID_FINGERPRINT'
 
@@ -32,6 +36,7 @@ runs:
   image: Dockerfile
   args:
     - ${{ inputs.kubeconfig }}
+    - ${{ inputs.enabled }}
     - ${{ inputs.operator }}
     - ${{ inputs.edgelevel-lastpass-username }}
     - ${{ inputs.edgelevel-lastpass-password }}

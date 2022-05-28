@@ -117,10 +117,12 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 [![test-kube-secrets](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml)
 
-> TODO
+> Init Kubernetes master Secret used by the operator
 
 * [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
 * [External Secrets Operator](https://external-secrets.io)
+
+> TODO
 
 ### discord-action
 
