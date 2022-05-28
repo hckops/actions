@@ -34,11 +34,15 @@ function init_secret {
     --set edgelevel.lastpass.password="${PARAM_LASTPASS_PASSWORD}" \
     --set externalSecrets.oracle.privateKey="${PARAM_ORACLE_PRIVATE_KEY}" \
     --set externalSecrets.oracle.fingerprint="${PARAM_ORACLE_FINGERPRINT}" \
-    ${CHART_PATH} | tee "${CHART_PATH}/${OUTPUT_TEMPLATE}"
+    ${CHART_PATH} > "${CHART_PATH}/${OUTPUT_TEMPLATE}"
 
     if [[ ${PARAM_ENABLED} == "true" ]]; then
       echo "[*] Action enabled"
       kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f "${CHART_PATH}/${OUTPUT_TEMPLATE}"
+    else
+      echo "[*] Action disabled"
+      # debug
+      #cat "${CHART_PATH}/${OUTPUT_TEMPLATE}"
     fi
 }
 
