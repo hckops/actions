@@ -71,6 +71,7 @@ function doctl_cluster {
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
       echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
 
+      # TODO step: add domain (networking)
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --count ${CLUSTER_COUNT} \
@@ -94,6 +95,12 @@ function doctl_cluster {
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --force
+
+      # TODO step: remove domain (networking)
+      #doctl compute domain list --access-token ${DIGITALOCEAN_ACCESS_TOKEN}
+      # TODO step: cleanup load balancer (networking)
+      #doctl compute load-balancer list --access-token ${DIGITALOCEAN_ACCESS_TOKEN} --format=ID --no-header
+      #doctl compute load-balancer delete <LOAD_BALANCER_ID> --access-token ${DIGITALOCEAN_ACCESS_TOKEN} --force
     ;;
     *)
       echo "ERROR: unknown command"
