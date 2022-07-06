@@ -119,10 +119,34 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 > Init Kubernetes master Secret used by the operator
 
-* [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
 * [External Secrets Operator](https://external-secrets.io)
+* [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
 
-> TODO
+Example
+```bash
+# AKEYLESS
+- name: Secrets
+  uses: hckops/actions/kube-secrets-action@main
+  with:
+    kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
+    operator: external-secrets-akeyless
+    external-secrets-akeyless-access-id: ${{ secrets.AKEYLESS_ACCESS_ID }}
+    external-secrets-akeyless-access-type: api_key
+    external-secrets-akeyless-access-type-param: ${{ secrets.AKEYLESS_ACCESS_KEY }}
+
+# LASTPASS
+- name: Secrets
+  uses: hckops/actions/kube-secrets-action@main
+  with:
+    kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
+    operator: edgelevel-lastpass
+    edgelevel-lastpass-username: ${{ secrets.LASTPASS_USERNAME }}
+    edgelevel-lastpass-password: ${{ secrets.LASTPASS_PASSWORD }}
+```
+
+Requires
+* `AKEYLESS_ACCESS_ID` and `AKEYLESS_ACCESS_KEY` secrets for [Akeyless](https://www.akeyless.io)
+* `LASTPASS_USERNAME` and `LASTPASS_PASSWORD` secrets for [LastPass](https://www.lastpass.com)
 
 ### discord-action
 
