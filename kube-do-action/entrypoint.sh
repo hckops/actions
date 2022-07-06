@@ -10,6 +10,7 @@ PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
 PARAM_ENABLED=${4:?"Missing ENABLED"}
 PARAM_WAIT=${5:?"Missing WAIT"}
 PARAM_SKIP=${6:?"Missing SKIP"}
+PARAM_RESET_DOMAIN=${7:?"Missing RESET_DOMAIN"}
 
 ##############################
 
@@ -96,17 +97,53 @@ function doctl_cluster {
         --access-token ${PARAM_ACCESS_TOKEN} \
         --force
 
-      # TODO step: remove domain (networking)
-      #doctl compute domain list --access-token ${DIGITALOCEAN_ACCESS_TOKEN}
-      # TODO step: cleanup load balancer (networking)
-      #doctl compute load-balancer list --access-token ${DIGITALOCEAN_ACCESS_TOKEN} --format=ID --no-header
-      #doctl compute load-balancer delete <LOAD_BALANCER_ID> --access-token ${DIGITALOCEAN_ACCESS_TOKEN} --force
+      if [[ ${PARAM_RESET_DOMAIN} != "INVALID_DOMAIN" ]]; then
+        doctl_reset_networking ${PARAM_RESET_DOMAIN}
+      fi
     ;;
     *)
       echo "ERROR: unknown command"
       exit 1
     ;;
   esac
+}
+
+# param #1: <string>
+function doctl_reset_networking {
+  local PARAM_DOMAIN=$1
+  # matches also invalid ip
+  local REGEX_IP="([0-9]{1,3}[\.]){3}[0-9]{1,3}"
+
+  # returns load balancer ip associated to this domain
+  local LOAD_BALANCER_IP=$(doctl compute domain records list ${PARAM_DOMAIN} \
+    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} | \
+      grep -E -o ${REGEX_IP} | \
+      uniq -d)
+
+  # returns load balancer id
+  local LOAD_BALANCER_ID=$(doctl compute load-balancer list \
+    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+    --format=IP,ID --no-header | \
+      grep ${LOAD_BALANCER_IP} | \
+      awk '{print $2}')
+
+  echo "[-] DOMAIN=${PARAM_DOMAIN}"
+  echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
+  echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
+
+  # deletes load balancer
+  doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
+    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+    --force
+
+  # deletes domain records
+  doctl compute domain delete ${PARAM_DOMAIN} \
+    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+    --force
+
+  # claims domain back immediately
+  doctl compute domain create ${PARAM_DOMAIN} \
+    --access-token ${DIGITALOCEAN_ACCESS_TOKEN}
 }
 
 ##############################

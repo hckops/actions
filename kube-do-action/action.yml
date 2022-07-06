@@ -11,7 +11,7 @@ inputs:
   access-token:
     description: 'Digital Ocean access token required to provision clusters'
     required: true
-  # TODO cluster configuration file schema (multi-privider)
+  # TODO cluster configuration file schema (multi-provider)
   # https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html
   config-path:
     description: 'Path to the cluster configuration file'
@@ -28,6 +28,10 @@ inputs:
     description: 'Ignore provisioning. If cluster status is UP download kubeconfig: useful for development'
     required: false
     default: false
+  reset-domain:
+    description: 'Remove domain records and the associated load balancer'
+    required: false
+    default: 'INVALID_DOMAIN'
 outputs:
   status:
     description: 'Current status of the cluster: [CREATE|DELETE|UP|DOWN]'
@@ -44,3 +48,4 @@ runs:
     - ${{ inputs.enabled }}
     - ${{ inputs.wait }}
     - ${{ inputs.skip }}
+    - ${{ inputs.reset-domain }}
