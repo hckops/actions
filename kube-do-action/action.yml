@@ -16,10 +16,6 @@ inputs:
   config-path:
     description: 'Path to the cluster configuration file'
     required: true
-  # e.g. "example.com"
-  reset-domain:
-    description: 'Remove domain records and the associated load balancer when deleting the cluster'
-    required: false
   enabled:
     description: 'Dry run if set to false'
     required: false
@@ -45,7 +41,6 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.access-token }}
     - ${{ inputs.config-path }}
-    - ${{ inputs.reset-domain }}
     - ${{ inputs.enabled }}
     - ${{ inputs.wait }}
     - ${{ inputs.skip }}

@@ -7,11 +7,9 @@ set -euo pipefail
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
-# default value
-PARAM_RESET_DOMAIN=${4:-"INVALID_DOMAIN"} 
-PARAM_ENABLED=${5:?"Missing ENABLED"}
-PARAM_WAIT=${6:?"Missing WAIT"}
-PARAM_SKIP=${7:?"Missing SKIP"}
+PARAM_ENABLED=${4:?"Missing ENABLED"}
+PARAM_WAIT=${5:?"Missing WAIT"}
+PARAM_SKIP=${6:?"Missing SKIP"}
 
 ##############################
 
@@ -68,12 +66,14 @@ function doctl_cluster {
       local CLUSTER_REGION=$(yq e '.config.region' ${CONFIG_PATH})
       local CLUSTER_SIZE=$(yq e '.config.size' ${CONFIG_PATH})
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
+      # default
+      local CLUSTER_DOMAIN=$(yq e '.config.domain.name // "INVALID_DOMAIN"' ${CONFIG_PATH})
+
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
       echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
 
-      # TODO step: add domain (networking)
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --count ${CLUSTER_COUNT} \
@@ -98,8 +98,9 @@ function doctl_cluster {
         --access-token ${PARAM_ACCESS_TOKEN} \
         --force
 
-      if [[ ${PARAM_RESET_DOMAIN} != "INVALID_DOMAIN" ]]; then
-        doctl_reset_networking ${PARAM_RESET_DOMAIN}
+      if [[ ${CLUSTER_DOMAIN} != "INVALID_DOMAIN" ]]; then
+        # removes domain records and the associated load balancer
+        doctl_reset_networking ${CLUSTER_DOMAIN}
       fi
     ;;
     *)
@@ -110,41 +111,42 @@ function doctl_cluster {
 }
 
 # param #1: <string>
+# global param: <PARAM_ACCESS_TOKEN>
 function doctl_reset_networking {
-  local PARAM_DOMAIN=$1
+  local DOMAIN_NAME=$1
   # matches also invalid ip
   local REGEX_IP="([0-9]{1,3}[\.]){3}[0-9]{1,3}"
 
   # returns load balancer ip associated to this domain
-  local LOAD_BALANCER_IP=$(doctl compute domain records list ${PARAM_DOMAIN} \
-    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} | \
+  local LOAD_BALANCER_IP=$(doctl compute domain records list ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN} | \
       grep -E -o ${REGEX_IP} | \
       uniq -d)
 
   # returns load balancer id
   local LOAD_BALANCER_ID=$(doctl compute load-balancer list \
-    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
     --format=IP,ID --no-header | \
       grep ${LOAD_BALANCER_IP} | \
       awk '{print $2}')
 
-  echo "[-] DOMAIN=${PARAM_DOMAIN}"
+  echo "[-] DOMAIN=${DOMAIN_NAME}"
   echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
   echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
 
   # deletes load balancer
   doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
-    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
     --force
 
   # deletes domain records
-  doctl compute domain delete ${PARAM_DOMAIN} \
-    --access-token ${DIGITALOCEAN_ACCESS_TOKEN} \
+  doctl compute domain delete ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
     --force
 
   # claims domain back immediately
-  doctl compute domain create ${PARAM_DOMAIN} \
-    --access-token ${DIGITALOCEAN_ACCESS_TOKEN}
+  doctl compute domain create ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN}
 }
 
 ##############################
