@@ -196,7 +196,7 @@ docker run --rm --name hck-kube -it hckops/kube-<base|aws|do>
 How to build and publish images manually
 ```bash
 make docker-build
-make docker-publish version=v0.1.0 token=<ACCESS_TOKEN>
+make docker-publish version=v0.2.0 token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
