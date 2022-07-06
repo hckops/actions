@@ -200,9 +200,10 @@ make docker-publish version=v0.2.0 token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
-TODOs
-- action to publish on git tag
-- `latest` tag might cause issues: see `bootstrap` and `kube-do` dockerfile
+When updating tag, check image versions
+* `bootstrap-action` uses `hckops/kube-base`
+* `kube-do-action` uses `hckops/kube-do`
+* `kube-secrets-action` uses `hckops/kube-do`
 
 ### minikube
 
