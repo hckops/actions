@@ -66,9 +66,6 @@ function doctl_cluster {
       local CLUSTER_REGION=$(yq e '.config.region' ${CONFIG_PATH})
       local CLUSTER_SIZE=$(yq e '.config.size' ${CONFIG_PATH})
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
-      # default
-      local CLUSTER_DOMAIN=$(yq e '.config.domain.name // "INVALID_DOMAIN"' ${CONFIG_PATH})
-
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
@@ -94,6 +91,9 @@ function doctl_cluster {
       echo "::set-output name=kubeconfig::${KUBE_CONFIG}"
     ;;
     "delete")
+      local CLUSTER_DOMAIN=$(yq e '.config.domain.name // "INVALID_DOMAIN"' ${CONFIG_PATH})
+      echo "[-] CLUSTER_DOMAIN=${CLUSTER_DOMAIN}"
+
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --force
@@ -130,7 +130,6 @@ function doctl_reset_networking {
       grep ${LOAD_BALANCER_IP} | \
       awk '{print $2}')
 
-  echo "[-] DOMAIN=${DOMAIN_NAME}"
   echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
   echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
 
