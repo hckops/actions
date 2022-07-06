@@ -7,10 +7,11 @@ set -euo pipefail
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
-PARAM_ENABLED=${4:?"Missing ENABLED"}
-PARAM_WAIT=${5:?"Missing WAIT"}
-PARAM_SKIP=${6:?"Missing SKIP"}
-PARAM_RESET_DOMAIN=${7:?"Missing RESET_DOMAIN"}
+# default value
+PARAM_RESET_DOMAIN=${4:-"INVALID_DOMAIN"} 
+PARAM_ENABLED=${5:?"Missing ENABLED"}
+PARAM_WAIT=${6:?"Missing WAIT"}
+PARAM_SKIP=${7:?"Missing SKIP"}
 
 ##############################
 
