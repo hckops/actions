@@ -99,6 +99,9 @@ function doctl_cluster {
         --force
 
       if [[ ${CLUSTER_DOMAIN} != "INVALID_DOMAIN" ]]; then
+        # wait 60 seconds at least before deleting the domain
+        # or external-dns will keep updading dns records when the domain is re-added
+        sleep 60
         # removes domain records and the associated load balancer
         doctl_reset_networking ${CLUSTER_DOMAIN}
       fi
@@ -143,7 +146,11 @@ function doctl_reset_networking {
     --access-token ${PARAM_ACCESS_TOKEN} \
     --force
 
-  # claims domain back immediately
+  # adds domain back immediately:
+  # it should be added only when the cluster is created,
+  # but there are bots that keep trying to steal other users domains,
+  # and the only way to claim it back is to open a support ticket showing proof of ownership.
+  # DigitalOcean is not a registrar and they can't verify it automatically
   doctl compute domain create ${DOMAIN_NAME} \
     --access-token ${PARAM_ACCESS_TOKEN}
 }
