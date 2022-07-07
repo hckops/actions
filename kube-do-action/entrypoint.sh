@@ -99,10 +99,6 @@ function doctl_cluster {
         --force
 
       if [[ ${CLUSTER_DOMAIN} != "INVALID_DOMAIN" ]]; then
-        # wait 60 seconds at least before deleting the domain
-        # or external-dns will keep updading dns records when the domain is re-added
-        echo "[*] sleeping..."
-        sleep 60
         # removes domain records and the associated load balancer
         doctl_reset_networking ${CLUSTER_DOMAIN}
       fi
@@ -141,6 +137,10 @@ function doctl_reset_networking {
   doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
     --access-token ${PARAM_ACCESS_TOKEN} \
     --force
+  
+  # wait before deleting the domain or external-dns will keep updading dns records when the domain is re-added
+  echo "[*] sleeping..."
+  sleep 2m
 
   # deletes domain records
   doctl compute domain delete ${DOMAIN_NAME} \
