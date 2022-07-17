@@ -1,7 +1,11 @@
 --- actions
 
+https://docs.github.com/en/actions
+https://github.com/actions/starter-workflows
 https://github.com/sdras/awesome-actions
 https://www.philschmid.de/create-custom-github-action-in-4-steps
+https://www.actionsbyexample.com
+https://actionsflow.github.io
 
 # examples
 https://github.com/netlify/actions
