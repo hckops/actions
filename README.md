@@ -57,7 +57,8 @@ docker run --rm \
 ```
 
 TODOs
-- [ ] validate cluster definition `ClusterConfig`
+- [ ] add domain if doesn't exist, see `doctl_cluster create`
+- [ ] validate cluster definition `ClusterConfig` e.g. [JSON Schema](http://json-schema.org)
 - [ ] scheduler
     * reconcile cluster drift status
     * delete development clusters (add flag) after working hours
