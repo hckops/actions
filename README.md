@@ -3,6 +3,7 @@
 * [kube-do](#kube-do-action)
 * [bootstrap](#bootstrap-action)
 * [kube-secrets](#kube-secrets-action)
+* [helm-lint](#helm-lint-action)
 * [discord](#discord-action)
 * [development](#development)
 
@@ -149,6 +150,10 @@ Requires
 * `AKEYLESS_ACCESS_ID` and `AKEYLESS_ACCESS_KEY` secrets for [Akeyless](https://www.akeyless.io)
 * `LASTPASS_USERNAME` and `LASTPASS_PASSWORD` secrets for [LastPass](https://www.lastpass.com)
 
+### helm-lint-action
+
+> TODO doc and test
+
 ### discord-action
 
 [![test-discord](https://github.com/hckops/actions/actions/workflows/test-discord.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-discord.yml)
@@ -203,6 +208,7 @@ make docker-clean
 
 When updating tag, check image versions
 * `bootstrap-action` uses `hckops/kube-base`
+* `helm-lint-action` uses `hckops/kube-base`
 * `kube-do-action` uses `hckops/kube-do`
 * `kube-secrets-action` uses `hckops/kube-do`
 
