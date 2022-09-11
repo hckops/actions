@@ -152,7 +152,15 @@ Requires
 
 ### helm-lint-action
 
-> TODO doc and test
+[![test-ci](https://github.com/hckops/actions/actions/workflows/test-ci.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-ci.yml)
+
+> Validate [Helm](https://helm.sh) chart
+
+Example
+```bash
+- name: Helm Lint
+  uses: hckops/actions/helm-lint-action@main
+```
 
 ### discord-action
 

@@ -1,11 +1,12 @@
-name: ci
+name: test-ci
 
 on:
   push:
     branches:
-      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-      # defaut: matches all branch and tag names
-      - '**'
+      - main
+    paths:
+      - '.github/workflows/test-ci.yml'
+      - 'helm-lint-action/**'
 
 jobs:
   ci:
