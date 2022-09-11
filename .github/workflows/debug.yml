@@ -1,0 +1,26 @@
+name: debug
+
+on:
+  push:
+    branches:
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      # defaut: matches all branch and tag names
+      - '**'
+
+jobs:
+  docker:
+    name: Docker
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Dump GitHub context
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
