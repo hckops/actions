@@ -26,3 +26,18 @@ jobs:
         run: echo '${{ toJSON(strategy) }}'
       - name: Dump matrix context
         run: echo '${{ toJSON(matrix) }}'
+
+      - name: Get Docker tag
+        id: get-docker-tag
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          if [[ ${{ github.ref_type }} == "tag" ]]; then
+            echo "::set-output name=tag::${GITHUB_REF#refs/tags/docker-}"
+          else
+            echo "::set-output name=tag::${COMMIT_SHA:0:7}"
+          fi
+      
+      - name: Output Docker tag
+        run: echo ${{ steps.get-docker-tag.outputs.tag }}
