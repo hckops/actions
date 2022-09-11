@@ -221,10 +221,10 @@ make docker-clean
 ```
 
 When updating tag, check image versions
-* `bootstrap-action` uses `hckops/kube-base`
-* `helm-lint-action` uses `hckops/kube-base`
-* `kube-do-action` uses `hckops/kube-do`
-* `kube-secrets-action` uses `hckops/kube-do`
+* `bootstrap-action`
+* `helm-lint-action`
+* `kube-do-action`
+* `kube-secrets-action`
 
 ### minikube
 
