@@ -22,9 +22,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Dump GitHub context
-        run: echo '${{ toJSON(github) }}'
-      
       # extraxts tag from ref, returns semver tag or sha suffix
       - name: Get Docker tag
         id: get-docker-tag
