@@ -210,17 +210,17 @@ docker run --rm --name hck-tmp -it hckops/kube-<base|aws|do>
 
 How to publish docker images
 ```bash
-# with docker-ci action
+# publish with action
 git tag docker-X.Y.Z
 git push origin --tags
 
-# build and publish manually
+# build and publish manually (old)
 make docker-build
 make docker-publish version=vX.Y.Z token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
-When updating tag, check image versions
+Actions to update when a new tag is created
 * `bootstrap-action`
 * `helm-lint-action`
 * `kube-do-action`
