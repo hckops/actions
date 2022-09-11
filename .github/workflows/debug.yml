@@ -1,18 +1,10 @@
 name: debug
 
-on:
-  push:
-    branches:
-      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-      # defaut: matches all branch and tag names
-      - '**'
-    tags:
-      - 'docker-[0-9]+.[0-9]+.[0-9]+'
-
+# defaut: matches all branch and tag names
 jobs:
   docker:
     name: Docker
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         run: echo '${{ toJSON(github) }}'
@@ -26,18 +18,3 @@ jobs:
         run: echo '${{ toJSON(strategy) }}'
       - name: Dump matrix context
         run: echo '${{ toJSON(matrix) }}'
-
-      - name: Get Docker tag
-        id: get-docker-tag
-        env:
-          GITHUB_REF: ${{ github.ref }}
-          COMMIT_SHA: ${{ github.sha }}
-        run: |
-          if [[ ${{ github.ref_type }} == "tag" ]]; then
-            echo "::set-output name=tag::${GITHUB_REF#refs/tags/docker-}"
-          else
-            echo "::set-output name=tag::${COMMIT_SHA:0:7}"
-          fi
-      
-      - name: Output Docker tag
-        run: echo ${{ steps.get-docker-tag.outputs.tag }}
