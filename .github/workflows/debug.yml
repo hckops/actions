@@ -1,6 +1,9 @@
 name: debug
 
 # defaut: matches all branch and tag names
+on:
+  push:
+
 jobs:
   docker:
     name: Docker
