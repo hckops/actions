@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+    branches:
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      # defaut: matches all branch and tag names
+      - '**'
+
+jobs:
+  ci:
+    name: Continuos Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Helm Lint
+        uses: ./helm-lint-action
