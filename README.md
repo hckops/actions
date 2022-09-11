@@ -203,14 +203,20 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 ```bash
 # run command
 docker run --rm hckops/kube-base /bin/bash -c <kubectl|helm|argocd>
+
 # start temporary container
-docker run --rm --name hck-kube -it hckops/kube-<base|aws|do>
+docker run --rm --name hck-tmp -it hckops/kube-<base|aws|do>
 ```
 
-How to build and publish images manually
+How to publish docker images
 ```bash
+# with docker-ci action
+git tag docker-X.Y.Z
+git push origin --tags
+
+# build and publish manually
 make docker-build
-make docker-publish version=v0.2.0 token=<ACCESS_TOKEN>
+make docker-publish version=vX.Y.Z token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
