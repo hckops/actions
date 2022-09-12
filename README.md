@@ -162,6 +162,11 @@ Example
   uses: hckops/actions/helm-lint-action@main
 ```
 
+TODOs
+- [ ] rename `kube-validate`
+- [ ] add https://github.com/yannh/kubeconform
+- [ ] add https://github.com/koalaman/shellcheck
+
 ### discord-action
 
 [![test-discord](https://github.com/hckops/actions/actions/workflows/test-discord.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-discord.yml)
