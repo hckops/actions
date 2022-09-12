@@ -1,13 +1,13 @@
-name: test-kube
+name: test-kube-do
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/test-kube.yml'
-      - 'examples/kube-*.yaml'
+      - '.github/workflows/test-kube-do.yml'
       - 'kube-do-action/**'
+      - 'examples/kube-*.yaml'
 
 jobs:
   test-kube-do:

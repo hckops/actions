@@ -11,7 +11,7 @@ For a working example see [kube-template](https://github.com/hckops/kube-templat
 
 ### kube-do-action
 
-[![test-kube](https://github.com/hckops/actions/actions/workflows/test-kube.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube.yml)
+[![test-kube-do](https://github.com/hckops/actions/actions/workflows/test-kube-do.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-do.yml)
 
 > Manage DigitalOcean Kubernetes cluster lifecycle
 
@@ -152,7 +152,7 @@ Requires
 
 ### helm-lint-action
 
-[![test-ci](https://github.com/hckops/actions/actions/workflows/test-ci.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-ci.yml)
+[![test-helm-lint](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml)
 
 > Validate [Helm](https://helm.sh) chart
 

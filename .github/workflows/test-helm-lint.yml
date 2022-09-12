@@ -1,16 +1,16 @@
-name: test-ci
+name: test-helm-lint
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/test-ci.yml'
+      - '.github/workflows/test-helm-lint.yml'
       - 'helm-lint-action/**'
 
 jobs:
-  ci:
-    name: Continuos Integration
+  test-helm-lint:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

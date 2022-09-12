@@ -22,7 +22,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      # extraxts tag from ref, returns semver tag or sha suffix
+      # extracts tag from ref, returns semver tag or sha suffix
       - name: Get Docker tag
         id: get-docker-tag
         env:
