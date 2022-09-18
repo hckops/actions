@@ -207,10 +207,10 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 
 ```bash
 # run command
-docker run --rm hckops/kube-base /bin/bash -c <kubectl|helm|argocd>
+docker run --rm hckops/kube-base /bin/bash -c <kubectl|helm>
 
 # start temporary container
-docker run --rm --name hck-tmp -it hckops/kube-<base|aws|do>
+docker run --rm --name hck-tmp -it hckops/kube-<base|argo|aws|do>
 ```
 
 How to publish docker images
