@@ -60,6 +60,18 @@ jobs:
           tags: |
             ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get-docker-tag.outputs.tag }}
+      
+      - name: Build and push [${{ env.DOCKER_IMAGE_NAME }}]
+        uses: docker/build-push-action@v3
+        env:
+          DOCKER_IMAGE_NAME: kube-argo
+        with:
+          context: ./docker
+          file: ./docker/Dockerfile.argo
+          push: true
+          tags: |
+            ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+            ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get-docker-tag.outputs.tag }}
 
       - name: Build and push [${{ env.DOCKER_IMAGE_NAME }}]
         uses: docker/build-push-action@v3

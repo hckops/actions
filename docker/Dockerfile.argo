@@ -1,0 +1,16 @@
+FROM hckops/kube-base
+
+# https://github.com/argoproj/argo-cd/releases
+ARG ARGO_CD_VERSION=2.4.12
+# https://github.com/argoproj/argo-workflows/releases
+ARG ARGO_WORKFLOWS_VERSION=3.3.9
+
+# argo-cd
+RUN curl -sSL "https://github.com/argoproj/argo-cd/releases/download/v${ARGO_CD_VERSION}/argocd-linux-amd64" -o /usr/local/bin/argocd && \
+  chmod +x /usr/local/bin/argocd && \
+  argocd version --client --output=json
+
+# argo-workflows
+RUN curl -sSL -o - "https://github.com/argoproj/argo-workflows/releases/download/v${ARGO_WORKFLOWS_VERSION}/argo-linux-amd64.gz" | gunzip > /usr/local/bin/argo && \
+  chmod +x /usr/local/bin/argo && \
+  argo version

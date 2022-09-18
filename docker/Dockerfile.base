@@ -6,14 +6,11 @@ ARG KUBECTL_VERSION=1.25.0
 ARG KUBECTX_VERSION=0.9.4
 # https://github.com/helm/helm/releases
 ARG HELM_VERSION=3.9.4
-# https://github.com/argoproj/argo-cd/releases
-ARG ARGOCD_VERSION=2.4.11
 
 RUN apk upgrade --update && apk --no-cache add \
   git \
   make \
   curl \
-  httpie \
   jq \
   yq \
   bash \
@@ -33,11 +30,6 @@ RUN curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VE
 # helm
 RUN curl -sSL "https://git.io/get_helm.sh" | bash -s -- --version "v${HELM_VERSION}" && \
   helm version
-
-# argocd
-RUN curl -sSL "https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64" -o /usr/local/bin/argocd && \
-  chmod +x /usr/local/bin/argocd && \
-  argocd version --client --output=json
 
 COPY .bashrc /root/
 CMD ["/bin/bash"]
