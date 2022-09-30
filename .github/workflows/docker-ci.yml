@@ -18,6 +18,8 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-22.04
+    # makes sure it doesn't finish the minutes quota if stalls
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
