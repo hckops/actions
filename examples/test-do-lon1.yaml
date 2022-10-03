@@ -1,0 +1,26 @@
+version: 1
+# name of the cluster
+name: test-do-lon1
+# cloud provider: [digitalocean|aws]
+provider: digitalocean
+# commit and push status UP or DOWN: used to start|stop the cluster by "kube-[do|aws]-action"
+status: DOWN
+
+# TODO override CHART_NAME and NAMESPACE
+bootstrap:
+  # OPTIONAL: used to override values in the chart i.e. multi env/tenant/cloud
+  # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
+  helmValueFile: values-custom.yaml
+
+config:
+  # https://slugs.do-api.dev
+  # https://www.digitalocean.com/try/new-pricing
+  # https://docs.digitalocean.com/products/kubernetes/details/limits
+  digitalocean:
+    count: 1
+    region: lon1
+    size: s-1vcpu-2gb
+    # TODO not used
+    tags: []
+    # OPTIONAL
+    version: latest

@@ -1,0 +1,13 @@
+# https://github.com/weaveworks/eksctl/blob/main/examples/01-simple-cluster.yaml
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster-test
+  region: us-east-1
+
+nodeGroups:
+  - name: ng-1
+    instanceType: m5.large
+    desiredCapacity: 1
