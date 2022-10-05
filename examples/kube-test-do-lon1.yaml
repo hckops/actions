@@ -1,16 +1,20 @@
+# cluster definition used by "kube-do-action" and "bootstrap-action"
+
+# matches major semver version of the actions
 version: 1
 # name of the cluster
 name: test-do-lon1
 # cloud provider: [digitalocean|aws]
 provider: digitalocean
-# commit and push status UP or DOWN: used to start|stop the cluster by "kube-[do|aws]-action"
+# starts|stops the cluster: the action detect changes i.e. UP or DOWN
 status: DOWN
 
-# TODO override CHART_NAME and NAMESPACE
+# TODO add parameters to override CHART_NAME and NAMESPACE
 bootstrap:
-  # OPTIONAL: used to override values in the chart i.e. multi env/tenant/cloud
+  # OPTIONAL: path from repository root
+  # overrides values in the chart i.e. multi env/tenant/cloud
   # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
-  helmValueFile: values-custom.yaml
+  helmValueFile: charts/argocd-config/values-custom.yaml
 
 config:
   # https://slugs.do-api.dev
@@ -22,5 +26,5 @@ config:
     size: s-1vcpu-2gb
     # TODO not used
     tags: []
-    # OPTIONAL
+    # OPTIONAL: version of kube
     version: latest

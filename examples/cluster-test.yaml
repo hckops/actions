@@ -5,6 +5,7 @@ kind: ClusterConfig
 
 metadata:
   name: cluster-test
+  # https://docs.aws.amazon.com/general/latest/gr/eks.html
   region: us-east-1
 
 nodeGroups:

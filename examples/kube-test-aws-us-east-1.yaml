@@ -1,3 +1,5 @@
+# TODO kube-aws-action
+
 version: 1
 name: test-aws-us-east-1
 provider: aws
@@ -6,4 +8,5 @@ status: DOWN
 config:
   # https://eksctl.io/usage/schema
   aws:
+    # path from repository root
     filePath: examples/cluster-test.yaml
