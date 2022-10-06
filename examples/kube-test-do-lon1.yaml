@@ -16,15 +16,27 @@ bootstrap:
   # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
   helmValueFile: charts/argocd-config/values-custom.yaml
 
-config:
+digitalocean:
   # https://slugs.do-api.dev
   # https://www.digitalocean.com/try/new-pricing
   # https://docs.digitalocean.com/products/kubernetes/details/limits
-  digitalocean:
+  cluster:
+    # number of nodes
     count: 1
     region: lon1
     size: s-1vcpu-2gb
-    # TODO not used
+    # TODO not implemented: currently is tagged automatically with the GitOps repository
     tags: []
     # OPTIONAL: version of kube
     version: latest
+  network:
+    # OPTIONAL
+    domain:
+      # WARNING: prefer adding/removing this manually
+      # when true, adds/removes domain when the cluster is created/deleted
+      managed: false
+      name: example.com
+    # OPTIONAL
+    loadBalancer:
+      # when true and the cluster is deleted, removes the load balancer associated to the domain name
+      managed: true

@@ -5,8 +5,8 @@ name: test-aws-us-east-1
 provider: aws
 status: DOWN
 
-config:
+aws:
   # https://eksctl.io/usage/schema
-  aws:
+  cluster:
     # path from repository root
     filePath: examples/cluster-test.yaml

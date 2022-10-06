@@ -17,17 +17,18 @@ For a working example see [kube-template](https://github.com/hckops/kube-templat
 
 Create or delete clusters based on a config definition
 ```diff
-# examples/kube-do-sample.yaml
+# examples/kube-test-do-lon1.yaml
 version: 1
-name: do-sample
+name: test-do-lon1
 provider: digitalocean
 + status: UP
 - status: DOWN
 
 config:
-  region: lon1
-  size: s-1vcpu-2gb
-  count: 1
+  digitalocean:
+    count: 1
+    region: lon1
+    size: s-1vcpu-2gb
 ```
 
 Example
@@ -36,7 +37,7 @@ Example
   uses: hckops/actions/kube-do-action@main
   with:
     access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-    config-path: examples/kube-do-sample.yaml
+    config-path: examples/kube-test-do-lon1.yaml
     wait: true
 ```
 
@@ -52,19 +53,15 @@ docker build -t hckops/kube-do-action ./kube-do-action
 # run action
 docker run --rm \
   -e GITHUB_REPOSITORY="INVALID_GITHUB_REPOSITORY" \
+  -v ${PWD}/examples:/examples \
   hckops/kube-do-action \
-  "INVALID_GITHUB_TOKEN" "INVALID_ACCESS_TOKEN" "./examples/kube-do-sample.yaml" \
-  "false" "false" "false"
+    "INVALID_GITHUB_TOKEN" \
+    "INVALID_ACCESS_TOKEN" \
+    "./examples/kube-test-do-lon1.yaml" \
+    "true" \
+    "false" \
+    "false"
 ```
-
-TODOs
-- [ ] add domain if doesn't exist, see `doctl_cluster create`
-- [ ] validate cluster definition `ClusterConfig` e.g. [JSON Schema](http://json-schema.org)
-- [ ] scheduler
-    * reconcile cluster drift status
-    * delete development clusters (add flag) after working hours
-- [ ] try to remove `github-token` from inputs
-- [ ] implementation: shell vs ???
 
 ### bootstrap-action
 
