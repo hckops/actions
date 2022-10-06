@@ -4,8 +4,6 @@ set -euo pipefail
 
 ##############################
 
-CONFIG_VERSION_SUPPORTED="1"
-
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
@@ -13,82 +11,9 @@ PARAM_ENABLED=${4:?"Missing ENABLED"}
 PARAM_WAIT=${5:?"Missing WAIT"}
 PARAM_SKIP_CREATE=${6:?"Missing SKIP_CREATE"}
 
-##############################
-
-echo "[+] kube-do"
-# global
-echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
-# params
-echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
-echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
-echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
-echo "[*] ENABLED=${PARAM_ENABLED}"
-echo "[*] WAIT=${PARAM_WAIT}"
-echo "[*] SKIP=${PARAM_SKIP_CREATE}"
-
-main
-
-echo "[-] kube-do"
+CONFIG_VERSION_SUPPORTED="1"
 
 ##############################
-
-function main {
-  if [[ ${PARAM_ENABLED} == "true" ]]; then
-    echo "[*] Action enabled"
-    provision_cluster
-  else
-    echo "[*] Action disabled"
-    echo "::set-output name=status::DISABLE"
-  fi
-}
-
-# starts|stops the cluster based on the current "status"
-function provision_cluster {
-  local CURRENT_CONFIG_PATH="/tmp/current"
-  local CURRENT_COMMIT=$(fetch_commit_sha)
-  local PREVIOUS_CONFIG_PATH="/tmp/previous"
-  local PREVIOUS_COMMIT=$(fetch_commit_sha 1)
-
-  # download config revisions for comparison
-  download_file ${PARAM_CONFIG_PATH} ${CURRENT_CONFIG_PATH} ${CURRENT_COMMIT}
-  download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
-
-  # validate current config
-  validate_config ${CURRENT_CONFIG_PATH}
-
-  local CURRENT_STATUS=$(get_config ${CURRENT_CONFIG_PATH} '.status')
-  local PREVIOUS_STATUS=$(get_config ${PREVIOUS_CONFIG_PATH} '.status')
-  echo "[-] CURRENT_STATUS=${CURRENT_STATUS} | PREVIOUS_STATUS=${PREVIOUS_STATUS}"
-
-  # for development only: flag used to skip cluster creation
-  if [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP_CREATE} == "true" ]]; then
-    # init kubeconfig only
-    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::CREATE"
-
-  # TODO it should also check cluster real status
-  elif [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
-    # do nothing
-    echo "[*] Cluster is already ${CURRENT_STATUS}"
-    # returns UP or DOWN
-    echo "::set-output name=status::${CURRENT_STATUS}"
-
-  elif [[ ${CURRENT_STATUS} == "UP" ]]; then
-    # setup network
-    doctl_network "init" ${CURRENT_CONFIG_PATH}
-    # create cluster and init kubeconfig
-    doctl_cluster "create" ${CURRENT_CONFIG_PATH}
-    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::CREATE"
-
-  elif [[ ${CURRENT_STATUS} == "DOWN" ]]; then
-    # delete cluster
-    doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
-    # cleanup network
-    doctl_network "reset" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::DELETE"
-  fi
-}
 
 # param #1 (optional): <string>
 # global param: <PARAM_GITHUB_TOKEN>
@@ -124,6 +49,15 @@ function download_file {
     "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${FILE_PATH}?ref=${COMMIT_REF}"
 }
 
+# param #1: <string>
+# param #2: <string>
+function get_config {
+  local CONFIG_PATH=$1
+  local JQ_PATH=$2
+
+  echo $(yq -o=json '.' ${CONFIG_PATH} | jq -r ${JQ_PATH})
+}
+
 # TODO json-schema validation
 # param #1: <string>
 # global param: <CONFIG_VERSION_SUPPORTED>
@@ -153,15 +87,6 @@ function validate_config {
     echo "::set-output name=status::ERROR"
     exit 1
   fi
-}
-
-# param #1: <string>
-# param #2: <string>
-function get_config {
-  local CONFIG_PATH=$1
-  local JQ_PATH=$2
-
-  echo $(yq -o=json '.' ${CONFIG_PATH} | jq -r ${JQ_PATH})
 }
 
 # param #1: <string>
@@ -224,6 +149,53 @@ function doctl_cluster {
   esac
 }
 
+# A domain should always be removed and added immediately:
+# it should be added only when the cluster is created and viceversa,
+# but there are bots that keep trying to steal other users domains.
+# If a domain is stolen, the only way to claim it back is to open a support ticket and show proof of ownership.
+# DigitalOcean is not a registrar and they can't verify it automatically.
+function doctl_domain_reset {
+  local DOMAIN_NAME=$1
+  echo "[*] Reset domain ${DOMAIN_NAME}"
+
+  # deletes domain records
+  doctl compute domain delete ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
+    --force
+
+  doctl compute domain create ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN}
+}
+
+# param #1: <string>
+# global param: <PARAM_ACCESS_TOKEN>
+function doctl_load_balancer_delete {
+  local DOMAIN_NAME=$1
+  # matches also invalid ip
+  local REGEX_IP="([0-9]{1,3}[\.]){3}[0-9]{1,3}"
+
+  # returns load balancer ip associated to this domain
+  local LOAD_BALANCER_IP=$(doctl compute domain records list ${DOMAIN_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN} | \
+      grep -E -o ${REGEX_IP} | \
+      uniq -d)
+
+  # returns load balancer id
+  local LOAD_BALANCER_ID=$(doctl compute load-balancer list \
+    --access-token ${PARAM_ACCESS_TOKEN} \
+    --format=IP,ID --no-header | \
+      grep ${LOAD_BALANCER_IP} | \
+      awk '{print $2}')
+
+  echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
+  echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
+
+  # deletes load balancer
+  doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
+    --force
+}
+
 # param #1: <string>
 # param #2: <string>
 # global param: <PARAM_ACCESS_TOKEN>
@@ -275,49 +247,79 @@ function doctl_network {
   esac
 }
 
-# A domain should always be removed and added immediately:
-# it should be added only when the cluster is created and viceversa,
-# but there are bots that keep trying to steal other users domains.
-# If a domain is stolen, the only way to claim it back is to open a support ticket and show proof of ownership.
-# DigitalOcean is not a registrar and they can't verify it automatically.
-function doctl_domain_reset {
-  local DOMAIN_NAME=$1
-  echo "[*] Reset domain ${DOMAIN_NAME}"
+# starts|stops the cluster based on the current "status"
+function provision_cluster {
+  local CURRENT_CONFIG_PATH="/tmp/current"
+  local CURRENT_COMMIT=$(fetch_commit_sha)
+  local PREVIOUS_CONFIG_PATH="/tmp/previous"
+  local PREVIOUS_COMMIT=$(fetch_commit_sha 1)
 
-  # deletes domain records
-  doctl compute domain delete ${DOMAIN_NAME} \
-    --access-token ${PARAM_ACCESS_TOKEN} \
-    --force
+  # download config revisions for comparison
+  download_file ${PARAM_CONFIG_PATH} ${CURRENT_CONFIG_PATH} ${CURRENT_COMMIT}
+  download_file ${PARAM_CONFIG_PATH} ${PREVIOUS_CONFIG_PATH} ${PREVIOUS_COMMIT}
 
-  doctl compute domain create ${DOMAIN_NAME} \
-    --access-token ${PARAM_ACCESS_TOKEN}
+  # validate current config
+  validate_config ${CURRENT_CONFIG_PATH}
+
+  local CURRENT_STATUS=$(get_config ${CURRENT_CONFIG_PATH} '.status')
+  local PREVIOUS_STATUS=$(get_config ${PREVIOUS_CONFIG_PATH} '.status')
+  echo "[-] CURRENT_STATUS=${CURRENT_STATUS} | PREVIOUS_STATUS=${PREVIOUS_STATUS}"
+
+  # for development only: flag used to skip cluster creation
+  if [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP_CREATE} == "true" ]]; then
+    # init kubeconfig only
+    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
+    echo "::set-output name=status::CREATE"
+
+  # TODO it should also check cluster real status
+  elif [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
+    # do nothing
+    echo "[*] Cluster is already ${CURRENT_STATUS}"
+    # returns UP or DOWN
+    echo "::set-output name=status::${CURRENT_STATUS}"
+
+  elif [[ ${CURRENT_STATUS} == "UP" ]]; then
+    # setup network
+    doctl_network "init" ${CURRENT_CONFIG_PATH}
+    # create cluster and init kubeconfig
+    doctl_cluster "create" ${CURRENT_CONFIG_PATH}
+    doctl_cluster "config" ${CURRENT_CONFIG_PATH}
+    echo "::set-output name=status::CREATE"
+
+  elif [[ ${CURRENT_STATUS} == "DOWN" ]]; then
+    # delete cluster
+    doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
+    # cleanup network
+    doctl_network "reset" ${CURRENT_CONFIG_PATH}
+    echo "::set-output name=status::DELETE"
+  fi
 }
 
-# param #1: <string>
-# global param: <PARAM_ACCESS_TOKEN>
-function doctl_load_balancer_delete {
-  local DOMAIN_NAME=$1
-  # matches also invalid ip
-  local REGEX_IP="([0-9]{1,3}[\.]){3}[0-9]{1,3}"
-
-  # returns load balancer ip associated to this domain
-  local LOAD_BALANCER_IP=$(doctl compute domain records list ${DOMAIN_NAME} \
-    --access-token ${PARAM_ACCESS_TOKEN} | \
-      grep -E -o ${REGEX_IP} | \
-      uniq -d)
-
-  # returns load balancer id
-  local LOAD_BALANCER_ID=$(doctl compute load-balancer list \
-    --access-token ${PARAM_ACCESS_TOKEN} \
-    --format=IP,ID --no-header | \
-      grep ${LOAD_BALANCER_IP} | \
-      awk '{print $2}')
-
-  echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
-  echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
-
-  # deletes load balancer
-  doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
-    --access-token ${PARAM_ACCESS_TOKEN} \
-    --force
+# function definition must be placed before any calls to the function
+function main {
+  if [[ ${PARAM_ENABLED} == "true" ]]; then
+    echo "[*] Action enabled"
+    provision_cluster
+  else
+    echo "[*] Action disabled"
+    echo "::set-output name=status::DISABLE"
+  fi
 }
+
+##############################
+
+echo "[+] kube-do"
+# global
+echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
+# params
+echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
+echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
+echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
+echo "[*] ENABLED=${PARAM_ENABLED}"
+echo "[*] WAIT=${PARAM_WAIT}"
+echo "[*] SKIP_CREATE=${PARAM_SKIP_CREATE}"
+echo "[*] CONFIG_VERSION_SUPPORTED=${CONFIG_VERSION_SUPPORTED}"
+
+main
+
+echo "[-] kube-do"
