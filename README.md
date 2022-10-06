@@ -77,6 +77,7 @@ Example
     gitops-ssh-key: ${{ secrets.GITOPS_SSH_KEY }}
     argocd-admin-password: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
     kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
+    config-path: examples/kube-test-do-lon1.yaml
     chart-path: ./charts/argocd-config
     version: HEAD
 ```
@@ -116,7 +117,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 [![test-kube-secrets](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml)
 
-> Init Kubernetes master Secret used by the operator
+> Init Kubernetes master Secret used by these operators
 
 * [External Secrets Operator](https://external-secrets.io)
 * [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
