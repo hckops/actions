@@ -99,7 +99,7 @@ function doctl_cluster {
   local CONFIG_PATH=$2
   local CLUSTER_NAME=$(get_config ${CONFIG_PATH} '.name')
   local REPOSITORY_NAME=$(echo $GITHUB_REPOSITORY | sed 's|/|-|g')
-  echo "[-] DOCTL_ACTION=${PARAM_ACTION}"
+  echo "[-] DOCTL_CLUSTER_ACTION=${PARAM_ACTION}"
   echo "[-] CLUSTER_NAME=${CLUSTER_NAME}"
 
   case ${PARAM_ACTION} in
@@ -108,7 +108,7 @@ function doctl_cluster {
       local CLUSTER_REGION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.region')
       local CLUSTER_SIZE=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.size')
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
-      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.version' // "default")
+      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.version // "default"')
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
@@ -202,10 +202,11 @@ function doctl_load_balancer_delete {
 function doctl_network {
   local PARAM_ACTION=$1
   local CONFIG_PATH=$2
-  local NETWORK_DOMAIN_MANAGED=$(get_config ${CONFIG_PATH} '.digitalocean.network.domain.managed' // "false")
-  local NETWORK_DOMAIN_NAME=$(get_config ${CONFIG_PATH} '.digitalocean.network.domain.name' // "INVALID_DOMAIN")
-  local NETWORK_LOAD_BALANCER_MANAGED=$(get_config ${CONFIG_PATH} '.digitalocean.network.loadBalancer.managed' // "false")
+  local NETWORK_DOMAIN_MANAGED=$(get_config ${CONFIG_PATH} '.digitalocean.network.domain.managed // "false"')
+  local NETWORK_DOMAIN_NAME=$(get_config ${CONFIG_PATH} '.digitalocean.network.domain.name // "INVALID_DOMAIN"')
+  local NETWORK_LOAD_BALANCER_MANAGED=$(get_config ${CONFIG_PATH} '.digitalocean.network.loadBalancer.managed // "false"')
 
+  echo "[-] DOCTL_NETWORK_ACTION=${PARAM_ACTION}"
   echo "[-] NETWORK_DOMAIN_MANAGED=${NETWORK_DOMAIN_MANAGED}"
   echo "[-] NETWORK_DOMAIN_NAME=${NETWORK_DOMAIN_NAME}"
   echo "[-] NETWORK_LOAD_BALANCER_MANAGED=${NETWORK_LOAD_BALANCER_MANAGED}"
