@@ -55,7 +55,8 @@ function get_config {
   local CONFIG_PATH=$1
   local JQ_PATH=$2
 
-  echo $(yq -o=json '.' ${CONFIG_PATH} | jq -r ${JQ_PATH})
+  # JQ_PATH must be escaped due to "default" issue
+  echo $(yq -o=json '.' "${CONFIG_PATH}" | jq -r "${JQ_PATH}")
 }
 
 # TODO [json|yaml]-schema validation: https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html

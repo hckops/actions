@@ -18,7 +18,7 @@ PARAM_VERSION=${6:-"HEAD"}
 function get_config {
   local JQ_PATH=$1
 
-  echo $(yq -o=json '.' ${PARAM_CONFIG_PATH} | jq -r ${JQ_PATH})
+  echo $(yq -o=json '.' "${PARAM_CONFIG_PATH}" | jq -r "${JQ_PATH}")
 }
 
 function bootstrap {
