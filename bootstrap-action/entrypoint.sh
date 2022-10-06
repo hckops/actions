@@ -23,9 +23,12 @@ function get_config {
 
 function bootstrap {
   local CHART_NAME="argocd"
-  local NAMESPACE=$(get_config ${PARAM_CONFIG_PATH} '.bootstrap.namespace // "argocd"')
+  local NAMESPACE=$(get_config '.bootstrap.namespace // "argocd"')
   # if the file doesn't exist apply twice the default values
-  local VALUE_FILE_OVERRIDE=$(get_config ${PARAM_CONFIG_PATH} '.bootstrap.helmValueFile // "values.yaml"')
+  local VALUE_FILE_OVERRIDE=$(get_config '.bootstrap.helmValueFile // "values.yaml"')
+
+  echo "[-] NAMESPACE=${NAMESPACE}"
+  echo "[-] VALUE_FILE_OVERRIDE=${VALUE_FILE_OVERRIDE}"
 
   # manually apply "argocd-config" chart and "argocd" dependency with crds
   helm template ${CHART_NAME} \
@@ -41,25 +44,30 @@ function bootstrap {
     ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
+function main {
+  # add helm repository
+  helm repo add "argo" "https://argoproj.github.io/argo-helm"
+
+  # download chart locally: "--dependency-update" fails
+  helm dependency update ${PARAM_CHART_PATH}
+
+  # Helm 3 flag --include-crds guarantees that CRDs are created first,
+  # but it might happen that by the time they are used in the same chart they are not ready yet.
+  # Since the bootstrap is idempotent, to fix the concurrency issue, when it fails apply the template twice
+  # ERROR 'unable to recognize "STDIN": no matches for kind "???" in version "argoproj.io/v1alpha1"'
+  bootstrap || bootstrap
+}
+
 ##############################
 
 echo "[+] bootstrap"
 echo "[*] GITOPS_SSH_KEY=${PARAM_GITOPS_SSH_KEY}"
 echo "[*] ARGOCD_ADMIN_PASSWORD=${PARAM_ARGOCD_ADMIN_PASSWORD}"
 echo "[*] KUBECONFIG=${PARAM_KUBECONFIG}"
+echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] CHART_PATH=${PARAM_CHART_PATH}"
 echo "[*] VERSION=${PARAM_VERSION}"
 
-# add helm repository
-helm repo add "argo" "https://argoproj.github.io/argo-helm"
-
-# download chart locally: "--dependency-update" fails
-helm dependency update ${PARAM_CHART_PATH}
-
-# Helm 3 flag --include-crds guarantees that CRDs are created first,
-# but it might happen that by the time they are used in the same chart they are not ready yet.
-# Since the bootstrap is idempotent, to fix the concurrency issue, when it fails apply the template twice
-# ERROR 'unable to recognize "STDIN": no matches for kind "???" in version "argoproj.io/v1alpha1"'
-bootstrap || bootstrap
+main
 
 echo "[-] bootstrap"
