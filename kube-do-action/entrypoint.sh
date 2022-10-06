@@ -109,13 +109,12 @@ function doctl_cluster {
       local CLUSTER_REGION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.region')
       local CLUSTER_SIZE=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.size')
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
-      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.version // "default"')
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
       echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
-      echo "[-] CLUSTER_VERSION=${CLUSTER_VERSION}"
 
+      # TODO --version
       # https://docs.digitalocean.com/reference/doctl/reference/kubernetes/cluster/create/
       # https://docs.digitalocean.com/reference/api/api-reference/#operation/kubernetes_create_cluster
       doctl kubernetes cluster create ${CLUSTER_NAME} \
@@ -124,7 +123,6 @@ function doctl_cluster {
         --region ${CLUSTER_REGION} \
         --size ${CLUSTER_SIZE} \
         --tag ${CLUSTER_TAGS} \
-        --version ${CLUSTER_VERSION} \
         --wait=${PARAM_WAIT}
     ;;
     "config")

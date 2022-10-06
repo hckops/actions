@@ -18,10 +18,10 @@ digitalocean:
     count: 1
     region: lon1
     size: s-1vcpu-2gb
-    # TODO not implemented: currently is tagged automatically with the GitOps repository
+    # TODO not implemented: by default is tagged automatically with the GitOps repository
     tags: []
-    # OPTIONAL: version of kube
-    version: latest
+    # TODO not implemented: by default use latest version
+    version: 1.24.4-do.0
   network:
     # OPTIONAL
     domain:
