@@ -13,9 +13,9 @@ For a working example see [kube-template](https://github.com/hckops/kube-templat
 
 [![test-kube-do](https://github.com/hckops/actions/actions/workflows/test-kube-do.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-do.yml)
 
-> Manage DigitalOcean Kubernetes cluster lifecycle
+> Manages DigitalOcean Kubernetes cluster lifecycle
 
-Create or delete clusters based on a config definition
+Creates or deletes clusters based on a config definition
 ```diff
 # examples/kube-test-do-lon1.yaml
 version: 1
@@ -67,7 +67,7 @@ docker run --rm \
 
 [![test-bootstrap](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-bootstrap.yml)
 
-> Bootstrap a platform with ArgoCD
+> Bootstraps a platform with ArgoCD
 
 Example
 ```bash
@@ -117,7 +117,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 [![test-kube-secrets](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-kube-secrets.yml)
 
-> Init Kubernetes master Secret used by these operators
+> Init Kubernetes master Secret required by the following operators
 
 * [External Secrets Operator](https://external-secrets.io)
 * [LastPass Operator](https://github.com/edgelevel/lastpass-operator)
@@ -152,7 +152,7 @@ Requires
 
 [![test-helm-lint](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml)
 
-> Validate [Helm](https://helm.sh) chart
+> Validates [Helm](https://helm.sh) charts
 
 Example
 ```bash
@@ -161,7 +161,7 @@ Example
 ```
 
 TODOs
-- [ ] rename `kube-validate`
+- [ ] rename to `kube-validate`
 - [ ] add https://github.com/yannh/kubeconform
 - [ ] add https://github.com/koalaman/shellcheck
 
@@ -169,7 +169,7 @@ TODOs
 
 [![test-discord](https://github.com/hckops/actions/actions/workflows/test-discord.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-discord.yml)
 
-> Interact with Discord API
+> Interacts with Discord API
 
 Example of *Create message*
 ```bash
@@ -199,7 +199,7 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 
 [![docker-ci](https://github.com/hckops/actions/actions/workflows/docker-ci.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/docker-ci.yml)
 
-> Actions base images
+> Action's base images
 
 * [DockerHub](https://hub.docker.com/u/hckops)
 
@@ -223,7 +223,7 @@ make docker-publish version=vX.Y.Z token=<ACCESS_TOKEN>
 make docker-clean
 ```
 
-Actions to update when a new tag is created
+Actions to update when a new docker tag is created
 * `bootstrap-action`
 * `helm-lint-action`
 * `kube-do-action`

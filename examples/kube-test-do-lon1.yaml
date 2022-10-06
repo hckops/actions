@@ -6,7 +6,7 @@ version: 1
 name: test-do-lon1
 # cloud provider: [digitalocean|aws]
 provider: digitalocean
-# starts|stops the cluster: the action detect changes i.e. UP or DOWN
+# starts|stops the cluster: the action detects changes i.e. UP or DOWN
 status: DOWN
 
 digitalocean:
@@ -17,6 +17,7 @@ digitalocean:
     # number of nodes
     count: 1
     region: lon1
+    # node types
     size: s-1vcpu-2gb
     # TODO not implemented: by default is tagged automatically with the GitOps repository
     tags: []
