@@ -23,9 +23,9 @@ function get_config {
 
 function bootstrap {
   local CHART_NAME="argocd"
-  local NAMESPACE=$(get_config ${CONFIG_PATH} '.bootstrap.namespace // "argocd"')
+  local NAMESPACE=$(get_config ${PARAM_CONFIG_PATH} '.bootstrap.namespace // "argocd"')
   # if the file doesn't exist apply twice the default values
-  local VALUE_FILE_OVERRIDE=$(get_config ${CONFIG_PATH} '.bootstrap.helmValueFile // "values.yaml"')
+  local VALUE_FILE_OVERRIDE=$(get_config ${PARAM_CONFIG_PATH} '.bootstrap.helmValueFile // "values.yaml"')
 
   # manually apply "argocd-config" chart and "argocd" dependency with crds
   helm template ${CHART_NAME} \
