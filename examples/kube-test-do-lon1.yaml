@@ -9,13 +9,6 @@ provider: digitalocean
 # starts|stops the cluster: the action detect changes i.e. UP or DOWN
 status: DOWN
 
-# TODO add parameters to override CHART_NAME and NAMESPACE
-bootstrap:
-  # OPTIONAL: path from repository root
-  # overrides values in the chart i.e. multi env/tenant/cloud
-  # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
-  helmValueFile: charts/argocd-config/values-custom.yaml
-
 digitalocean:
   # https://slugs.do-api.dev
   # https://www.digitalocean.com/try/new-pricing
@@ -40,3 +33,11 @@ digitalocean:
     loadBalancer:
       # when true and the cluster is deleted, removes the load balancer associated to the domain name
       managed: true
+
+bootstrap:
+  # OPTIONAL: namespace of the bootstrap chart
+  namespace: argocd
+  # OPTIONAL: path from chart folder
+  # overrides values in the chart i.e. multi env/tenant/cloud
+  # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
+  helmValueFile: values-custom.yaml

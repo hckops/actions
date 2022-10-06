@@ -18,6 +18,7 @@ PARAM_KUBE=${2:-"template"}
 ARGOCD_ADMIN_PASSWORD='$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2'
 MINIKUBE_CONFIG="${HOME}/.kube/config"
 CHART_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/charts/argocd-config"
+CONFIG_PATH="INVALID_CONFIG_PATH"
 
 ##############################
 
@@ -32,7 +33,8 @@ case ${PARAM_ACTION} in
       "$(cat "${HOME}/.ssh/id_ed25519_gitops")" \
       ${ARGOCD_ADMIN_PASSWORD} \
       ${MINIKUBE_CONFIG} \
-      ${CHART_PATH}
+      ${CHART_PATH} \
+      ${CONFIG_PATH}
   ;;
   *)
     echo "ERROR: unknown command"

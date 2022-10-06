@@ -14,7 +14,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      # required because it's not in the marketplace and to access cluster definition
+      # required to access cluster definition
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -24,7 +24,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          config-path: examples/kube-do-sample.yaml
+          config-path: examples/kube-test-do-lon1.yaml
           # action is disabled
           enabled: false
           wait: false

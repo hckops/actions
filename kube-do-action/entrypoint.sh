@@ -58,7 +58,7 @@ function get_config {
   echo $(yq -o=json '.' ${CONFIG_PATH} | jq -r ${JQ_PATH})
 }
 
-# TODO json-schema validation
+# TODO [json|yaml]-schema validation: https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html
 # param #1: <string>
 # global param: <CONFIG_VERSION_SUPPORTED>
 function validate_config {
