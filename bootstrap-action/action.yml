@@ -18,9 +18,6 @@ inputs:
   chart-path:
     description: 'Path to Helm v3 chart'
     required: true
-  version:
-    description: 'Repository target revision e.g. branch, SHA, tag'
-    required: false
 
 runs:
   using: docker
@@ -31,4 +28,3 @@ runs:
     - ${{ inputs.kubeconfig }}
     - ${{ inputs.config-path }}
     - ${{ inputs.chart-path }}
-    - ${{ inputs.version }}

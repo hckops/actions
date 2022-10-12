@@ -38,7 +38,3 @@ digitalocean:
 bootstrap:
   # OPTIONAL: namespace of the bootstrap chart
   namespace: argocd
-  # OPTIONAL: path relative to the chart folder
-  # overrides values in the chart i.e. multi env/tenant/cloud
-  # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
-  helmValueFile: values-custom.yaml

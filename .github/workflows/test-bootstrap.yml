@@ -30,4 +30,3 @@ jobs:
           kubeconfig: ./config.yaml
           config-path: examples/kube-test-do-lon1.yaml
           chart-path: INVALID_PATH
-          version: HEAD

@@ -10,7 +10,6 @@ PARAM_KUBECONFIG=${3:?"Missing KUBECONFIG"}
 # TODO CONFIG_PATH should be optional
 PARAM_CONFIG_PATH=${4:?"Missing CONFIG_PATH"}
 PARAM_CHART_PATH=${5:?"Missing CHART_PATH"}
-PARAM_VERSION=${6:-"HEAD"}
 
 ##############################
 
@@ -24,11 +23,8 @@ function get_config {
 function bootstrap {
   local CHART_NAME="argocd"
   local NAMESPACE=$(get_config '.bootstrap.namespace // "argocd"')
-  # if the file doesn't exist use the default values: relative to the chart folder
-  local HELM_VALUE_FILE=$(get_config '.bootstrap.helmValueFile // "values.yaml"')
 
-  echo "[-] NAMESPACE=${NAMESPACE}"
-  echo "[-] HELM_VALUE_FILE=${HELM_VALUE_FILE}"
+  echo "[*] NAMESPACE=${NAMESPACE}"
 
   # manually apply "argocd-config" chart and "argocd" dependency with crds
   helm template ${CHART_NAME} \
@@ -37,8 +33,6 @@ function bootstrap {
     --namespace ${NAMESPACE} \
     --values "${PARAM_CHART_PATH}/values.yaml" \
     --values "${PARAM_CHART_PATH}/values-bootstrap.yaml" \
-    --set bootstrap.helmValueFile="${HELM_VALUE_FILE}" \
-    --set repository.targetRevision=${PARAM_VERSION} \
     --set argocd.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set argocd.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
     ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
@@ -66,7 +60,6 @@ echo "[*] ARGOCD_ADMIN_PASSWORD=${PARAM_ARGOCD_ADMIN_PASSWORD}"
 echo "[*] KUBECONFIG=${PARAM_KUBECONFIG}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] CHART_PATH=${PARAM_CHART_PATH}"
-echo "[*] VERSION=${PARAM_VERSION}"
 
 main
 

@@ -82,7 +82,6 @@ Example
     kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
     config-path: examples/kube-test-do-lon1.yaml
     chart-path: ./charts/argocd-config
-    version: HEAD
 ```
 
 Requires
