@@ -37,7 +37,7 @@ function bootstrap {
     --namespace ${NAMESPACE} \
     --values "${PARAM_CHART_PATH}/values.yaml" \
     --values "${PARAM_CHART_PATH}/values-bootstrap.yaml" \
-    --set bootstrap.helmValueFile="${HELM_VALUE_FILE}"
+    --set bootstrap.helmValueFile="${HELM_VALUE_FILE}" \
     --set repository.targetRevision=${PARAM_VERSION} \
     --set argocd.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set argocd.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
