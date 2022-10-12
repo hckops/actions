@@ -24,11 +24,11 @@ function get_config {
 function bootstrap {
   local CHART_NAME="argocd"
   local NAMESPACE=$(get_config '.bootstrap.namespace // "argocd"')
-  # if the file doesn't exist apply twice the default values
-  local VALUE_FILE_OVERRIDE=$(get_config '.bootstrap.helmValueFile // "values.yaml"')
+  # if the file doesn't exist use the default values: relative to the chart folder
+  local HELM_VALUE_FILE=$(get_config '.bootstrap.helmValueFile // "values.yaml"')
 
   echo "[-] NAMESPACE=${NAMESPACE}"
-  echo "[-] VALUE_FILE_OVERRIDE=${VALUE_FILE_OVERRIDE}"
+  echo "[-] HELM_VALUE_FILE=${HELM_VALUE_FILE}"
 
   # manually apply "argocd-config" chart and "argocd" dependency with crds
   helm template ${CHART_NAME} \
@@ -36,8 +36,8 @@ function bootstrap {
     --dependency-update \
     --namespace ${NAMESPACE} \
     --values "${PARAM_CHART_PATH}/values.yaml" \
-    --values "${PARAM_CHART_PATH}/${VALUE_FILE_OVERRIDE}" \
     --values "${PARAM_CHART_PATH}/values-bootstrap.yaml" \
+    --set bootstrap.helmValueFile="${HELM_VALUE_FILE}"
     --set repository.targetRevision=${PARAM_VERSION} \
     --set argocd.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set argocd.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
