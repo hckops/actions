@@ -25,9 +25,11 @@ jobs:
           github-token: ${{ github.token }}
           access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           config-path: examples/kube-test-do-lon1.yaml
+          config-revision: HEAD
           # action is disabled
           enabled: false
           wait: false
+          skip-create: false
 
       - name: Output
         run: |

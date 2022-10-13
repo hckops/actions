@@ -14,6 +14,9 @@ inputs:
   config-path:
     description: 'Path to the cluster configuration file'
     required: true
+  config-revision:
+    description: 'Cluster configuration file revision e.g. branch, SHA, tag'
+    required: false
   enabled:
     description: 'Dry run if set to false'
     required: false
@@ -39,6 +42,7 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.access-token }}
     - ${{ inputs.config-path }}
+    - ${{ inputs.config-revision }}
     - ${{ inputs.enabled }}
     - ${{ inputs.wait }}
     - ${{ inputs.skip-create }}

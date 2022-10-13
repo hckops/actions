@@ -7,23 +7,26 @@ set -euo pipefail
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_ACCESS_TOKEN=${2:?"Missing ACCESS_TOKEN"}
 PARAM_CONFIG_PATH=${3:?"Missing CONFIG_PATH"}
-PARAM_ENABLED=${4:?"Missing ENABLED"}
-PARAM_WAIT=${5:?"Missing WAIT"}
-PARAM_SKIP_CREATE=${6:?"Missing SKIP_CREATE"}
+PARAM_CONFIG_REVISION=${4:-"HEAD"}
+PARAM_ENABLED=${5:?"Missing ENABLED"}
+PARAM_WAIT=${6:?"Missing WAIT"}
+PARAM_SKIP_CREATE=${7:?"Missing SKIP_CREATE"}
 
 CONFIG_VERSION_SUPPORTED="1"
 
 ##############################
 
-# param #1 (optional): <string>
+# param #1: <string>
+# param #2: <string> (optional)
 # global param: <PARAM_GITHUB_TOKEN>
+# global param: <PARAM_CONFIG_REVISION>
 # action param: <GITHUB_REPOSITORY>
 # returns SHA
 function fetch_commit_sha {
   # default latest (index 0)
   local COMMIT_INDEX=${1:-"0"}
   # fetch last 2 commits only
-  local COMMITS_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?per_page=2&page=1"
+  local COMMITS_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?sha=${PARAM_CONFIG_REVISION}&per_page=2&page=1"
 
   # extract commit sha
   echo $(curl -sSL \
@@ -148,8 +151,8 @@ function doctl_cluster {
   esac
 }
 
-# A domain should always be removed and added immediately:
-# it should be added only when the cluster is created and viceversa,
+# Domains MUST always be removed and added back immediately:
+# they should be added only when the cluster is created and viceversa,
 # but there are bots that keep trying to steal other users domains.
 # If a domain is stolen, the only way to claim it back is to open a support ticket and show proof of ownership.
 # DigitalOcean is not a registrar and they can't verify it automatically.
@@ -188,6 +191,8 @@ function doctl_load_balancer_delete {
 
   echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
   echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
+
+  # TODO LOAD_BALANCER_ID is empty sometimes???
 
   # deletes load balancer
   doctl compute load-balancer delete ${LOAD_BALANCER_ID} \
@@ -315,6 +320,7 @@ echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
 echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
 echo "[*] ACCESS_TOKEN=${PARAM_ACCESS_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
+echo "[*] CONFIG_REVISION=${PARAM_CONFIG_REVISION}"
 echo "[*] ENABLED=${PARAM_ENABLED}"
 echo "[*] WAIT=${PARAM_WAIT}"
 echo "[*] SKIP_CREATE=${PARAM_SKIP_CREATE}"

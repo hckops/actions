@@ -26,8 +26,8 @@ digitalocean:
   network:
     # OPTIONAL
     domain:
+      # when true, adds/removes domain when the cluster is created/deleted: domain MUST be first added manually
       # WARNING: prefer adding/removing this manually
-      # when true, adds/removes domain when the cluster is created/deleted
       managed: false
       name: example.com
     # OPTIONAL
