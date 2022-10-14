@@ -58,6 +58,7 @@ docker run --rm \
     "INVALID_GITHUB_TOKEN" \
     "INVALID_ACCESS_TOKEN" \
     "./examples/kube-test-do-lon1.yaml" \
+    "main" \
     "true" \
     "false" \
     "false"
