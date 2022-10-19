@@ -24,8 +24,8 @@ provider: digitalocean
 + status: UP
 - status: DOWN
 
-config:
-  digitalocean:
+digitalocean:
+  cluster:
     count: 1
     region: lon1
     size: s-1vcpu-2gb
@@ -53,6 +53,7 @@ docker build -t hckops/kube-do-action ./kube-do-action
 # run action
 docker run --rm \
   -e GITHUB_REPOSITORY="INVALID_GITHUB_REPOSITORY" \
+  -e GITHUB_OUTPUT="INVALID_GITHUB_OUTPUT" \
   -v ${PWD}/examples:/examples \
   hckops/kube-do-action \
     "INVALID_GITHUB_TOKEN" \

@@ -32,9 +32,9 @@ jobs:
           COMMIT_SHA: ${{ github.sha }}
         run: |
           if [[ ${{ github.ref_type }} == "tag" ]]; then
-            echo "::set-output name=tag::${GITHUB_REF#refs/tags/docker-}"
+            echo "tag=${GITHUB_REF#refs/tags/docker-}" >> ${GITHUB_OUTPUT}
           else
-            echo "::set-output name=tag::${COMMIT_SHA:0:7}"
+            echo "tag=${COMMIT_SHA:0:7}" >> ${GITHUB_OUTPUT}
           fi
       
       - name: Output Docker tag

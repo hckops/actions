@@ -59,13 +59,14 @@ function get_config {
   local CONFIG_PATH=$1
   local JQ_PATH=$2
 
-  # JQ_PATH must be escaped due to "default" issue
+  # JQ_PATH must be between quotes due to "default" issue
   echo $(yq -o=json '.' "${CONFIG_PATH}" | jq -r "${JQ_PATH}")
 }
 
 # TODO [json|yaml]-schema validation: https://asdf-standard.readthedocs.io/en/1.5.0/schemas.html
 # param #1: <string>
 # global param: <CONFIG_VERSION_SUPPORTED>
+# action param: <GITHUB_OUTPUT>
 function validate_config {
   local CONFIG_PATH=$1
 
@@ -79,17 +80,17 @@ function validate_config {
 
   if [[ ${CONFIG_VERSION} != ${CONFIG_VERSION_SUPPORTED} ]]; then
     echo "[*] Invalid version: ${CONFIG_VERSION}"
-    echo "::set-output name=status::ERROR"
+    echo "status=ERROR" >> ${GITHUB_OUTPUT}
     exit 1
 
   elif [[ ${CONFIG_PROVIDER} != "digitalocean" ]]; then
     echo "[*] Invalid provider: ${CONFIG_PROVIDER}"
-    echo "::set-output name=status::ERROR"
+    echo "status=ERROR" >> ${GITHUB_OUTPUT}
     exit 1
 
   elif [[ ${CONFIG_STATUS} != "UP" && ${CONFIG_STATUS} != "DOWN" ]]; then
     echo "[*] Invalid status: ${CONFIG_STATUS}"
-    echo "::set-output name=status::ERROR"
+    echo "status=ERROR" >> ${GITHUB_OUTPUT}
     exit 1
   fi
 }
@@ -99,6 +100,7 @@ function validate_config {
 # global param: <PARAM_ACCESS_TOKEN>
 # global param: <PARAM_WAIT>
 # action param: <GITHUB_REPOSITORY>
+# action param: <GITHUB_OUTPUT>
 function doctl_cluster {
   local PARAM_ACTION=$1
   local CONFIG_PATH=$2
@@ -119,7 +121,7 @@ function doctl_cluster {
       echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
 
       # TODO --version
-      # https://docs.digitalocean.com/reference/doctl/reference/kubernetes/cluster/create/
+      # https://docs.digitalocean.com/reference/doctl/reference/kubernetes/cluster/create
       # https://docs.digitalocean.com/reference/api/api-reference/#operation/kubernetes_create_cluster
       doctl kubernetes cluster create ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
@@ -138,7 +140,7 @@ function doctl_cluster {
         --access-token ${PARAM_ACCESS_TOKEN} > ${KUBE_CONFIG}
       
       # returns kubeconfig path
-      echo "::set-output name=kubeconfig::${KUBE_CONFIG}"
+      echo "kubeconfig=${KUBE_CONFIG}" >> ${GITHUB_OUTPUT}
     ;;
     "delete")
       doctl kubernetes cluster delete ${CLUSTER_NAME} \
@@ -232,7 +234,8 @@ function doctl_network {
         if [[ ${NETWORK_DOMAIN_MANAGED} == "true" ]]; then
           echo "[*] Cleanup domain"
 
-          # wait before deleting the domain or external-dns will keep updading dns records when the domain is re-added
+          # wait for the cluster to be completely gone before deleting the domain,
+          # or external-dns will keep updading dns records when the domain is re-added
           echo "[*] sleeping 2 minutes..."
           sleep 2m
 
@@ -252,6 +255,7 @@ function doctl_network {
 }
 
 # starts|stops the cluster based on the current "status"
+# action param: <GITHUB_OUTPUT>
 function provision_cluster {
   local CURRENT_CONFIG_PATH="/tmp/current"
   local CURRENT_COMMIT=$(fetch_commit_sha)
@@ -273,14 +277,14 @@ function provision_cluster {
   if [[ ${CURRENT_STATUS} == "UP" && ${PARAM_SKIP_CREATE} == "true" ]]; then
     # init kubeconfig only
     doctl_cluster "config" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::CREATE"
+    echo "status=CREATE" >> ${GITHUB_OUTPUT}
 
   # TODO it should also check cluster real status
   elif [[ ${CURRENT_STATUS} == ${PREVIOUS_STATUS} ]]; then
     # do nothing
     echo "[*] Cluster is already ${CURRENT_STATUS}"
     # returns UP or DOWN
-    echo "::set-output name=status::${CURRENT_STATUS}"
+    echo "status=${CURRENT_STATUS}" >> ${GITHUB_OUTPUT}
 
   elif [[ ${CURRENT_STATUS} == "UP" ]]; then
     # setup network
@@ -288,14 +292,14 @@ function provision_cluster {
     # create cluster and init kubeconfig
     doctl_cluster "create" ${CURRENT_CONFIG_PATH}
     doctl_cluster "config" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::CREATE"
+    echo "status=CREATE" >> ${GITHUB_OUTPUT}
 
   elif [[ ${CURRENT_STATUS} == "DOWN" ]]; then
     # delete cluster
     doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
     # cleanup network
     doctl_network "reset" ${CURRENT_CONFIG_PATH}
-    echo "::set-output name=status::DELETE"
+    echo "status=DELETE" >> ${GITHUB_OUTPUT}
   fi
 }
 
@@ -306,7 +310,7 @@ function main {
     provision_cluster
   else
     echo "[*] Action disabled"
-    echo "::set-output name=status::DISABLE"
+    echo "status=DISABLE" >> ${GITHUB_OUTPUT}
   fi
 }
 

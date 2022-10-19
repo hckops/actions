@@ -19,7 +19,7 @@ jobs:
       - name: "Set message content"
         id: message
         run: |
-          echo "::set-output name=content::github-test"
+          echo "content=github-test" >> ${GITHUB_OUTPUT}
 
       - name: "Create message"
         uses: ./discord-action
