@@ -76,7 +76,7 @@ function bootstrap {
     --values "${PARAM_CHART_PATH}/${HELM_VALUE_FILE}" \
     --set ${CHART_NAME_PREFIX}.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set ${CHART_NAME_PREFIX}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
-    ${PARAM_CHART_PATH}
+    ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
 function main {
