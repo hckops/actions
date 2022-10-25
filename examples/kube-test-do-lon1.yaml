@@ -23,18 +23,27 @@ digitalocean:
     tags: []
     # TODO not implemented: by default use latest version
     version: 1.24.4-do.0
+  # OPTIONAL
   network:
-    # OPTIONAL
     domain:
       # when true, adds/removes domain when the cluster is created/deleted: domain MUST be first added manually
       # WARNING: prefer adding/removing this manually
       managed: false
       name: example.com
-    # OPTIONAL
     loadBalancer:
       # when true and the cluster is deleted, removes the load balancer associated to the domain name
       managed: true
 
+# OPTIONAL: all fields are optionals
 bootstrap:
-  # OPTIONAL: namespace of the bootstrap chart
+  # uses alias instead of chart name e.g. argo-cd
+  chartName: argocd
+  # prefix variable override e.g. if bootstrap chart is a dependency of another chart
+  # NOTE: chart names must be separated by dots
+  chartNamePrefix: myparentchart.mysubchart
+  # namespace of where the chart is applied
   namespace: argocd
+  # overrides values in the chart i.e. multi env/tenant/cloud
+  # NOTE path is relative to the chart folder
+  # https://github.com/hckops/kube-template/tree/main/charts/argocd-config
+  helmValueFile: values-bootstrap.yaml

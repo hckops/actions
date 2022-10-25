@@ -17,16 +17,18 @@ PARAM_KUBE=${2:-"template"}
 # admin|argocd
 ARGOCD_ADMIN_PASSWORD='$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/AizY2'
 MINIKUBE_CONFIG="${HOME}/.kube/config"
-CONFIG_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/clusters/kube-test-do-lon1.yaml"
 CHART_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/charts/argocd-config"
+CONFIG_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/clusters/kube-template-do-lon1.yaml"
+CONFIG_BRANCH="HEAD"
 
 ##############################
 
 echo "[+] local"
 echo "[*] ACTION=${PARAM_ACTION}"
 echo "[*] KUBE=${PARAM_KUBE}"
-echo "[*] CONFIG_PATH=${CONFIG_PATH}"
 echo "[*] CHART_PATH=${CHART_PATH}"
+echo "[*] CONFIG_PATH=${CONFIG_PATH}"
+echo "[*] CONFIG_BRANCH=${CONFIG_BRANCH}"
 
 case ${PARAM_ACTION} in
   "bootstrap")
@@ -34,8 +36,9 @@ case ${PARAM_ACTION} in
       "$(cat "${HOME}/.ssh/id_ed25519_gitops")" \
       ${ARGOCD_ADMIN_PASSWORD} \
       ${MINIKUBE_CONFIG} \
+      ${CHART_PATH} \
       ${CONFIG_PATH} \
-      ${CHART_PATH}
+      ${CONFIG_BRANCH}
   ;;
   *)
     echo "ERROR: unknown command"

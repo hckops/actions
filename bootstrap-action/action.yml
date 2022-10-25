@@ -11,13 +11,16 @@ inputs:
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
     required: true
-  # TODO CONFIG_PATH should be optional
-  config-path:
-    description: 'Path to the cluster configuration file'
-    required: true
   chart-path:
     description: 'Path to Helm v3 chart'
     required: true
+  config-path:
+    description: 'Path to the cluster configuration file'
+    required: false
+  # TODO not used
+  config-branch:
+    description: 'Branch of the cluster configuration file'
+    required: false
 
 runs:
   using: docker
@@ -26,5 +29,6 @@ runs:
     - ${{ inputs.gitops-ssh-key }}
     - ${{ inputs.argocd-admin-password }}
     - ${{ inputs.kubeconfig }}
-    - ${{ inputs.config-path }}
     - ${{ inputs.chart-path }}
+    - ${{ inputs.config-path }}
+    - ${{ inputs.config-branch }}
