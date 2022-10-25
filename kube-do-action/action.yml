@@ -15,7 +15,7 @@ inputs:
     description: 'Path to the cluster configuration file'
     required: true
   config-branch:
-    description: 'Branch of the cluster configuration file to compare with previous commit'
+    description: 'Branch of the cluster configuration file'
     required: false
   enabled:
     description: 'Dry run if set to false'
