@@ -42,6 +42,26 @@ function bootstrap {
   echo "[*] BOOTSTRAP_NAMESPACE=${NAMESPACE}"
   echo "[*] BOOTSTRAP_HELM_VALUE_FILE=${HELM_VALUE_FILE}"
 
+  # download dependencies of the dependency first, alternatively commit the tgz
+  # fixes "ensure CRDs are installed first", argocd CRDs are defined in the template folder
+  # https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd/templates/crds
+  # consider migration to bitnami chart which respects helm 3 standard
+  # https://github.com/bitnami/charts/tree/main/bitnami/argo-cd/crds
+  if [[ "${CHART_NAME_PREFIX}" != "argocd" ]]; then
+    # e.g. "myparentchart.mysubchart" returns "myparentchart"
+    DEPENDENCY_CHART_NAME=$(echo ${CHART_NAME_PREFIX} | awk -F '.' '{print $1}')
+    # assumes dependency chart is in the same path
+    DEPENDENCY_CHART_FOLDER=$(dirname ${PARAM_CHART_PATH})
+    DEPENDENCY_CHART_PATH="${DEPENDENCY_CHART_FOLDER}/${DEPENDENCY_CHART_NAME}"
+
+    echo "[*] downloading sub-chart dependencies: ${DEPENDENCY_CHART_PATH}"
+    helm dependency update ${DEPENDENCY_CHART_PATH}
+  fi
+
+  echo "[*] downloading chart dependencies: ${PARAM_CHART_PATH}"
+  # download chart locally: "--dependency-update" fails
+  helm dependency update ${PARAM_CHART_PATH}
+
   # manually applies "argocd-config" chart and "argocd" dependency with crds
   # applies in order: values.yaml -> values-bootstrap.yaml -> 2 secret ovverrides
   # argocd-config app uses values.yaml and values-auth.yaml excluding values-bootstrap.yaml
@@ -56,15 +76,12 @@ function bootstrap {
     --values "${PARAM_CHART_PATH}/${HELM_VALUE_FILE}" \
     --set ${CHART_NAME_PREFIX}.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
     --set ${CHART_NAME_PREFIX}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
-    ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
+    ${PARAM_CHART_PATH}
 }
 
 function main {
   # add helm repository
   helm repo add "argo" "https://argoproj.github.io/argo-helm"
-
-  # download chart locally: "--dependency-update" fails
-  helm dependency update ${PARAM_CHART_PATH}
 
   # Helm 3 flag --include-crds guarantees that CRDs are created first,
   # but it might happen that by the time they are used in the same chart they are not ready yet.

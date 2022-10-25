@@ -34,7 +34,7 @@ digitalocean:
       # when true and the cluster is deleted, removes the load balancer associated to the domain name
       managed: true
 
-# OPTIONAL: all fields are optionals
+# OPTIONAL: all fields are optional
 bootstrap:
   # uses alias instead of chart name e.g. argo-cd
   chartName: argocd
