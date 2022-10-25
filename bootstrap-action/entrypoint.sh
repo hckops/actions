@@ -33,12 +33,16 @@ function bootstrap {
   local CHART_NAME=$(get_config "chartName" "argocd")
   # https://helm.sh/docs/chart_template_guide/subcharts_and_globals/#overriding-values-from-a-parent-chart
   local CHART_NAME_PREFIX=$(get_config "chartNamePrefix" ${CHART_NAME})
+  # helm issue: make sure to use an alias without dash for dependencies
+  # e.g. "my_parent-chart.mysubchart" returns "myparentchart.mysubchart"
+  local CHART_NAME_PREFIX_ALIAS=$(echo ${CHART_NAME_PREFIX} | sed -r 's/[-_]+//g')
   local NAMESPACE=$(get_config "namespace" "argocd")
   # if the file doesn't exist apply the default values twice
   local HELM_VALUE_FILE=$(get_config "helmValueFile" "values.yaml")
 
   echo "[*] BOOTSTRAP_CHART_NAME=${CHART_NAME}"
   echo "[*] BOOTSTRAP_CHART_NAME_PREFIX=${CHART_NAME_PREFIX}"
+  echo "[*] BOOTSTRAP_CHART_NAME_PREFIX_ALIAS=${CHART_NAME_PREFIX_ALIAS}"
   echo "[*] BOOTSTRAP_NAMESPACE=${NAMESPACE}"
   echo "[*] BOOTSTRAP_HELM_VALUE_FILE=${HELM_VALUE_FILE}"
 
@@ -74,8 +78,8 @@ function bootstrap {
     --namespace ${NAMESPACE} \
     --values "${PARAM_CHART_PATH}/values.yaml" \
     --values "${PARAM_CHART_PATH}/${HELM_VALUE_FILE}" \
-    --set ${CHART_NAME_PREFIX}.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
-    --set ${CHART_NAME_PREFIX}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
+    --set ${CHART_NAME_PREFIX_ALIAS}.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
+    --set ${CHART_NAME_PREFIX_ALIAS}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
     ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
