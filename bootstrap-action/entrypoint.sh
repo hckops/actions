@@ -8,10 +8,8 @@ PARAM_GITOPS_SSH_KEY=${1:?"Missing GITOPS_SSH_KEY"}
 PARAM_ARGOCD_ADMIN_PASSWORD=${2:?"Missing ARGOCD_ADMIN_PASSWORD"}
 PARAM_KUBECONFIG=${3:?"Missing KUBECONFIG"}
 PARAM_CHART_PATH=${4:?"Missing CHART_PATH"}
-# optional config override
+# optional config override: uses always latest config in the current branch
 PARAM_CONFIG_PATH=${5:-"INVALID_CONFIG_PATH"}
-# NOT IMPLEMENTED: uses always latest config in the current branch
-PARAM_CONFIG_BRANCH=${6:-"HEAD"}
 
 ##############################
 
@@ -102,7 +100,6 @@ echo "[*] ARGOCD_ADMIN_PASSWORD=${PARAM_ARGOCD_ADMIN_PASSWORD}"
 echo "[*] KUBECONFIG=${PARAM_KUBECONFIG}"
 echo "[*] CHART_PATH=${PARAM_CHART_PATH}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
-echo "[*][TODO] CONFIG_BRANCH=${PARAM_CONFIG_BRANCH}"
 
 main
 

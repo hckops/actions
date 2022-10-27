@@ -40,7 +40,8 @@ bootstrap:
   chartName: argocd
   # prefix variable override e.g. if bootstrap chart is a dependency of another chart
   # NOTE: chart names must be separated by dots
-  chartNamePrefix: myparentchart.mysubchart
+  # if there are dashes or underscore, use the folder name and define an alias for the dependency
+  chartNamePrefix: myparent-chart.mysubchart
   # namespace of where the chart is applied
   namespace: argocd
   # overrides values in the chart i.e. multi env/tenant/cloud

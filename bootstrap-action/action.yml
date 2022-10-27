@@ -17,10 +17,6 @@ inputs:
   config-path:
     description: 'Path to the cluster configuration file'
     required: false
-  # TODO not used
-  config-branch:
-    description: 'Branch of the cluster configuration file'
-    required: false
 
 runs:
   using: docker
@@ -31,4 +27,3 @@ runs:
     - ${{ inputs.kubeconfig }}
     - ${{ inputs.chart-path }}
     - ${{ inputs.config-path }}
-    - ${{ inputs.config-branch }}

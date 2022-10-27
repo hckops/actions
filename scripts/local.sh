@@ -19,7 +19,6 @@ ARGOCD_ADMIN_PASSWORD='$2a$04$qj3hWU1Id.l.4e/8JN4Kr.ecQDuf3hhyG0TbsLeDcZV2kRG/Ai
 MINIKUBE_CONFIG="${HOME}/.kube/config"
 CHART_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/charts/argocd-config"
 CONFIG_PATH="${ROOT_PATH}/../kube-${PARAM_KUBE}/clusters/kube-template-do-lon1.yaml"
-CONFIG_BRANCH="HEAD"
 
 ##############################
 
@@ -28,7 +27,6 @@ echo "[*] ACTION=${PARAM_ACTION}"
 echo "[*] KUBE=${PARAM_KUBE}"
 echo "[*] CHART_PATH=${CHART_PATH}"
 echo "[*] CONFIG_PATH=${CONFIG_PATH}"
-echo "[*] CONFIG_BRANCH=${CONFIG_BRANCH}"
 
 case ${PARAM_ACTION} in
   "bootstrap")
@@ -37,8 +35,7 @@ case ${PARAM_ACTION} in
       ${ARGOCD_ADMIN_PASSWORD} \
       ${MINIKUBE_CONFIG} \
       ${CHART_PATH} \
-      ${CONFIG_PATH} \
-      ${CONFIG_BRANCH}
+      ${CONFIG_PATH}
   ;;
   *)
     echo "ERROR: unknown command"
