@@ -175,24 +175,12 @@ function doctl_domain_reset {
 # param #1: <string>
 # global param: <PARAM_ACCESS_TOKEN>
 function doctl_load_balancer_delete {
-  local DOMAIN_NAME=$1
-  # matches also invalid ip
-  local REGEX_IP="([0-9]{1,3}[\.]){3}[0-9]{1,3}"
+  local CLUSTER_NAME=$1
 
-  # returns load balancer ip associated to this domain
-  local LOAD_BALANCER_IP=$(doctl compute domain records list ${DOMAIN_NAME} \
-    --access-token ${PARAM_ACCESS_TOKEN} | \
-      grep -E -o ${REGEX_IP} | \
-      uniq -d)
+  # returns load balancer id: it expects only 1 for each cluster
+  local LOAD_BALANCER_ID=$(doctl kubernetes cluster list-associated-resources ${CLUSTER_NAME} \
+    --format LoadBalancers --no-header | yq '.[0]')
 
-  # returns load balancer id
-  local LOAD_BALANCER_ID=$(doctl compute load-balancer list \
-    --access-token ${PARAM_ACCESS_TOKEN} \
-    --format=IP,ID --no-header | \
-      grep ${LOAD_BALANCER_IP} | \
-      awk '{print $2}')
-
-  echo "[-] LOAD_BALANCER_IP=${LOAD_BALANCER_IP}"
   echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
 
   # deletes load balancer
@@ -229,7 +217,8 @@ function doctl_network {
       # removes domain records and the associated load balancer
       if [[ ${NETWORK_LOAD_BALANCER_MANAGED} == "true" && ${NETWORK_DOMAIN_NAME} != "INVALID_DOMAIN" ]]; then
         echo "[*] Cleanup LoadBalancer"
-        doctl_load_balancer_delete ${NETWORK_DOMAIN_NAME}
+        local CLUSTER_NAME=$(get_config ${CONFIG_PATH} '.name')
+        doctl_load_balancer_delete ${CLUSTER_NAME}
 
         if [[ ${NETWORK_DOMAIN_MANAGED} == "true" ]]; then
           echo "[*] Cleanup domain"
