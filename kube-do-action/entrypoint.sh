@@ -179,6 +179,7 @@ function doctl_load_balancer_delete {
 
   # returns load balancer id: it expects only 1 for each cluster
   local LOAD_BALANCER_ID=$(doctl kubernetes cluster list-associated-resources ${CLUSTER_NAME} \
+    --access-token ${PARAM_ACCESS_TOKEN} \
     --format LoadBalancers --no-header | yq '.[0]')
 
   echo "[-] LOAD_BALANCER_ID=${LOAD_BALANCER_ID}"
