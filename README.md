@@ -152,6 +152,14 @@ Requires
 * `AKEYLESS_ACCESS_ID` and `AKEYLESS_ACCESS_KEY` secrets for [Akeyless](https://www.akeyless.io)
 * `LASTPASS_USERNAME` and `LASTPASS_PASSWORD` secrets for [LastPass](https://www.lastpass.com)
 
+### helm-dependencies-action
+
+> TODO
+
+```bash
+./helm-dependencies-action/entrypoint.sh examples/versions.yaml
+```
+
 ### helm-lint-action
 
 [![test-helm-lint](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml)

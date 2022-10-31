@@ -1,0 +1,6 @@
+name: 'Helm Lint'
+description: 'Validate Helm chart'
+
+runs:
+  using: docker
+  image: Dockerfile
