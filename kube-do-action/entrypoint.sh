@@ -207,34 +207,35 @@ function doctl_network {
 
   case ${PARAM_ACTION} in
     "init")
-      if [[ ${NETWORK_DOMAIN_MANAGED} == "true" ]]; then
+      if [[ ${NETWORK_DOMAIN_MANAGED} == "true" && ${NETWORK_DOMAIN_NAME} != "INVALID_DOMAIN" ]]; then
         echo "[*] Setup domain"
         doctl_domain_reset ${NETWORK_DOMAIN_NAME}
       else
-        echo "[*] Domain setup skipped"
+        echo "[*] Setup domain: skipped"
       fi
     ;;
     "reset")
-      # removes domain records and the associated load balancer
-      if [[ ${NETWORK_LOAD_BALANCER_MANAGED} == "true" && ${NETWORK_DOMAIN_NAME} != "INVALID_DOMAIN" ]]; then
-        echo "[*] Cleanup LoadBalancer"
-        local CLUSTER_NAME=$(get_config ${CONFIG_PATH} '.name')
-        doctl_load_balancer_delete ${CLUSTER_NAME}
+      if [[ ${NETWORK_DOMAIN_MANAGED} == "true" && ${NETWORK_DOMAIN_NAME} != "INVALID_DOMAIN" ]]; then
+        echo "[*] Cleanup domain"
 
-        if [[ ${NETWORK_DOMAIN_MANAGED} == "true" ]]; then
-          echo "[*] Cleanup domain"
+        # wait for the cluster to be completely gone before deleting the domain,
+        # or external-dns will keep updading dns records when the domain is re-added
+        echo "[*] sleeping 2 minutes..."
+        sleep 2m
 
-          # wait for the cluster to be completely gone before deleting the domain,
-          # or external-dns will keep updading dns records when the domain is re-added
-          echo "[*] sleeping 2 minutes..."
-          sleep 2m
-
-          doctl_domain_reset ${NETWORK_DOMAIN_NAME}
-        else
-          echo "[*] Domain cleanup skipped"
-        fi
+        doctl_domain_reset ${NETWORK_DOMAIN_NAME}
       else
-        echo "[*] LoadBalancer cleanup skipped"
+        echo "[*] Cleanup domain: skipped"
+      fi
+    ;;
+    "delete-resources")
+      if [[ ${NETWORK_LOAD_BALANCER_MANAGED} == "true" ]]; then
+        echo "[*] Delete LoadBalancer"
+        local CLUSTER_NAME=$(get_config ${CONFIG_PATH} '.name')
+
+        doctl_load_balancer_delete ${CLUSTER_NAME}
+      else
+        echo "[*] Delete LoadBalancer: skipped"
       fi
     ;;
     *)
@@ -285,6 +286,8 @@ function provision_cluster {
     echo "status=CREATE" >> ${GITHUB_OUTPUT}
 
   elif [[ ${CURRENT_STATUS} == "DOWN" ]]; then
+    # delete load-balancer etc.
+    doctl_network "delete-resources" ${CURRENT_CONFIG_PATH}
     # delete cluster
     doctl_cluster "delete" ${CURRENT_CONFIG_PATH}
     # cleanup network
