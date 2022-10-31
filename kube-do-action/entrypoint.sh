@@ -221,7 +221,7 @@ function doctl_network {
         # wait for the cluster to be completely gone before deleting the domain,
         # or external-dns will keep updading dns records when the domain is re-added
         echo "[*] sleeping 2 minutes..."
-        sleep 2m
+        #sleep 2m
 
         doctl_domain_reset ${NETWORK_DOMAIN_NAME}
       else
