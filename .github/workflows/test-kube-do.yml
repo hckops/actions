@@ -23,7 +23,7 @@ jobs:
         id: provision
         with:
           github-token: ${{ github.token }}
-          access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          access-token: INVALID_ACCESS_TOKEN
           config-path: examples/kube-test-do-lon1.yaml
           config-branch: main
           # action is disabled
