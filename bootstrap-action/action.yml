@@ -2,11 +2,11 @@ name: 'Bootstrap'
 description: 'Bootstrap a platform with ArgoCD'
 
 inputs:
-  gitops-ssh-key:
-    description: 'Private SSH key to access the repository from the cluster'
-    required: true
   argocd-admin-password:
     description: 'ArgoCD admin password'
+    required: true
+  argocd-git-ssh-key:
+    description: 'ArgoCD private SSH key to access the repository from the cluster'
     required: true
   kubeconfig:
     description: 'Path to kubeconfig file e.g. ./OWNER-REPOSITORY-kubeconfig.yaml'
@@ -22,8 +22,8 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.gitops-ssh-key }}
     - ${{ inputs.argocd-admin-password }}
+    - ${{ inputs.argocd-git-ssh-key }}
     - ${{ inputs.kubeconfig }}
     - ${{ inputs.chart-path }}
     - ${{ inputs.config-path }}

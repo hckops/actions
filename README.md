@@ -3,6 +3,7 @@
 * [kube-do](#kube-do-action)
 * [bootstrap](#bootstrap-action)
 * [kube-secrets](#kube-secrets-action)
+* [helm-dependencies](#helm-dependencies-action)
 * [helm-lint](#helm-lint-action)
 * [discord](#discord-action)
 * [development](#development)
@@ -79,31 +80,31 @@ Example
 - name: Bootstrap
   uses: hckops/actions/bootstrap-action@main
   with:
-    gitops-ssh-key: ${{ secrets.GITOPS_SSH_KEY }}
     argocd-admin-password: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
+    argocd-git-ssh-key: ${{ secrets.ARGOCD_GIT_SSH_KEY }}
     kubeconfig: <REPOSITORY_NAME>-kubeconfig.yaml
     chart-path: ./charts/argocd-config
 ```
 
 Requires
-* `GITOPS_SSH_KEY` secret
-    - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
-    ```bash
-    # generate ssh key pair
-    ssh-keygen -t ed25519 -C "gitops@example.com" -N '' -f /tmp/id_ed25519_gitops
-
-    # add public key to a github user account with access to the repo
-    cat /tmp/id_ed25519_gitops.pub | xclip -selection clipboard
-
-    # create secret with private key
-    cat /tmp/id_ed25519_gitops | xclip -selection clipboard
-
-    # cleanup
-    rm /tmp/id_ed25519_gitops*
-    ```
 * `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
+* `ARGOCD_GIT_SSH_KEY` secret
+    - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
+    ```bash
+    # generate ssh key pair
+    ssh-keygen -t ed25519 -C "argocd@example.com" -N '' -f /tmp/id_ed25519_argocd
+
+    # add public key to a github user account with access to the repo
+    cat /tmp/id_ed25519_argocd.pub | xclip -selection clipboard
+
+    # create secret with private key
+    cat /tmp/id_ed25519_argocd | xclip -selection clipboard
+
+    # cleanup
+    rm /tmp/id_ed25519_argocd*
+    ```
 
 How to test it locally on minikube
 ```bash

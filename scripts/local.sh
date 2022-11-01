@@ -31,7 +31,7 @@ echo "[*] CONFIG_PATH=${CONFIG_PATH}"
 case ${PARAM_ACTION} in
   "bootstrap")
     ../bootstrap-action/entrypoint.sh \
-      "$(cat "${HOME}/.ssh/id_ed25519_gitops")" \
+      "$(cat "${HOME}/.ssh/id_ed25519_argocd")" \
       ${ARGOCD_ADMIN_PASSWORD} \
       ${MINIKUBE_CONFIG} \
       ${CHART_PATH} \

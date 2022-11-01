@@ -4,8 +4,8 @@ set -euo pipefail
 
 ##############################
 
-PARAM_GITOPS_SSH_KEY=${1:?"Missing GITOPS_SSH_KEY"}
-PARAM_ARGOCD_ADMIN_PASSWORD=${2:?"Missing ARGOCD_ADMIN_PASSWORD"}
+PARAM_ARGOCD_ADMIN_PASSWORD=${1:?"Missing ARGOCD_ADMIN_PASSWORD"}
+PARAM_ARGOCD_GIT_SSH_KEY=${2:?"Missing ARGOCD_GIT_SSH_KEY"}
 PARAM_KUBECONFIG=${3:?"Missing KUBECONFIG"}
 PARAM_CHART_PATH=${4:?"Missing CHART_PATH"}
 # optional config override: uses always latest config in the current branch
@@ -77,7 +77,7 @@ function bootstrap {
     --values "${PARAM_CHART_PATH}/values.yaml" \
     --values "${PARAM_CHART_PATH}/${HELM_VALUE_FILE}" \
     --set ${CHART_NAME_PREFIX_ALIAS}.configs.secret.argocdServerAdminPassword="${PARAM_ARGOCD_ADMIN_PASSWORD}" \
-    --set ${CHART_NAME_PREFIX_ALIAS}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_GITOPS_SSH_KEY}" \
+    --set ${CHART_NAME_PREFIX_ALIAS}.configs.credentialTemplates.ssh-creds.sshPrivateKey="${PARAM_ARGOCD_GIT_SSH_KEY}" \
     ${PARAM_CHART_PATH} | kubectl --kubeconfig ${PARAM_KUBECONFIG} --namespace ${NAMESPACE} apply -f -
 }
 
@@ -95,8 +95,8 @@ function main {
 ##############################
 
 echo "[+] bootstrap"
-echo "[*] GITOPS_SSH_KEY=${PARAM_GITOPS_SSH_KEY}"
 echo "[*] ARGOCD_ADMIN_PASSWORD=${PARAM_ARGOCD_ADMIN_PASSWORD}"
+echo "[*] ARGOCD_GIT_SSH_KEY=${PARAM_ARGOCD_GIT_SSH_KEY}"
 echo "[*] KUBECONFIG=${PARAM_KUBECONFIG}"
 echo "[*] CHART_PATH=${PARAM_CHART_PATH}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
