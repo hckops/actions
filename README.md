@@ -90,6 +90,13 @@ Requires
 * `ARGOCD_ADMIN_PASSWORD` secret
     - [User Management](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management)
     - [How to change admin password](https://argo-cd.readthedocs.io/en/stable/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
+    ```bash
+    docker run --rm -it python:3-alpine ash
+    pip3 install bcrypt
+
+    # create secret with bcrypt hash
+    python3 -c "import bcrypt; print(bcrypt.hashpw(b'argocd', bcrypt.gensalt()).decode())"
+    ```
 * `ARGOCD_GIT_SSH_KEY` secret
     - [Generate a new SSH key pair](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)
     ```bash
