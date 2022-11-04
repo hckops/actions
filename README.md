@@ -158,6 +158,8 @@ Example
 
 Requires
 * `AKEYLESS_ACCESS_ID` and `AKEYLESS_ACCESS_KEY` secrets for [Akeyless](https://www.akeyless.io)
+    - In *Auth Methods*, create new *API Key* e.g. `kube-template-action`
+    - In *Access Roles*, create new *Role* e.g. `action-role` Associate Auth Method*
 * `LASTPASS_USERNAME` and `LASTPASS_PASSWORD` secrets for [LastPass](https://www.lastpass.com)
 
 ### helm-dependencies-action
@@ -245,6 +247,7 @@ make docker-clean
 
 Actions to update when a new docker tag is created
 * `bootstrap-action`
+* `helm-dependencies-action`
 * `helm-lint-action`
 * `kube-do-action`
 * `kube-secrets-action`
