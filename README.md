@@ -159,7 +159,22 @@ Example
 Requires
 * `AKEYLESS_ACCESS_ID` and `AKEYLESS_ACCESS_KEY` secrets for [Akeyless](https://www.akeyless.io)
     - In *Auth Methods*, create new *API Key* e.g. `kube-template-action`
-    - In *Access Roles*, create new *Role* e.g. `action-role` Associate Auth Method*
+    - In *Access Roles*, create new *Role* e.g. `template-role`, *Associate Auth Method* to the api key previously created and *Add Rule for Secrets & Keys*
+    ```bash
+    # returns AKEYLESS_ACCESS_TOKEN
+    curl --request POST \
+      --url https://api.akeyless.io/auth \
+      --header 'accept: application/json' \
+      --header 'content-type: application/json' \
+      --data '{"access-type": "access_key", "access-id": "<AKEYLESS_ACCESS_ID>", "access-key": "<AKEYLESS_ACCESS_KEY>"}'
+
+    # verify access rules
+    curl --request POST \
+      --url https://api.akeyless.io/get-secret-value \
+      --header 'accept: application/json' \
+      --header 'content-type: application/json' \
+      --data '{"names": ["/path/to/MY_SECRET"], "token": "<AKEYLESS_ACCESS_TOKEN>"}'
+    ```
 * `LASTPASS_USERNAME` and `LASTPASS_PASSWORD` secrets for [LastPass](https://www.lastpass.com)
 
 ### helm-dependencies-action
