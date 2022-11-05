@@ -1,5 +1,5 @@
-name: 'Helm Lint'
-description: 'Validate Helm chart'
+name: 'Helm Dependencies'
+description: 'Keep Helm dependencies updated'
 
 runs:
   using: docker

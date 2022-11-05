@@ -1,0 +1,40 @@
+# TODO not used
+version: 1
+
+# TODO not used
+default:
+  pr:
+    tags: []
+    automerge: false
+    autoclose: true
+    description: "test me"
+
+dependencies:
+  - name: "Argo CD"
+    source:
+      file: examples/test-chart/Chart.yaml
+      path: .dependencies[0].version
+    repository:
+      # TODO add support for [github] i.e. releases/tags
+      type: artifacthub
+      name: argo/argo-cd
+    # TODO overrides default
+    pr:
+      tags: []
+      automerge: false
+      autoclose: true
+      description: "todo"
+  - name: "Argo Workflows"
+    source:
+      file: examples/test-chart/values.yaml
+      path: .versions.argo.argoWorkflows.helmRepo
+    repository:
+      type: artifacthub
+      name: argo/argo-workflows
+  - name: "Prometheus Stack"
+    source:
+      file: examples/test-chart/values.yaml
+      path: .versions.observe.prometheusStack.helmRepo
+    repository:
+      type: artifacthub
+      name: prometheus-community/kube-prometheus-stack

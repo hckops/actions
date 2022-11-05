@@ -181,8 +181,10 @@ Requires
 
 > TODO
 
+* https://github.com/dependabot/dependabot-core/issues/2237
+
 ```bash
-./helm-dependencies-action/entrypoint.sh examples/versions.yaml
+./helm-dependencies-action/entrypoint.sh examples/dependencies.yaml
 ```
 
 ### helm-lint-action
