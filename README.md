@@ -183,8 +183,20 @@ Requires
 
 * https://github.com/dependabot/dependabot-core/issues/2237
 
+How to test it locally
 ```bash
-./helm-dependencies-action/entrypoint.sh examples/dependencies.yaml
+# build image
+docker build -t hckops/helm-dependencies-action ./helm-dependencies-action
+
+# run action
+docker run --rm \
+  --env GITHUB_TOKEN=INVALID_TOKEN \
+  --volume ${PWD}/examples:/examples \
+  hckops/helm-dependencies-action \
+    examples/dependencies.yaml \
+    "email@example.com" \
+    "username" \
+    "true"
 ```
 
 ### helm-lint-action
