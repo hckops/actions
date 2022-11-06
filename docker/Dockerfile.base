@@ -9,6 +9,7 @@ ARG HELM_VERSION=3.10.1
 
 RUN apk upgrade --update && apk --no-cache add \
   git \
+  github-cli \
   make \
   curl \
   jq \
