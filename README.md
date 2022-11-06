@@ -179,6 +179,8 @@ Requires
 
 ### helm-dependencies-action
 
+[![test-helm-dependencies](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml)
+
 > TODO
 
 * https://github.com/dependabot/dependabot-core/issues/2237
