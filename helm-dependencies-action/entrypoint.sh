@@ -32,36 +32,40 @@ function get_latest_artifacthub {
     yq -p=xml '.rss.channel.item[0].title')
 }
 
-# param #1: <string>
-# param #2: <string>
-# param #3: <string>
-# global param: <PARAM_GITHUB_TOKEN>
 # global param: <PARAM_GIT_USER_EMAIL>
 # global param: <PARAM_GIT_USER_NAME>
-# global param: <PARAM_GIT_DEFAULT_BRANCH>
-# see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
-function create_pr {
-  local REPOSITORY_NAME=$1
-  local CURRENT_VERSION=$2
-  local LATEST_VERSION=$3
-  local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
-  local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
-  local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
-  local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
-  
-  echo "GIT_BRANCH=$GIT_BRANCH"
-  echo "PR_TITLE=$PR_TITLE"
-  echo "PR_MESSAGE=$PR_MESSAGE"
-
+function init_git {
   # fixes: unsafe repository ('/github/workspace' is owned by someone else)
   git config --global --add safe.directory /github/workspace
 
   # mandatory configs
   git config user.email $PARAM_GIT_USER_EMAIL
   git config user.name $PARAM_GIT_USER_NAME
+}
 
-  # reset default branch
+# global param: <PARAM_GIT_DEFAULT_BRANCH>
+function reset_git {
+  # stash any changes from previous prs
+  git stash save -u
+
+  # reset default to branch
   git checkout $PARAM_GIT_DEFAULT_BRANCH
+}
+
+# param #1: <string>
+# param #2: <string>
+# param #3: <string>
+# global param: <PARAM_GITHUB_TOKEN> (hidden)
+# see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
+function create_pr {
+  local GIT_BRANCH=$1
+  local PR_TITLE=$2
+  local PR_MESSAGE=$3
+
+  echo "[*] GIT_BRANCH=${GIT_BRANCH}"
+  echo "[*] PR_TITLE=${PR_TITLE}"
+  echo "[*] PR_MESSAGE=${PR_MESSAGE}"
+
   # must be on a different branch
   git checkout -b $GIT_BRANCH
   git add .
@@ -73,7 +77,8 @@ function create_pr {
   gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE"
   
   # TODO labels https://github.com/cli/cli/issues/1503
-  # TODO fails if branch is already existing
+  # TODO fails if branch is already existing: should reuse same or different branch?
+  # TODO automerge
 }
 
 # param #1: <string>
@@ -101,7 +106,13 @@ function update_dependency {
         # update version: see formatting issue https://github.com/mikefarah/yq/issues/515
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
 
-        create_pr ${REPOSITORY_NAME} ${CURRENT_VERSION} ${LATEST_VERSION}
+        reset_git
+
+        local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
+        local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
+        local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
+        local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
+        create_pr ${GIT_BRANCH} ${PR_TITLE} ${PR_MESSAGE}
       fi
     ;;
     *)
@@ -116,7 +127,8 @@ function update_dependency {
 function main {
   local DEPENDENCIES=$(get_config ${PARAM_CONFIG_PATH} '.dependencies[]')
 
-  # TODO save initial branch and checkout every time before open a new pr
+  # setup git repository
+  init_git
   
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
