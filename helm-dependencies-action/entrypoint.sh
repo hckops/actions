@@ -66,7 +66,9 @@ function create_pr {
   # fails without quotes: "quote all values that have spaces"
   git commit -m "$PR_MESSAGE"
   git push origin $GIT_BRANCH
-  gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE" --labels "hckbot,test"
+  gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE"
+  
+  # TODO labels https://github.com/cli/cli/issues/1503
 }
 
 # param #1: <string>
