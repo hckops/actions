@@ -1,9 +1,8 @@
 apiVersion: v2
 name: test-chart
 version: 0.1.0
-
 dependencies:
   - name: argo-cd
     alias: argocd
-    version: 5.13.0
+    version: 5.13.4
     repository: https://argoproj.github.io/argo-helm
