@@ -56,6 +56,7 @@ function reset_git {
 # param #2: <string>
 # param #3: <string>
 # global param: <PARAM_GITHUB_TOKEN> (hidden)
+# global param: <PARAM_GIT_DEFAULT_BRANCH>
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
   local GIT_BRANCH=$1
@@ -74,7 +75,7 @@ function create_pr {
   # fails without quotes: "quote all values that have spaces"
   git commit -m "$PR_MESSAGE"
   git push origin $GIT_BRANCH
-  gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE"
+  gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
   
   # TODO labels https://github.com/cli/cli/issues/1503
   # TODO fails if branch is already existing: should reuse same or different branch?
@@ -107,10 +108,16 @@ function update_dependency {
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
 
         local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
+        local GIT_BRANCH_EXISTS=$(git show-ref --quiet --heads ${GIT_BRANCH})
         local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
-        create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
+        
+        if [[ ${GIT_BRANCH_EXISTS} ]]; then
+          echo "[-] Pull request already exists"
+        else
+          create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
+        fi
       fi
     ;;
     *)
