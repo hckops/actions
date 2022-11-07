@@ -41,6 +41,9 @@ function init_git {
   # mandatory configs
   git config user.email $PARAM_GIT_USER_EMAIL
   git config user.name $PARAM_GIT_USER_NAME
+
+  # fetch existing remote branches
+  git fetch --all
 }
 
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
@@ -78,7 +81,6 @@ function create_pr {
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
   
   # TODO labels https://github.com/cli/cli/issues/1503
-  # TODO fails if branch is already existing: should reuse same or different branch?
   # TODO automerge
 }
 
@@ -112,9 +114,8 @@ function update_dependency {
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
 
-        # fetch existing remote branches
-        git fetch --all
         # returns the hash of the branch if exists or nothing
+        # IMPORTAT branches are fetched once during setup
         local GIT_BRANCH_EXISTS=$(git show-ref ${GIT_BRANCH})
 
         # returns true if the string is not empty
@@ -139,7 +140,7 @@ function main {
 
   # setup git repository
   init_git
-  reset_git
+
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
     update_dependency "${ITEM}"
