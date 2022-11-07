@@ -2,14 +2,17 @@ name: 'Helm Dependencies'
 description: 'Keep Helm dependencies updated'
 
 inputs:
-  config-path:
-    description: 'Path to the dependencies configuration file'
+  github-token:
+    description: 'GitHub token required to open pull requests'
     required: true
   user-email:
     description: 'user.email to configure git'
     required: true
   user-name:
     description: 'user.name to configure git'
+    required: true
+  config-path:
+    description: 'Path to the dependencies configuration file'
     required: true
   dry-run:
     description: 'Skip pull requests if set to true'
@@ -20,7 +23,8 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.config-path }}
+    - ${{ inputs.github-token }}
     - ${{ inputs.user-email }}
     - ${{ inputs.user-name }}
+    - ${{ inputs.config-path }}
     - ${{ inputs.dry-run }}

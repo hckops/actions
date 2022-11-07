@@ -25,10 +25,11 @@ jobs:
       - name: Helm Dependencies
         uses: ./helm-dependencies-action
         with:
-          config-path: examples/dependencies.yaml
+          github-token: ${{ github.token }}
           user-email: "hckbot@users.noreply.github.com"
           user-name: "hckbot"
-          dry-run: true
+          config-path: examples/dependencies.yaml
+          dry-run: false
         env:
           # default secret
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
