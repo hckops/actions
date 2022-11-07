@@ -202,6 +202,10 @@ docker run --rm \
     "true"
 ```
 
+If you get the error *pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)*, enable `Allow GitHub Actions to create and approve pull requests` in your organization and your repository
+* `https://github.com/organizations/<ORGANIZATION>/settings/actions`
+* `https://github.com/<ORGANIZATION>/<REPOSITORY>/settings/actions`
+
 ### helm-lint-action
 
 [![test-helm-lint](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-lint.yml)

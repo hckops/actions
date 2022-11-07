@@ -7,8 +7,9 @@ set -euo pipefail
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
 PARAM_GIT_USER_EMAIL=${2:?"Missing GIT_USER_EMAIL"}
 PARAM_GIT_USER_NAME=${3:?"Missing GIT_USER_NAME"}
-PARAM_CONFIG_PATH=${4:?"Missing CONFIG_PATH"}
-PARAM_DRY_RUN=${5:?"Missing DRY_RUN"}
+PARAM_GIT_DEFAULT_BRANCH=${4:?"Missing GIT_DEFAULT_BRANCH"}
+PARAM_CONFIG_PATH=${5:?"Missing CONFIG_PATH"}
+PARAM_DRY_RUN=${6:?"Missing DRY_RUN"}
 
 ##############################
 
@@ -69,6 +70,7 @@ function create_pr {
   gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE"
   
   # TODO labels https://github.com/cli/cli/issues/1503
+  # TODO fails if branch is already existing
 }
 
 # param #1: <string>
@@ -110,6 +112,8 @@ function update_dependency {
 
 function main {
   local DEPENDENCIES=$(get_config ${PARAM_CONFIG_PATH} '.dependencies[]')
+
+  # TODO save initial branch and checkout every time before open a new pr
   
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
@@ -122,6 +126,7 @@ echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] GIT_USER_EMAIL=${PARAM_GIT_USER_EMAIL}"
 echo "[*] GIT_USER_NAME=${PARAM_GIT_USER_NAME}"
+echo "[*] GIT_DEFAULT_BRANCH=${PARAM_GIT_DEFAULT_BRANCH}"
 echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version

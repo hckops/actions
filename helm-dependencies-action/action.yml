@@ -11,6 +11,10 @@ inputs:
   user-name:
     description: 'user.name to configure git'
     required: true
+  default-branch:
+    description: 'Repository default branch'
+    required: false
+    default: ${{ github.event.repository.default_branch }}
   config-path:
     description: 'Path to the dependencies configuration file'
     required: true
@@ -26,5 +30,6 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.user-email }}
     - ${{ inputs.user-name }}
+    - ${{ inputs.default-branch }}
     - ${{ inputs.config-path }}
     - ${{ inputs.dry-run }}

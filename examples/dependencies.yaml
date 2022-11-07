@@ -6,6 +6,7 @@ default:
   pr:
     tags: []
     automerge: false
+    # closes old prs for the same dependency
     autoclose: true
     description: "test me"
 
@@ -20,9 +21,6 @@ dependencies:
       name: argo/argo-cd
     # TODO overrides default
     pr:
-      tags: []
-      automerge: false
-      autoclose: true
       description: "todo"
   - name: "Argo Workflows"
     source:
