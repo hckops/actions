@@ -38,6 +38,7 @@ function get_latest_artifacthub {
 # global param: <PARAM_GITHUB_TOKEN>
 # global param: <PARAM_GIT_USER_EMAIL>
 # global param: <PARAM_GIT_USER_NAME>
+# global param: <PARAM_GIT_DEFAULT_BRANCH>
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
   local REPOSITORY_NAME=$1
@@ -59,6 +60,8 @@ function create_pr {
   git config user.email $PARAM_GIT_USER_EMAIL
   git config user.name $PARAM_GIT_USER_NAME
 
+  # reset default branch
+  git checkout $PARAM_GIT_DEFAULT_BRANCH
   # must be on a different branch
   git checkout -b $GIT_BRANCH
   git add .
