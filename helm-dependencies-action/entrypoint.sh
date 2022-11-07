@@ -110,7 +110,7 @@ function update_dependency {
         local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
-        create_pr ${GIT_BRANCH} ${PR_TITLE} ${PR_MESSAGE}
+        create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
       fi
     ;;
     *)
@@ -127,7 +127,7 @@ function main {
 
   # setup git repository
   init_git
-  
+  reset_git
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
     update_dependency "${ITEM}"
