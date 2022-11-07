@@ -1,7 +1,7 @@
 versions:
   argo:
     argoWorkflows:
-      helmRepo: "0.20.1"
+      helmRepo: "0.20.6"
   examples:
     # TODO https://github.com/paulbouwer/hello-kubernetes.git
     helloKubernetes:
