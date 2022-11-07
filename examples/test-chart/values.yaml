@@ -11,4 +11,4 @@ versions:
       # TODO https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
       # TODO replace/prefix/regex
       gitRepo: "kube-prometheus-stack-41.4.0"
-      helmRepo: "41.4.0"
+      helmRepo: "41.7.3"
