@@ -108,12 +108,12 @@ function update_dependency {
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
 
         local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
-        local GIT_BRANCH_EXISTS=$(git show-ref --quiet --heads ${GIT_BRANCH})
         local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
-        
-        if [[ -z ${GIT_BRANCH_EXISTS} ]]; then
+
+        # checks if branch exists already        
+        if [[ git show-ref --quiet --heads ${GIT_BRANCH} ]]; then
           create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
         else
           echo "[-] Pull request already exists"
