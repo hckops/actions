@@ -108,18 +108,14 @@ function update_dependency {
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
 
         local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
-        # returns the hash of the branch if exists or nothing
-        local GIT_BRANCH_EXISTS=$(git show-ref ${GIT_BRANCH})
         local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
-        
-        # TODO debug
-        echo $GIT_BRANCH_EXISTS
-        echo ">>>>>"
-        git branch -a
+
+        # fetch existing remote branches
         git fetch --all
-        git branch -a
+        # returns the hash of the branch if exists or nothing
+        local GIT_BRANCH_EXISTS=$(git show-ref ${GIT_BRANCH})
 
         # returns true if the string is not empty
         if [[ -n ${GIT_BRANCH_EXISTS} ]]; then
