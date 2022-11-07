@@ -114,11 +114,18 @@ function update_dependency {
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
         
-        # returns true if the string is empty
+        # TODO debug
+        echo $GIT_BRANCH_EXISTS
+        echo ">>>>>"
+        git branch -a
+        git fetch --all
+        git branch -a
+
+        # returns true if the string is not empty
         if [[ -n ${GIT_BRANCH_EXISTS} ]]; then
-          create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
-        else
           echo "[-] Pull request already exists"
+        else
+          create_pr "${GIT_BRANCH}" "${PR_TITLE}" "${PR_MESSAGE}"
         fi
       fi
     ;;
