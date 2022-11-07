@@ -35,6 +35,9 @@ function get_latest_artifacthub {
 # param #2: <string>
 # param #3: <string>
 # global param: <PARAM_GITHUB_TOKEN>
+# global param: <PARAM_GIT_USER_EMAIL>
+# global param: <PARAM_GIT_USER_NAME>
+# see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
   local REPOSITORY_NAME=$1
   local CURRENT_VERSION=$2
@@ -48,9 +51,22 @@ function create_pr {
   echo "PR_TITLE=$PR_TITLE"
   echo "PR_MESSAGE=$PR_MESSAGE"
 
+  # fixes: unsafe repository ('/github/workspace' is owned by someone else)
+  git config --global --add safe.directory /github/workspace
+
+  # mandatory configs
+  git config user.email $PARAM_GIT_USER_EMAIL
+  git config user.name $PARAM_GIT_USER_NAME
+
+  # must be on a different branch
+  git checkout -b $GIT_BRANCH
+  git add .
   git status
 
-  # TODO https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
+  # fails without quotes: "quote all values that have spaces"
+  git commit -m "$PR_MESSAGE"
+  git push origin $GIT_BRANCH
+  gh pr create --head $GIT_BRANCH --title "$PR_TITLE" --body "$PR_MESSAGE" --labels "hckbot,test"
 }
 
 # param #1: <string>

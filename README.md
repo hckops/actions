@@ -195,9 +195,10 @@ docker run --rm \
   --env GITHUB_TOKEN=INVALID_TOKEN \
   --volume ${PWD}/examples:/examples \
   hckops/helm-dependencies-action \
-    examples/dependencies.yaml \
-    "email@example.com" \
-    "username" \
+    "INVALID_GITHUB_TOKEN" \
+    "INVALID_EMAIL" \
+    "INVALID_USERNAME" \
+    "examples/dependencies.yaml" \
     "true"
 ```
 
