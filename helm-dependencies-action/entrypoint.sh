@@ -106,8 +106,6 @@ function update_dependency {
         # update version: see formatting issue https://github.com/mikefarah/yq/issues/515
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
 
-        reset_git
-
         local GIT_BRANCH=$(echo "helm-${REPOSITORY_NAME}-${LATEST_VERSION}" | sed -r 's|[/.]|-|g')
         local DEPENDENCY_NAME=$(basename ${REPOSITORY_NAME})
         local PR_TITLE="Update ${DEPENDENCY_NAME} to ${LATEST_VERSION}"
@@ -133,6 +131,9 @@ function main {
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
     update_dependency "${ITEM}"
+
+    # prepare git repository for next pr
+    reset_git
   done
 }
 
