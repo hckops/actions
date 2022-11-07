@@ -13,6 +13,7 @@ on:
     paths:
       - '.github/workflows/test-helm-dependencies.yml'
       - 'helm-dependencies-action/**'
+      - 'examples/dependencies.yaml'
 
 jobs:
   test-helm-dependencies:
@@ -29,7 +30,4 @@ jobs:
           user-email: "hckbot@users.noreply.github.com"
           user-name: "hckbot"
           config-path: examples/dependencies.yaml
-          dry-run: false
-        env:
-          # default secret
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: true
