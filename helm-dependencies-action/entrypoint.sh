@@ -5,9 +5,9 @@ set -euo pipefail
 ##############################
 
 PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
-PARAM_CONFIG_PATH=${2:?"Missing CONFIG_PATH"}
-PARAM_GIT_USER_EMAIL=${3:?"Missing GIT_USER_EMAIL"}
-PARAM_GIT_USER_NAME=${4:?"Missing GIT_USER_NAME"}
+PARAM_GIT_USER_EMAIL=${2:?"Missing GIT_USER_EMAIL"}
+PARAM_GIT_USER_NAME=${3:?"Missing GIT_USER_NAME"}
+PARAM_CONFIG_PATH=${4:?"Missing CONFIG_PATH"}
 PARAM_DRY_RUN=${5:?"Missing DRY_RUN"}
 
 ##############################
