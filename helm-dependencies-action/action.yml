@@ -2,6 +2,9 @@ name: 'Helm Dependencies'
 description: 'Keep Helm dependencies updated'
 
 inputs:
+  config-path:
+    description: 'Path to the dependencies configuration file'
+    required: true
   user-email:
     description: 'user.email to configure git'
     required: true
@@ -12,9 +15,6 @@ inputs:
     description: 'Repository default branch'
     required: false
     default: ${{ github.event.repository.default_branch }}
-  config-path:
-    description: 'Path to the dependencies configuration file'
-    required: true
   dry-run:
     description: 'Skip pull requests if set to true'
     required: false
@@ -24,8 +24,8 @@ runs:
   using: docker
   image: Dockerfile
   args:
+    - ${{ inputs.config-path }}
     - ${{ inputs.user-email }}
     - ${{ inputs.user-name }}
     - ${{ inputs.default-branch }}
-    - ${{ inputs.config-path }}
     - ${{ inputs.dry-run }}

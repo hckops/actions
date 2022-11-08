@@ -4,10 +4,10 @@ set -euo pipefail
 
 ##############################
 
-PARAM_GIT_USER_EMAIL=${1:?"Missing GIT_USER_EMAIL"}
-PARAM_GIT_USER_NAME=${2:?"Missing GIT_USER_NAME"}
-PARAM_GIT_DEFAULT_BRANCH=${3:?"Missing GIT_DEFAULT_BRANCH"}
-PARAM_CONFIG_PATH=${4:?"Missing CONFIG_PATH"}
+PARAM_CONFIG_PATH=${1:?"Missing CONFIG_PATH"}
+PARAM_GIT_USER_EMAIL=${2:?"Missing GIT_USER_EMAIL"}
+PARAM_GIT_USER_NAME=${3:?"Missing GIT_USER_NAME"}
+PARAM_GIT_DEFAULT_BRANCH=${4:?"Missing GIT_DEFAULT_BRANCH"}
 PARAM_DRY_RUN=${5:?"Missing DRY_RUN"}
 
 ##############################
@@ -58,7 +58,9 @@ function reset_git {
 # param #2: <string>
 # param #3: <string>
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
-# action param: <GITHUB_TOKEN> (hidden)
+# action param: <GITHUB_REPOSITORY>
+# action param: <GITHUB_SHA>
+# action param: <GITHUB_TOKEN>
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
   local GIT_BRANCH=$1
@@ -80,6 +82,15 @@ function create_pr {
 
   # uses GITHUB_TOKEN
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
+
+  # https://docs.github.com/en/rest/commits/statuses#about-the-commit-statuses-api
+  # allows branch protection
+  gh api \
+    --method POST \
+    -H "Accept: application/vnd.github+json" \
+    "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+    -f state='success' \
+    -f context='action/helm-dependencies' 
   
   # TODO labels https://github.com/cli/cli/issues/1503
   # TODO automerge
@@ -108,7 +119,7 @@ function update_dependency {
         echo "[-] Dependency is already up to date"
 
       elif [[ "${PARAM_DRY_RUN}" == "true" ]]; then
-        echo "[-] Skip pull request: dry run"
+        echo "[-] Skip pull request"
 
       else
         # update version: see formatting issue https://github.com/mikefarah/yq/issues/515
@@ -143,15 +154,24 @@ function update_dependency {
 function main {
   local DEPENDENCIES=$(get_config ${PARAM_CONFIG_PATH} '.dependencies[]')
 
-  # setup git repository
-  init_git
+  if [[ "${PARAM_DRY_RUN}" == "true" ]]; then
+    echo "[-] Skip git setup"
+  else
+    # setup git repository
+    init_git
+  fi
 
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
     update_dependency "${ITEM}"
 
-    # prepare git repository for next pr
-    reset_git
+    
+    if [[ "${PARAM_DRY_RUN}" == "true" ]]; then
+      echo "[-] Skip git reset"
+    else
+      # prepare git repository for next pr
+      reset_git
+    fi
   done
 }
 
@@ -159,10 +179,10 @@ echo "[+] helm-dependencies"
 # global
 echo "[*] GITHUB_TOKEN=${GITHUB_TOKEN}"
 # params
+echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] GIT_USER_EMAIL=${PARAM_GIT_USER_EMAIL}"
 echo "[*] GIT_USER_NAME=${PARAM_GIT_USER_NAME}"
 echo "[*] GIT_DEFAULT_BRANCH=${PARAM_GIT_DEFAULT_BRANCH}"
-echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version

@@ -181,30 +181,78 @@ Requires
 
 [![test-helm-dependencies](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml)
 
-> TODO
+> Keeps [Helm](https://helm.sh) dependencies updated
 
-* https://github.com/dependabot/dependabot-core/issues/2237
+See also https://github.com/dependabot/dependabot-core/issues/2237
+
+Example
+```bash
+# workflow example
+- name: Helm Dependencies
+  uses: hckops/actions/helm-dependencies-action@main
+  with:
+    user-email: "<EMAIL>"
+    user-name: "<USERNAME>"
+    config-path: examples/dependencies.yaml
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# config example
+dependencies:
+  # it will fetch the latest dependency from https://artifacthub.io/packages/helm/argo/argo-cd
+  # and create a pr to update the jq/yq path in Chart.yaml
+  - name: "Argo CD"
+    source:
+      file: examples/test-chart/Chart.yaml
+      path: .dependencies[0].version
+    repository: 
+      type: artifacthub
+      name: argo/argo-cd
+```
 
 How to test it locally
 ```bash
 # build image
 docker build -t hckops/helm-dependencies-action ./helm-dependencies-action
 
-# run action
+# dry run without creating a pr
 docker run --rm \
   --env GITHUB_TOKEN=INVALID_TOKEN \
+  --env GITHUB_REPOSITORY=INVALID_REPOSITORY \
+  --env GITHUB_SHA=INVALID_SHA \
   --volume ${PWD}/examples:/examples \
   hckops/helm-dependencies-action \
-    "INVALID_GITHUB_TOKEN" \
+    "examples/dependencies.yaml" \
     "INVALID_EMAIL" \
     "INVALID_USERNAME" \
-    "examples/dependencies.yaml" \
+    "main" \
     "true"
 ```
 
-If you get the error *pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)*, enable `Allow GitHub Actions to create and approve pull requests` in your organization and your repository
-* `https://github.com/organizations/<ORGANIZATION>/settings/actions`
-* `https://github.com/<ORGANIZATION>/<REPOSITORY>/settings/actions`
+#### Recommendations 
+
+* Automatically delete branches, see `https://github.com/<OWNER>/<REPOSITORY>/settings`
+
+<p align="center">
+  <img src="docs/settings-delete-pr.png" alt="settings-delete-pr" width="500">
+</p>
+
+* Pull requests must be up to date with default branch before being merged, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes status check `action/helm-dependencies` upon success
+
+<p align="center">
+  <img src="docs/settings-branch.png" alt="settings-branch" width="500">
+</p>
+
+#### Troubleshooting
+
+* *pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)*
+    - make sure it's enabled `Allow GitHub Actions to create and approve pull requests` in your organization and repository
+    - `https://github.com/organizations/<ORGANIZATION>/settings/actions`
+    - `https://github.com/<OWNER>/<REPOSITORY>/settings/actions`
+
+<p align="center">
+  <img src="docs/settings-create-pr.png" alt="settings-create-pr" width="500">
+</p>
 
 ### helm-lint-action
 

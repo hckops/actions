@@ -1,0 +1,56 @@
+[+] helm-dependencies
+[*] GITHUB_TOKEN=INVALID_TOKEN
+[*] CONFIG_PATH=examples/dependencies.yaml
+[*] GIT_USER_EMAIL=INVALID_EMAIL
+[*] GIT_USER_NAME=INVALID_USERNAME
+[*] GIT_DEFAULT_BRANCH=main
+[*] DRY_RUN=true
+gh version 2.10.1 (2022-10-07)
+https://github.com/cli/cli/releases/tag/v2.10.1
+[-] Skip git setup
+{
+  "name": "Argo CD",
+  "source": {
+    "file": "examples/test-chart/Chart.yaml",
+    "path": ".dependencies[0].version"
+  },
+  "repository": {
+    "type": "artifacthub",
+    "name": "argo/argo-cd"
+  },
+  "pr": {
+    "description": "todo"
+  }
+}
+[argo/argo-cd] CURRENT=[5.13.6] LATEST=[5.13.6]
+[-] Dependency is already up to date
+[-] Skip git reset
+{
+  "name": "Argo Workflows",
+  "source": {
+    "file": "examples/test-chart/values.yaml",
+    "path": ".versions.argo.argoWorkflows.helmRepo"
+  },
+  "repository": {
+    "type": "artifacthub",
+    "name": "argo/argo-workflows"
+  }
+}
+[argo/argo-workflows] CURRENT=[0.20.1] LATEST=[0.20.6]
+[-] Skip pull request
+[-] Skip git reset
+{
+  "name": "Prometheus Stack",
+  "source": {
+    "file": "examples/test-chart/values.yaml",
+    "path": ".versions.observe.prometheusStack.helmRepo"
+  },
+  "repository": {
+    "type": "artifacthub",
+    "name": "prometheus-community/kube-prometheus-stack"
+  }
+}
+[prometheus-community/kube-prometheus-stack] CURRENT=[41.4.0] LATEST=[41.7.3]
+[-] Skip pull request
+[-] Skip git reset
+[-] helm-dependencies
