@@ -181,7 +181,7 @@ Requires
 
 [![test-helm-dependencies](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml/badge.svg)](https://github.com/hckops/actions/actions/workflows/test-helm-dependencies.yml)
 
-> Keeps [Helm](https://helm.sh) dependencies updated
+> Keeps [Helm](https://helm.sh) dependencies up to date
 
 See also https://github.com/dependabot/dependabot-core/issues/2237
 
@@ -200,7 +200,7 @@ Example
 # config example
 dependencies:
   # it will fetch the latest dependency from https://artifacthub.io/packages/helm/argo/argo-cd
-  # and create a pr to update the jq/yq path in Chart.yaml
+  # and create a pr with the updated version using jq/yq path in Chart.yaml
   - name: "Argo CD"
     source:
       file: examples/test-chart/Chart.yaml
@@ -210,7 +210,7 @@ dependencies:
       name: argo/argo-cd
 ```
 
-How to test it locally
+How to test it locally, sample [output](docs/helm-dependencies-local.txt)
 ```bash
 # build image
 docker build -t hckops/helm-dependencies-action ./helm-dependencies-action
@@ -235,14 +235,14 @@ docker run --rm \
 
 ![settings-delete-pr](docs/settings-delete-pr.png)
 
-* Pull requests must be up to date with default branch before being merged, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes status check `action/helm-dependencies` upon success
+* Pull requests should be up to date with the default branch before being merged, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes a status check named **`action/helm-dependencies`** upon success
 
 ![settings-branch](docs/settings-branch.png)
 
 #### Troubleshooting
 
-* *pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)*
-    - make sure it's enabled `Allow GitHub Actions to create and approve pull requests` in your organization and repository
+* If you get the following error, *pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)*
+    - make sure you've enabled `Allow GitHub Actions to create and approve pull requests` in your organization and repository settings
     - `https://github.com/organizations/<ORGANIZATION>/settings/actions`
     - `https://github.com/<OWNER>/<REPOSITORY>/settings/actions`
 
