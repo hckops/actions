@@ -104,7 +104,7 @@ function update_dependency {
 
       echo "[${REPOSITORY_NAME}] CURRENT=[${CURRENT_VERSION}] LATEST=[${LATEST_VERSION}]"
 
-      if [[ ${CURRENT_VERSION} != ${LATEST_VERSION} ]]; then
+      if [[ ${CURRENT_VERSION} == ${LATEST_VERSION} ]]; then
         echo "[-] Dependency is already up to date"
 
       elif [[ "${PARAM_DRY_RUN}" == "true" ]]; then
