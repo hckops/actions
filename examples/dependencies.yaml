@@ -8,6 +8,7 @@ default:
     automerge: false
     # closes old prs for the same dependency
     autoclose: true
+    # supports markdown
     description: "test me"
 
 dependencies:
@@ -19,7 +20,7 @@ dependencies:
       # TODO add support for [github] i.e. releases/tags
       type: artifacthub
       name: argo/argo-cd
-    # TODO overrides default
+    # TODO override default
     pr:
       description: "todo"
   - name: "Argo Workflows"

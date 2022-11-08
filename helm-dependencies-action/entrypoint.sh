@@ -47,10 +47,10 @@ function init_git {
 
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
 function reset_git {
-  # stash any changes from previous prs
+  # stash any changes from previous pr
   git stash save -u
 
-  # reset default to branch
+  # reset to default branch
   git checkout $PARAM_GIT_DEFAULT_BRANCH
 }
 
@@ -104,8 +104,12 @@ function update_dependency {
 
       echo "[${REPOSITORY_NAME}] CURRENT=[${CURRENT_VERSION}] LATEST=[${LATEST_VERSION}]"
 
-      if [[ "${PARAM_DRY_RUN}" == "true" ]]; then
-        echo "[-] Skip pull request"
+      if [[ ${CURRENT_VERSION} != ${LATEST_VERSION} ]]; then
+        echo "[-] Dependency is already up to date"
+
+      elif [[ "${PARAM_DRY_RUN}" == "true" ]]; then
+        echo "[-] Skip pull request: dry run"
+
       else
         # update version: see formatting issue https://github.com/mikefarah/yq/issues/515
         yq -i  "${SOURCE_PATH} = \"${LATEST_VERSION}\"" ${SOURCE_FILE}
@@ -155,10 +159,10 @@ echo "[+] helm-dependencies"
 # global
 echo "[*] GITHUB_TOKEN=${GITHUB_TOKEN}"
 # params
-echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] GIT_USER_EMAIL=${PARAM_GIT_USER_EMAIL}"
 echo "[*] GIT_USER_NAME=${PARAM_GIT_USER_NAME}"
 echo "[*] GIT_DEFAULT_BRANCH=${PARAM_GIT_DEFAULT_BRANCH}"
+echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version
