@@ -235,7 +235,11 @@ docker run --rm \
 
 ![settings-delete-pr](docs/settings-delete-pr.png)
 
-* Pull requests should be up to date with the default branch before being merged, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes a status check named **`action/helm-dependencies`** upon success
+* Suggest to update branches, see `https://github.com/<OWNER>/<REPOSITORY>/settings`
+
+![settings-update-pr](docs/settings-update-pr.png)
+
+* Enable default branch protection, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes a status check named **`action/helm-dependencies`** upon success
 
 ![settings-branch](docs/settings-branch.png)
 

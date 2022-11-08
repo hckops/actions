@@ -178,6 +178,8 @@ function main {
 echo "[+] helm-dependencies"
 # global
 echo "[*] GITHUB_TOKEN=${GITHUB_TOKEN}"
+echo "[*] GITHUB_REPOSITORY=${GITHUB_REPOSITORY}"
+echo "[*] GITHUB_SHA=${GITHUB_SHA}"
 # params
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] GIT_USER_EMAIL=${PARAM_GIT_USER_EMAIL}"
