@@ -26,8 +26,10 @@ jobs:
       - name: Helm Dependencies
         uses: ./helm-dependencies-action
         with:
-          github-token: ${{ github.token }}
           user-email: "hckbot@users.noreply.github.com"
           user-name: "hckbot"
           config-path: examples/dependencies.yaml
           dry-run: true
+        env:
+          # gh-cli uses global token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

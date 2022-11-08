@@ -4,12 +4,11 @@ set -euo pipefail
 
 ##############################
 
-PARAM_GITHUB_TOKEN=${1:?"Missing GITHUB_TOKEN"}
-PARAM_GIT_USER_EMAIL=${2:?"Missing GIT_USER_EMAIL"}
-PARAM_GIT_USER_NAME=${3:?"Missing GIT_USER_NAME"}
-PARAM_GIT_DEFAULT_BRANCH=${4:?"Missing GIT_DEFAULT_BRANCH"}
-PARAM_CONFIG_PATH=${5:?"Missing CONFIG_PATH"}
-PARAM_DRY_RUN=${6:?"Missing DRY_RUN"}
+PARAM_GIT_USER_EMAIL=${1:?"Missing GIT_USER_EMAIL"}
+PARAM_GIT_USER_NAME=${2:?"Missing GIT_USER_NAME"}
+PARAM_GIT_DEFAULT_BRANCH=${3:?"Missing GIT_DEFAULT_BRANCH"}
+PARAM_CONFIG_PATH=${4:?"Missing CONFIG_PATH"}
+PARAM_DRY_RUN=${5:?"Missing DRY_RUN"}
 
 ##############################
 
@@ -58,8 +57,8 @@ function reset_git {
 # param #1: <string>
 # param #2: <string>
 # param #3: <string>
-# global param: <PARAM_GITHUB_TOKEN> (hidden)
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
+# action param: <GITHUB_TOKEN> (hidden)
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
   local GIT_BRANCH=$1
@@ -78,6 +77,8 @@ function create_pr {
   # fails without quotes: "quote all values that have spaces"
   git commit -m "$PR_MESSAGE"
   git push origin $GIT_BRANCH
+
+  # uses GITHUB_TOKEN
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
   
   # TODO labels https://github.com/cli/cli/issues/1503
@@ -115,7 +116,7 @@ function update_dependency {
         local PR_MESSAGE="Updates [${REPOSITORY_NAME}](https://artifacthub.io/packages/helm/${REPOSITORY_NAME}) Helm dependency from ${CURRENT_VERSION} to ${LATEST_VERSION}"
 
         # returns the hash of the branch if exists or nothing
-        # IMPORTAT branches are fetched once during setup
+        # IMPORTANT branches are fetched once during setup
         local GIT_BRANCH_EXISTS=$(git show-ref ${GIT_BRANCH})
 
         # returns true if the string is not empty
@@ -151,7 +152,9 @@ function main {
 }
 
 echo "[+] helm-dependencies"
-echo "[*] GITHUB_TOKEN=${PARAM_GITHUB_TOKEN}"
+# global
+echo "[*] GITHUB_TOKEN=${GITHUB_TOKEN}"
+# params
 echo "[*] CONFIG_PATH=${PARAM_CONFIG_PATH}"
 echo "[*] GIT_USER_EMAIL=${PARAM_GIT_USER_EMAIL}"
 echo "[*] GIT_USER_NAME=${PARAM_GIT_USER_NAME}"

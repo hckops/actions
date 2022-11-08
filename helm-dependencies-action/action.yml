@@ -2,9 +2,6 @@ name: 'Helm Dependencies'
 description: 'Keep Helm dependencies updated'
 
 inputs:
-  github-token:
-    description: 'GitHub token required to open pull requests'
-    required: true
   user-email:
     description: 'user.email to configure git'
     required: true
@@ -27,7 +24,6 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.github-token }}
     - ${{ inputs.user-email }}
     - ${{ inputs.user-name }}
     - ${{ inputs.default-branch }}
