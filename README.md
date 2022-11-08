@@ -210,6 +210,10 @@ dependencies:
       name: argo/argo-cd
 ```
 
+For more example see
+* [dependencies](https://github.com/hckops/actions/blob/main/examples/dependencies.yaml)
+* [workflow](https://github.com/hckops/kube-template/blob/main/.github/workflows/helm-dependencies.yml)
+
 How to test it locally, sample [output](docs/helm-dependencies-local.txt)
 ```bash
 # build image

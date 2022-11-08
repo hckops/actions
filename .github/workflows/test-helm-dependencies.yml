@@ -31,7 +31,8 @@ jobs:
           user-name: "hckbot"
           dry-run: true
         env:
+          # mandatory: not declared explicitly, but used by gh-cli
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # not required: declared only for documentation because they are automatically added at runtime
           GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
           GITHUB_SHA: ${{ env.GITHUB_SHA }}
-          # gh-cli uses global token
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
