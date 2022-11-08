@@ -233,15 +233,11 @@ docker run --rm \
 
 * Automatically delete branches, see `https://github.com/<OWNER>/<REPOSITORY>/settings`
 
-<p align="center">
-  <img src="docs/settings-delete-pr.png" alt="settings-delete-pr" width="500">
-</p>
+![settings-delete-pr](docs/settings-delete-pr.png)
 
 * Pull requests must be up to date with default branch before being merged, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes status check `action/helm-dependencies` upon success
 
-<p align="center">
-  <img src="docs/settings-branch.png" alt="settings-branch" width="500">
-</p>
+![settings-branch](docs/settings-branch.png)
 
 #### Troubleshooting
 
@@ -250,9 +246,7 @@ docker run --rm \
     - `https://github.com/organizations/<ORGANIZATION>/settings/actions`
     - `https://github.com/<OWNER>/<REPOSITORY>/settings/actions`
 
-<p align="center">
-  <img src="docs/settings-create-pr.png" alt="settings-create-pr" width="500">
-</p>
+![settings-create-pr](docs/settings-create-pr.png)
 
 ### helm-lint-action
 
