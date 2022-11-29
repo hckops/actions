@@ -243,6 +243,10 @@ docker run --rm \
 
 ![settings-update-pr](docs/settings-update-pr.png)
 
+* Favour squashed PRs to keep a clean commit history
+
+![settings-squash-pr](docs/settings-squash-pr.png)
+
 * Enable default branch protection, see `https://github.com/<OWNER>/<REPOSITORY>/settings/branches`. The action pushes a status check named **`action/helm-dependencies`** upon success
 
 ![settings-branch](docs/settings-branch.png)

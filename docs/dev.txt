@@ -37,7 +37,7 @@ https://gist.github.com/madrobby/9476733
 # diff
 git diff main~1:.github/workflows/test-kube-do.yml main:.github/workflows/test-kube-do.yml
 # yaml
-yq -r '.status' examples/kube-do-sample.yaml
+yq -r '.status' examples/kube-test-do-lon1.yaml
 
 --- github
 

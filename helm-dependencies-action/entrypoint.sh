@@ -164,7 +164,6 @@ function main {
   # use the compact output option (-c) so each result is put on a single line and is treated as one item in the loop
   echo ${DEPENDENCIES} | jq -c '.' | while read ITEM; do
     update_dependency "${ITEM}"
-
     
     if [[ "${PARAM_DRY_RUN}" == "true" ]]; then
       echo "[-] Skip git reset"
