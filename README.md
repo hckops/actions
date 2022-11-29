@@ -243,7 +243,7 @@ docker run --rm \
 
 ![settings-update-pr](docs/settings-update-pr.png)
 
-* Favour squashed PRs to keep a clean commit history
+* Favour squashed PRs to keep a clean commit history, see `https://github.com/<OWNER>/<REPOSITORY>/settings`
 
 ![settings-squash-pr](docs/settings-squash-pr.png)
 
