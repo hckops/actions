@@ -77,7 +77,7 @@ function create_pr {
   git status
 
   # fails without quotes: "quote all values that have spaces"
-  git commit -m "$PR_MESSAGE"
+  git commit -m "$PR_TITLE"
   git push origin $GIT_BRANCH
 
   # uses GITHUB_TOKEN
