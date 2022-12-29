@@ -59,7 +59,7 @@ function reset_git {
 # param #3: <string>
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
 # action param: <GITHUB_REPOSITORY>
-# action param: <GITHUB_JOB>
+# action param: <GITHUB_RUN_ID>
 # action param: <GITHUB_TOKEN>
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
@@ -83,6 +83,7 @@ function create_pr {
   # uses GITHUB_TOKEN
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
 
+  # retrieves latest sha of the current branch
   # global GITHUB_SHA is the commit sha that triggered the workflow, before the update
   GIT_BRANCH_SHA=$(git rev-parse $GIT_BRANCH)
 
@@ -96,7 +97,7 @@ function create_pr {
     -H "Accept: application/vnd.github+json" \
     "/repos/${GITHUB_REPOSITORY}/statuses/${GIT_BRANCH_SHA}" \
     -f state="success" \
-    -f target_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_JOB}" \
+    -f target_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
     -f description="Helm dependencies up to date" \
     -f context="action/helm-dependencies"
 
