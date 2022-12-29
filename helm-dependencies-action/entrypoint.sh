@@ -59,7 +59,7 @@ function reset_git {
 # param #3: <string>
 # global param: <PARAM_GIT_DEFAULT_BRANCH>
 # action param: <GITHUB_REPOSITORY>
-# action param: <GITHUB_SHA>
+# action param: <GITHUB_JOB>
 # action param: <GITHUB_TOKEN>
 # see https://github.com/my-awesome/actions/blob/main/gh-update-action/update.sh
 function create_pr {
@@ -83,22 +83,22 @@ function create_pr {
   # uses GITHUB_TOKEN
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
 
-  # https://docs.github.com/en/rest/commits/statuses#about-the-commit-statuses-api
-  # allows branch protection
-  # gh api \
-  #   --method POST \
-  #   -H "Accept: application/vnd.github+json" \
-  #   "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
-  #   -f state='success' \
-  #   -f context='action/helm-dependencies'
+  # global GITHUB_SHA is the commit sha that triggered the workflow, before the update
+  GIT_BRANCH_SHA=$(git ls-remote "git@github.com:${GITHUB_REPOSITORY}.git" | grep $GIT_BRANCH | cut -f 1)
 
-  curl \
-    -X POST \
+  echo "[*] GIT_BRANCH_SHA=${GIT_BRANCH_SHA}"
+
+  # uses GITHUB_TOKEN
+  # https://docs.github.com/en/rest/commits/statuses#about-the-commit-statuses-api
+  # push status to allow branch protection
+  gh api \
+    --method POST \
     -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer ${GITHUB_TOKEN}"\
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
-    -d '{"state":"success","target_url":"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}","description":"Helm Dependencies up to date","context":"action/helm-dependencies"}'
+    "/repos/${GITHUB_REPOSITORY}/statuses/${GIT_BRANCH_SHA}" \
+    -f state="success" \
+    -f target_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_JOB}" \
+    -f description="Helm dependencies up to date" \
+    -f context="action/helm-dependencies"
 
   # TODO labels https://github.com/cli/cli/issues/1503
   # TODO automerge
@@ -196,7 +196,6 @@ echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version
 gh auth status
-curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com | grep -i x-oauth-scopes
 
 main
 

@@ -5,6 +5,8 @@ name: debug
 on:
   push:
 
+# default environment variables
+# https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 jobs:
   docker:
     name: Docker
