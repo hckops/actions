@@ -85,13 +85,21 @@ function create_pr {
 
   # https://docs.github.com/en/rest/commits/statuses#about-the-commit-statuses-api
   # allows branch protection
-  gh api \
-    --method POST \
+  # gh api \
+  #   --method POST \
+  #   -H "Accept: application/vnd.github+json" \
+  #   "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+  #   -f state='success' \
+  #   -f context='action/helm-dependencies'
+
+  curl \
+    -X POST \
     -H "Accept: application/vnd.github+json" \
-    "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
-    -f state='success' \
-    -f context='action/helm-dependencies'
-  
+    -H "Authorization: Bearer ${GITHUB_TOKEN}"\
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+    -d '{"state":"success","target_url":"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}","description":"Helm Dependencies up to date","context":"action/helm-dependencies"}'
+
   # TODO labels https://github.com/cli/cli/issues/1503
   # TODO automerge
 }
