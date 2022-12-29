@@ -84,7 +84,7 @@ function create_pr {
   gh pr create --head $GIT_BRANCH --base ${PARAM_GIT_DEFAULT_BRANCH} --title "$PR_TITLE" --body "$PR_MESSAGE"
 
   # global GITHUB_SHA is the commit sha that triggered the workflow, before the update
-  GIT_BRANCH_SHA=$(git ls-remote "git@github.com:${GITHUB_REPOSITORY}.git" | grep $GIT_BRANCH | cut -f 1)
+  GIT_BRANCH_SHA=$(git rev-parse $GIT_BRANCH)
 
   echo "[*] GIT_BRANCH_SHA=${GIT_BRANCH_SHA}"
 
