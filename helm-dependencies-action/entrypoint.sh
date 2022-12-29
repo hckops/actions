@@ -196,6 +196,7 @@ echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version
 gh auth status
+curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com | grep -i x-oauth-scopes
 
 main
 
