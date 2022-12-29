@@ -90,7 +90,7 @@ function create_pr {
     -H "Accept: application/vnd.github+json" \
     "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
     -f state='success' \
-    -f context='action/helm-dependencies' 
+    -f context='action/helm-dependencies'
   
   # TODO labels https://github.com/cli/cli/issues/1503
   # TODO automerge
@@ -187,6 +187,7 @@ echo "[*] GIT_DEFAULT_BRANCH=${PARAM_GIT_DEFAULT_BRANCH}"
 echo "[*] DRY_RUN=${PARAM_DRY_RUN}"
 
 gh --version
+gh auth status
 
 main
 
