@@ -28,7 +28,7 @@ function get_latest_artifacthub {
 
   # fetches latest version from rss feed (xml format)
   echo $(curl -sSL "https://artifacthub.io/api/v1/packages/helm/$HELM_NAME/feed/rss" | \
-    yq -p=xml '.rss.channel.item[0].title')
+    yq -p=xml --xml-attribute-prefix=+ '.rss.channel.item[0].title')
 }
 
 # global param: <PARAM_GIT_USER_EMAIL>
