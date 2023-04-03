@@ -324,7 +324,6 @@ See [composite actions](https://docs.github.com/en/actions/creating-actions/crea
     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     # optional
     SECRET_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-    ENABLE_NOTIFICATION: true
 ```
 
 TODOs
