@@ -14,6 +14,9 @@ inputs:
   DOCKER_REPOSITORY:
     description: 'Docker repository name'
     required: true
+  DOCKER_DEFAULT_TAG:
+    description: 'Default Docker tag'
+    required: false
   SECRET_DOCKERHUB_USERNAME:
     description: 'DockerHub username'
     required: true
@@ -31,18 +34,21 @@ runs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # extracts tag from ref, returns semver tag or latest
+    # extracts tag from ref, returns semver tag or sha suffix or default tag
     - name: Get Docker tag
       id: get-docker-tag
       env:
         GITHUB_REF: ${{ github.ref }}
         COMMIT_SHA: ${{ github.sha }}
+        DEFAULT_TAG: ${{ inputs.DOCKER_DEFAULT_TAG }}
       shell: bash
       run: |
         if [[ ${{ github.ref_type }} == "tag" ]]; then
           echo "tag=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
+        else if [[ ${DEFAULT_TAG} == "" ]]; then
+          echo "tag=${COMMIT_SHA:0:7}" >> ${GITHUB_OUTPUT}
         else
-          echo "tag=latest" >> ${GITHUB_OUTPUT}
+          echo "tag=${DEFAULT_TAG}" >> ${GITHUB_OUTPUT}
         fi
     
     - name: Output Docker tag

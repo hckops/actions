@@ -320,6 +320,8 @@ See [composite actions](https://docs.github.com/en/actions/creating-actions/crea
     DOCKER_CONTEXT: "./docker/<IMAGE_NAME>"
     DOCKER_IMAGE_NAME: "<IMAGE_NAME>"
     DOCKER_REPOSITORY: "<REPOSITORY_NAME>"
+    # optional, default is sha
+    DOCKER_DEFAULT_TAG: "latest"
     SECRET_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     # optional
