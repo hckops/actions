@@ -313,7 +313,6 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 See [composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action), useful to build base images without repetition in combination with [matrixes](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
 
 ```bash
-# uses tag or latest
 - name: Docker CI
   uses: hckops/actions/docker-template-action@main
   with:
@@ -327,9 +326,6 @@ See [composite actions](https://docs.github.com/en/actions/creating-actions/crea
     # optional
     SECRET_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 ```
-
-TODOs
-* [ ] refactor to override default `latest` vs `sha` and update `.github/workflows/docker-ci.yml`
 
 ## Development
 

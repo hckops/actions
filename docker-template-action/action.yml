@@ -2,7 +2,6 @@ name: docker-template
 
 # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 # https://wallis.dev/blog/composite-github-actions
-# RUN commands require "shell: bash"
 
 inputs:
   DOCKER_CONTEXT:
@@ -27,6 +26,7 @@ inputs:
     description: 'Discord webhook url'
     required: false
 
+# all "run" steps require "shell: bash" in composite actions
 runs:
   using: 'composite'
   steps:
