@@ -317,12 +317,17 @@ See [composite actions](https://docs.github.com/en/actions/creating-actions/crea
 - name: Docker CI
   uses: hckops/actions/docker-template-action@main
   with:
-    IMAGE_NAME: "<IMAGE_NAME>"
+    DOCKER_CONTEXT: "./docker/<IMAGE_NAME>"
+    DOCKER_IMAGE_NAME: "<IMAGE_NAME>"
     DOCKER_REPOSITORY: "<REPOSITORY_NAME>"
     SECRET_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     SECRET_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 ```
+
+TODOs
+* [ ] refactor to override default `latest` vs `sha` and update `.github/workflows/docker-ci.yml`
+* [ ] add flag to disable notifications
 
 ## Development
 

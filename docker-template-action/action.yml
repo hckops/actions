@@ -5,7 +5,10 @@ name: docker-template
 # RUN commands require "shell: bash"
 
 inputs:
-  IMAGE_NAME:
+  DOCKER_CONTEXT:
+    description: 'Path of Dockerfile'
+    required: true
+  DOCKER_IMAGE_NAME:
     description: 'Docker image name'
     required: true
   DOCKER_REPOSITORY:
@@ -55,17 +58,17 @@ runs:
         username: ${{ inputs.SECRET_DOCKERHUB_USERNAME }}
         password: ${{ inputs.SECRET_DOCKERHUB_TOKEN }}
 
-    - name: Build and push [${{ env.DOCKER_IMAGE_NAME }}]
+    - name: Build and push [${{ env.IMAGE_NAME }}]
       uses: docker/build-push-action@v4
       env:
-        DOCKER_IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
+        IMAGE_NAME: ${{ inputs.DOCKER_IMAGE_NAME }}
       with:
-        context: ./docker/${{ env.DOCKER_IMAGE_NAME }}
+        context: ${{ inputs.DOCKER_CONTEXT }}
         # if false it will only build
         push: true
         tags: |
-          ${{ inputs.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-          ${{ inputs.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.get-docker-tag.outputs.tag }}
+          ${{ inputs.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ inputs.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ steps.get-docker-tag.outputs.tag }}
 
     - name: Notification
       uses: hckops/actions/discord-action@main
@@ -73,4 +76,4 @@ runs:
         action: create-message
         webhook-url: ${{ inputs.SECRET_DISCORD_WEBHOOK_URL }}
         # markdown format
-        message: "> Repository:  **${{ github.repository }}**\\n> Docker:\\t\\t [${{ inputs.IMAGE_NAME }}](https://hub.docker.com/r/${{ inputs.DOCKER_REPOSITORY }}/${{ inputs.IMAGE_NAME }})\\n> Status:\\t\\t  **NEW image**"
+        message: "> Repository:  **${{ github.repository }}**\\n> Docker:\\t\\t [${{ inputs.DOCKER_IMAGE_NAME }}](https://hub.docker.com/r/${{ inputs.DOCKER_REPOSITORY }}/${{ inputs.DOCKER_IMAGE_NAME }})\\n> Status:\\t\\t  **NEW image**"
