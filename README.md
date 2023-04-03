@@ -310,13 +310,15 @@ docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "d
 
 > Builds and publishes Docker images
 
-See [composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action), useful to build base images without repetition in combination with [matrixes](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
+See [composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action), useful to build base images in combination with [matrixes](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
 
 ```bash
 - name: Docker CI
   uses: hckops/actions/docker-template-action@main
   with:
     DOCKER_CONTEXT: "./docker/<IMAGE_NAME>"
+    # optional
+    DOCKER_FILE: "Dockerfile"
     DOCKER_IMAGE_NAME: "<IMAGE_NAME>"
     DOCKER_REPOSITORY: "<REPOSITORY_NAME>"
     # optional, default is sha

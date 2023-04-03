@@ -7,6 +7,10 @@ inputs:
   DOCKER_CONTEXT:
     description: 'Path of Dockerfile'
     required: true
+  DOCKER_FILE:
+    description: 'Dockerfile name'
+    required: false
+    default: Dockerfile
   DOCKER_IMAGE_NAME:
     description: 'Docker image name'
     required: true
@@ -70,6 +74,7 @@ runs:
         IMAGE_NAME: ${{ inputs.DOCKER_IMAGE_NAME }}
       with:
         context: ${{ inputs.DOCKER_CONTEXT }}
+        file: ${{ inputs.DOCKER_CONTEXT }}/${{ inputs.DOCKER_FILE }}
         # if false it will only build
         push: true
         tags: |
