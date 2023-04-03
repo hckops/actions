@@ -5,7 +5,7 @@ name: docker-template
 # RUN commands require "shell: bash"
 
 inputs:
-  IMAGE:
+  IMAGE_NAME:
     description: 'Docker image name'
     required: true
   DOCKER_REPOSITORY:
@@ -58,7 +58,7 @@ runs:
     - name: Build and push [${{ env.DOCKER_IMAGE_NAME }}]
       uses: docker/build-push-action@v4
       env:
-        DOCKER_IMAGE_NAME: ${{ inputs.IMAGE }}
+        DOCKER_IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
       with:
         context: ./docker/${{ env.DOCKER_IMAGE_NAME }}
         # if false it will only build
@@ -73,4 +73,4 @@ runs:
         action: create-message
         webhook-url: ${{ inputs.SECRET_DISCORD_WEBHOOK_URL }}
         # markdown format
-        message: "> Repository:  **${{ github.repository }}**\\n> Docker:\\t\\t [${{ inputs.IMAGE }}](https://hub.docker.com/r/${{ inputs.DOCKER_REPOSITORY }}/${{ inputs.IMAGE }})\\n> Status:\\t\\t  **NEW image**"
+        message: "> Repository:  **${{ github.repository }}**\\n> Docker:\\t\\t [${{ inputs.IMAGE_NAME }}](https://hub.docker.com/r/${{ inputs.DOCKER_REPOSITORY }}/${{ inputs.IMAGE_NAME }})\\n> Status:\\t\\t  **NEW image**"
