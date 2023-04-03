@@ -6,6 +6,7 @@
 * [helm-dependencies](#helm-dependencies-action)
 * [helm-lint](#helm-lint-action)
 * [discord](#discord-action)
+* [docker-template](#docker-template-action)
 * [development](#development)
 
 For a working example see [kube-template](https://github.com/hckops/kube-template/blob/main/.github/workflows/kube-do.yml)
@@ -303,6 +304,23 @@ make discord-create webhook=${DISCORD_WEBHOOK_URL} message=test
 
 docker build -t hckops/discord-action ./discord-action
 docker run --rm hckops/discord-action "create-message" ${DISCORD_WEBHOOK_URL} "docker"
+```
+
+### docker-template-action
+
+> Builds and publishes docker images
+
+See [composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action), useful to build base images without repetition in combination with [matrixes](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
+
+```bash
+- name: Docker CI
+  uses: hckops/actions/docker-template-action@main
+  with:
+    IMAGE: "my-image"
+    DOCKER_REPOSITORY: "hckops"
+    SECRET_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    SECRET_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 ```
 
 ## Development
