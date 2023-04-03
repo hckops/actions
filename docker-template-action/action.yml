@@ -22,7 +22,11 @@ inputs:
     required: true
   SECRET_DISCORD_WEBHOOK_URL:
     description: 'Discord webhook url'
-    required: true
+    required: false
+  ENABLE_NOTIFICATION:
+    description: 'Send notification to Discord'
+    required: false
+    default: true
 
 runs:
   using: 'composite'
@@ -71,6 +75,7 @@ runs:
           ${{ inputs.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ steps.get-docker-tag.outputs.tag }}
 
     - name: Notification
+      if: ${{ inputs.ENABLE_NOTIFICATION }}
       uses: hckops/actions/discord-action@main
       with:
         action: create-message
