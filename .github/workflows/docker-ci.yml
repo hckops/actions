@@ -21,7 +21,6 @@ jobs:
     # makes sure it doesn't finish the minutes quota if stalls
     timeout-minutes: 10
 
-    # run jobs in parallel: alternative to loop
     strategy:
       matrix:
         images:
@@ -46,13 +45,14 @@ jobs:
           SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   
   docker-all:
-    # run in sequence: depends on previous job
+    # runs in sequence: depends on previous jobs to complete
     needs: docker-base
 
     name: Docker all
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    # runs jobs in parallel: alternative to loop
     strategy:
       matrix:
         images:
