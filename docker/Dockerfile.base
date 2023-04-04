@@ -2,11 +2,11 @@
 FROM alpine:3.17
 
 # https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.26.2
+ARG KUBECTL_VERSION=1.26.3
 # https://github.com/ahmetb/kubectx/releases
 ARG KUBECTX_VERSION=0.9.4
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.11.1
+ARG HELM_VERSION=3.11.2
 
 RUN apk upgrade --update && apk --no-cache add \
   git \
