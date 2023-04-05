@@ -17,6 +17,10 @@ inputs:
   DOCKER_REPOSITORY:
     description: 'Docker repository name'
     required: true
+  DOCKER_TAG_PREFIX:
+    description: 'Tag prefix to strip out'
+    required: false
+    default: 'v'
   DOCKER_DEFAULT_TAG:
     description: 'Default Docker tag'
     required: false
@@ -44,11 +48,13 @@ runs:
       env:
         GITHUB_REF: ${{ github.ref }}
         COMMIT_SHA: ${{ github.sha }}
+        TAG_PREFIX: ${{ inputs.DOCKER_TAG_PREFIX }}
         DEFAULT_TAG: ${{ inputs.DOCKER_DEFAULT_TAG }}
       shell: bash
+      # see https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
       run: |
         if [[ ${{ github.ref_type }} == "tag" ]]; then
-          echo "tag=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
+          echo "tag=${GITHUB_REF#refs/tags/$TAG_PREFIX}" >> ${GITHUB_OUTPUT}
         elif [[ ${DEFAULT_TAG} == "" ]]; then
           echo "tag=${COMMIT_SHA:0:7}" >> ${GITHUB_OUTPUT}
         else

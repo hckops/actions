@@ -35,11 +35,12 @@ jobs:
       - name: Docker CI
         uses: ./docker-template-action
         with:
-          # default tag is sha
           DOCKER_CONTEXT: ./docker
           DOCKER_FILE: ${{ matrix.images.file }}
           DOCKER_IMAGE_NAME: ${{ matrix.images.name }}
           DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
+          # default tag is sha
+          DOCKER_TAG_PREFIX: 'docker-'
           # repository secrets: gh-actions-rw
           SECRET_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -74,6 +75,7 @@ jobs:
           DOCKER_FILE: ${{ matrix.images.file }}
           DOCKER_IMAGE_NAME: ${{ matrix.images.name }}
           DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
+          DOCKER_TAG_PREFIX: 'docker-'
           SECRET_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           SECRET_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
