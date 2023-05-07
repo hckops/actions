@@ -366,6 +366,11 @@ Actions to update when a new docker tag is created
 * `kube-do-action`
 * `kube-secrets-action`
 
+```bash
+# bump all images
+make update-version old="<OLD_VERSION>" new="<NEW_VERSION>"
+```
+
 ### minikube
 
 * [Documentation](https://minikube.sigs.k8s.io)

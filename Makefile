@@ -46,3 +46,9 @@ bootstrap: require-helm require-kubectl
 .PHONY: discord-create
 discord-create: require-curl check-param-webhook check-param-message
 	./discord-action/entrypoint.sh "create-message" ${webhook} ${message}
+
+##############################
+
+.PHONY: update-version
+update-version: check-param-old check-param-new
+	grep -l -r ${old} */Dockerfile | xargs sed -i 's/${old}/${new}/'
