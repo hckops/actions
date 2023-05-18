@@ -349,6 +349,9 @@ docker run --rm --name hck-tmp -it hckops/kube-<base|argo|aws|do>
 
 How to publish docker images
 ```bash
+# list latest tags
+curl -sS "https://api.github.com/repos/hckops/actions/tags" | jq '.[].name'
+
 # publish with action
 git tag docker-X.Y.Z
 git push origin --tags
