@@ -1,4 +1,4 @@
-FROM hckops/kube-base:0.4.10
+FROM hckops/kube-base:0.4.11
 
 # https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
