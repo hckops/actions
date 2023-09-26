@@ -2,7 +2,7 @@
 FROM alpine:3.18
 
 # https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.28.1
+ARG KUBECTL_VERSION=1.28.2
 # https://github.com/ahmetb/kubectx/releases
 ARG KUBECTX_VERSION=0.9.5
 # https://github.com/helm/helm/releases
