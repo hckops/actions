@@ -1,4 +1,4 @@
-FROM hckops/kube-base:0.4.14
+FROM hckops/kube-base:0.4.15
 
 COPY entrypoint.sh /entrypoint.sh
 
