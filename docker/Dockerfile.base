@@ -3,10 +3,15 @@ FROM alpine:3.18
 
 # https://github.com/kubernetes/kubernetes/releases
 ARG KUBECTL_VERSION=1.28.2
+# https://github.com/kubernetes-sigs/krew/releases
+ARG KREW_VERSION=0.4.4
 # https://github.com/ahmetb/kubectx/releases
 ARG KUBECTX_VERSION=0.9.5
 # https://github.com/helm/helm/releases
 ARG HELM_VERSION=3.12.3
+
+ENV KUBECONFIG="/root/.kube/config"
+ENV KREW_ROOT="/root/.krew"
 
 RUN apk upgrade --update && apk --no-cache add \
   git \
@@ -21,9 +26,16 @@ RUN apk upgrade --update && apk --no-cache add \
 # kubectl
 RUN curl -sSL "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && \
   curl -sSL "https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl.sha256" -o /tmp/kubectl.sha256 && \
-  echo "$(cat /tmp/kubectl.sha256)  /usr/local/bin/kubectl" | sha256sum -c && \
+  echo "$(cat /tmp/kubectl.sha256)  /usr/local/bin/kubectl" | sha256sum -c && rm /tmp/kubectl.sha256 && \
   chmod +x /usr/local/bin/kubectl && \
   kubectl version --client --output=json
+
+# krew and klock plugin
+RUN TMPDIR="$(mktemp -d)" && \
+  curl -sSL "https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew-linux_amd64.tar.gz" | tar -xzf - -C ${TMPDIR} && \
+  "${TMPDIR}/krew-linux_amd64" install krew && \
+  rm -frv ${TMPDIR} && PATH="${KREW_ROOT}/bin:$PATH" && kubectl krew version && \
+  kubectl krew install klock
 
 # kubectx and kubens
 RUN curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_x86_64.tar.gz" | tar -xzf - -C /usr/local/bin && \

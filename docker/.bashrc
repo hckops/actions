@@ -15,3 +15,6 @@ function kube_context_prompt() {
   [[ -f "$KUBECONFIG" ]] && echo "($(kubectx -c)|$(kubens -c)) " || echo ""
 }
 export PS1="${_YELLOW}\$(kube_context_prompt)${_BLUE}\u${_DEFAULT}@\h ${_GREEN}\w${_DEFAULT} \$ "
+
+# PATH
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

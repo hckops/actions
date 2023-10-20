@@ -21,6 +21,7 @@ docker-build: require-docker
 	./scripts/docker_apply.sh "build" "base"
 	./scripts/docker_apply.sh "build" "do"
 	./scripts/docker_apply.sh "build" "aws"
+	./scripts/docker_apply.sh "build" "argo"
 
 # use "@" prefix to don't print command
 .PHONY: docker-login
@@ -32,6 +33,7 @@ docker-publish: require-docker check-param-version docker-login docker-build
 	./scripts/docker_apply.sh "publish" "base" ${version}
 	./scripts/docker_apply.sh "publish" "do" ${version}
 	./scripts/docker_apply.sh "publish" "aws" ${version}
+	./scripts/docker_apply.sh "publish" "argo" ${version}
 
 .PHONY: docker-clean
 docker-clean: require-docker
