@@ -2,13 +2,13 @@
 FROM alpine:3.19
 
 # https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.29.0
+ARG KUBECTL_VERSION=1.30.0
 # https://github.com/kubernetes-sigs/krew/releases
 ARG KREW_VERSION=0.4.4
 # https://github.com/ahmetb/kubectx/releases
 ARG KUBECTX_VERSION=0.9.5
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.13.3
+ARG HELM_VERSION=3.14.4
 
 ENV KUBECONFIG="/root/.kube/config"
 ENV KREW_ROOT="/root/.krew"
