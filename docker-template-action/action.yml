@@ -40,7 +40,7 @@ runs:
   steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # extracts tag from ref, returns semver tag or sha suffix or default tag
     - name: Get Docker tag
