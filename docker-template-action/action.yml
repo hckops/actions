@@ -8,7 +8,7 @@ inputs:
     description: 'Path of Dockerfile'
     required: true
   DOCKER_PLATFORMS:
-    description: 'Docker buildx platforms'
+    description: 'Multi-platform'
     required: false
     default: 'linux/amd64,linux/arm64'
   DOCKER_FILE:
