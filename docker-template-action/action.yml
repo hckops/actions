@@ -10,6 +10,7 @@ inputs:
   DOCKER_PLATFORMS:
     description: 'Docker buildx platforms'
     required: false
+    default: 'linux/amd64,linux/arm64'
   DOCKER_FILE:
     description: 'Dockerfile name'
     required: false
