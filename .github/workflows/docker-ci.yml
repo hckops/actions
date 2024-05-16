@@ -36,6 +36,7 @@ jobs:
         uses: ./docker-template-action
         with:
           DOCKER_CONTEXT: ./docker
+          DOCKER_PLATFORMS: linux/amd64,linux/arm64
           DOCKER_FILE: ${{ matrix.images.file }}
           DOCKER_IMAGE_NAME: ${{ matrix.images.name }}
           DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
@@ -72,6 +73,7 @@ jobs:
         uses: ./docker-template-action
         with:
           DOCKER_CONTEXT: ./docker
+          DOCKER_PLATFORMS: linux/amd64,linux/arm64
           DOCKER_FILE: ${{ matrix.images.file }}
           DOCKER_IMAGE_NAME: ${{ matrix.images.name }}
           DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
