@@ -1,7 +1,7 @@
 FROM hckops/kube-base
 
 # https://github.com/weaveworks/eksctl/releases
-ARG EKSCTL_VERSION=0.175.0
+ARG EKSCTL_VERSION=0.177.0
 
 # eksctl
 RUN curl -sSL "https://github.com/weaveworks/eksctl/releases/download/v${EKSCTL_VERSION}/eksctl_$(uname -s)_amd64.tar.gz" | tar -xzf - -C /usr/local/bin && \

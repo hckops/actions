@@ -1,7 +1,7 @@
 FROM hckops/kube-base
 
 # https://github.com/argoproj/argo-cd/releases
-ARG ARGO_CD_VERSION=2.10.7
+ARG ARGO_CD_VERSION=2.11.0
 # https://github.com/argoproj/argo-workflows/releases
 ARG ARGO_WORKFLOWS_VERSION=3.5.6
 
