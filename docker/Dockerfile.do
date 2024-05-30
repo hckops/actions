@@ -4,5 +4,5 @@ FROM hckops/kube-base
 ARG DOCTL_VERSION=1.106.0
 
 # doctl
-RUN curl -sSL "https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-amd64.tar.gz" | tar -xzf - -C /usr/local/bin && \
+RUN curl -sSL "https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-$(uname -m | sed s/x86_64/amd64/).tar.gz" | tar -xzf - -C /usr/local/bin && \
   doctl version
