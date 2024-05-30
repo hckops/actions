@@ -24,8 +24,8 @@ RUN apk upgrade --update && apk --no-cache add \
   openssl
 
 # kubectl
-RUN curl -sSL "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/$(uname -m | sed s/x86_64/amd64/;s/aarch64/arm64/)/kubectl" -o /usr/local/bin/kubectl && \
-  curl -sSL "https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/$(uname -m | sed s/x86_64/amd64/;s/aarch64/arm64/)/kubectl.sha256" -o /tmp/kubectl.sha256 && \
+RUN curl -sSL "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')/kubectl" -o /usr/local/bin/kubectl && \
+  curl -sSL "https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')/kubectl.sha256" -o /tmp/kubectl.sha256 && \
   echo "$(cat /tmp/kubectl.sha256)  /usr/local/bin/kubectl" | sha256sum -c && rm /tmp/kubectl.sha256 && \
   chmod +x /usr/local/bin/kubectl && \
   kubectl version --client --output=json
