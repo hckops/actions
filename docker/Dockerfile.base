@@ -40,8 +40,8 @@ RUN TMPDIR="$(mktemp -d)" && \
   kubectl krew install klock
 
 # kubectx and kubens
-RUN curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_$(cat /tmp/bin-arch).tar.gz" | tar -xzf - -C /usr/local/bin && \
-  curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubens_v${KUBECTX_VERSION}_linux_$(cat /tmp/bin-arch).tar.gz" | tar -xzf - -C /usr/local/bin
+RUN curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_$(uname -m).tar.gz" | tar -xzf - -C /usr/local/bin && \
+  curl -sSL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubens_v${KUBECTX_VERSION}_linux_$(uname -m).tar.gz" | tar -xzf - -C /usr/local/bin
 
 # helm
 RUN curl -sSL "https://git.io/get_helm.sh" | bash -s -- --version "v${HELM_VERSION}" && \
