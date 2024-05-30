@@ -13,7 +13,7 @@ ARG HELM_VERSION=3.15.0
 ENV KUBECONFIG="/root/.kube/config"
 ENV KREW_ROOT="/root/.krew"
 
-RUN echo "$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')" > /tmp/bin-arch
+RUN echo "$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')" > /tmp/bin-arch && cat /tmp/bin-arch
 
 RUN apk upgrade --update && apk --no-cache add \
   git \
