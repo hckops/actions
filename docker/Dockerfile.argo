@@ -5,12 +5,14 @@ ARG ARGO_CD_VERSION=2.11.0
 # https://github.com/argoproj/argo-workflows/releases
 ARG ARGO_WORKFLOWS_VERSION=3.5.6
 
+ENV BIN_ARCH="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')"
+
 # argo-cd
-RUN curl -sSL "https://github.com/argoproj/argo-cd/releases/download/v${ARGO_CD_VERSION}/argocd-linux-$(uname -m | sed s/x86_64/amd64/)" -o /usr/local/bin/argocd && \
+RUN curl -sSL "https://github.com/argoproj/argo-cd/releases/download/v${ARGO_CD_VERSION}/argocd-linux-${BIN_ARCH}" -o /usr/local/bin/argocd && \
   chmod +x /usr/local/bin/argocd && \
   argocd version --client --output=json
 
 # argo-workflows
-RUN curl -sSL -o - "https://github.com/argoproj/argo-workflows/releases/download/v${ARGO_WORKFLOWS_VERSION}/argo-linux-$(uname -m | sed s/x86_64/amd64/).gz" | gunzip > /usr/local/bin/argo && \
+RUN curl -sSL -o - "https://github.com/argoproj/argo-workflows/releases/download/v${ARGO_WORKFLOWS_VERSION}/argo-linux-${BIN_ARCH}.gz" | gunzip > /usr/local/bin/argo && \
   chmod +x /usr/local/bin/argo && \
   argo version
