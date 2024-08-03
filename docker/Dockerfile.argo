@@ -1,9 +1,9 @@
 FROM hckops/kube-base
 
 # https://github.com/argoproj/argo-cd/releases
-ARG ARGO_CD_VERSION=2.11.2
+ARG ARGO_CD_VERSION=2.11.7
 # https://github.com/argoproj/argo-workflows/releases
-ARG ARGO_WORKFLOWS_VERSION=3.5.7
+ARG ARGO_WORKFLOWS_VERSION=3.5.10
 
 RUN echo "$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')" > /tmp/bin-arch
 
