@@ -114,11 +114,13 @@ function doctl_cluster {
       local CLUSTER_COUNT=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.count')
       local CLUSTER_REGION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.region')
       local CLUSTER_SIZE=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.size')
-      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.version // "default"')
+      local CLUSTER_LATEST_VERSION=$(doctl kubernetes options versions | tail -n +2 | head -n 1 | awk '{print $1}')
+      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} ".digitalocean.cluster.version // ${CLUSTER_LATEST_VERSION}")
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
       echo "[-] CLUSTER_SIZE=${CLUSTER_SIZE}"
+      echo "[-] CLUSTER_LATEST_VERSION=${CLUSTER_LATEST_VERSION}"
       echo "[-] CLUSTER_VERSION=${CLUSTER_VERSION}"
       echo "[-] CLUSTER_TAGS=${CLUSTER_TAGS}"
 

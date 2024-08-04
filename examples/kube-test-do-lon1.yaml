@@ -19,7 +19,7 @@ digitalocean:
     region: lon1
     # node types
     size: s-1vcpu-2gb
-    # by default use "latest" version
+    # by default use latest version
     version: 1.29.6-do.0
     # TODO not implemented: by default is tagged automatically with the GitOps repository
     tags: []
