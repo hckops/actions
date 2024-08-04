@@ -111,12 +111,11 @@ function doctl_cluster {
 
   case ${PARAM_ACTION} in
     "create")
-      doctl kubernetes options versions --access-token ${PARAM_ACCESS_TOKEN}
-
       local CLUSTER_COUNT=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.count')
       local CLUSTER_REGION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.region')
       local CLUSTER_SIZE=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.size')
-      local CLUSTER_LATEST_VERSION=$(doctl kubernetes options versions | tail -n +2 | head -n 1 | awk '{print $1}')
+      local CLUSTER_LATEST_VERSION=$(doctl kubernetes options versions --access-token ${PARAM_ACCESS_TOKEN} | \
+        tail -n +2 | head -n 1 | awk '{print $1}')
       local VERSION_PATH=".digitalocean.cluster.version // ${CLUSTER_LATEST_VERSION}"
       local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} ${VERSION_PATH})
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
