@@ -111,7 +111,8 @@ function doctl_cluster {
 
   case ${PARAM_ACTION} in
     "create")
-      doctl kubernetes options versions
+      doctl kubernetes options versions --access-token ${PARAM_ACCESS_TOKEN}
+
       local CLUSTER_COUNT=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.count')
       local CLUSTER_REGION=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.region')
       local CLUSTER_SIZE=$(get_config ${CONFIG_PATH} '.digitalocean.cluster.size')
