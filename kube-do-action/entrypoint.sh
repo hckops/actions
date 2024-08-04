@@ -118,7 +118,7 @@ function doctl_cluster {
         tail -n +2 | head -n 1 | awk '{print $1}')
       local VERSION_PATH=".digitalocean.cluster.version // \"${CLUSTER_LATEST_VERSION}\""
       echo "[-] VERSION_PATH=${VERSION_PATH}"
-      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} ${VERSION_PATH})
+      local CLUSTER_VERSION=$(get_config ${CONFIG_PATH} "'${VERSION_PATH}'")
       local CLUSTER_TAGS="repository:${REPOSITORY_NAME}"
       echo "[-] CLUSTER_COUNT=${CLUSTER_COUNT}"
       echo "[-] CLUSTER_REGION=${CLUSTER_REGION}"
