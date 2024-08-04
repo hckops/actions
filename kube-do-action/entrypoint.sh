@@ -57,8 +57,8 @@ function download_file {
 # param #2: <string>
 function get_config {
   local CONFIG_PATH=$1
-  echo "${JQ_PATH}"
   local JQ_PATH=$2
+  echo "${JQ_PATH}"
 
   # JQ_PATH must be between quotes due to "default" issue
   echo $(yq -o=json '.' "${CONFIG_PATH}" | jq -r "${JQ_PATH}")
