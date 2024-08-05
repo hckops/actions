@@ -164,7 +164,7 @@ function doctl_cluster {
 
       doctl kubernetes cluster delete-selective ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
-        --volume-list "${VOLUME_IDS}" \
+        --volumes ${VOLUME_IDS} \
         --force
 
       # if [[ ${VOLUME_IDS} == "" ]]; then
