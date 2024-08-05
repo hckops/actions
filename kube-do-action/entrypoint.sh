@@ -159,10 +159,12 @@ function doctl_cluster {
       local VOLUME_IDS=$(doctl kubernetes cluster list-associated-resources ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
         --format Volumes --no-header --output json | jq -r '.volumes[].id' | paste -s -d',')
-      
+
+      echo "[-] VOLUME_IDS=${VOLUME_IDS}"
+
       doctl kubernetes cluster delete-selective ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
-        --volume-list ${VOLUME_IDS} \
+        --volume-list "${VOLUME_IDS}" \
         --force
 
       # if [[ ${VOLUME_IDS} == "" ]]; then
