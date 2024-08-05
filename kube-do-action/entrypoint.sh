@@ -149,9 +149,36 @@ function doctl_cluster {
       echo "kubeconfig=${KUBE_CONFIG}" >> ${GITHUB_OUTPUT}
     ;;
     "delete")
-      doctl kubernetes cluster delete ${CLUSTER_NAME} \
+
+      # >>> close https://github.com/hckops/actions/issues/27
+      # update readme in kotlin-fun
+      # >>> TODO test with empty list if valid --volume-list ""
+      # >>> TODO test config with "FALSE"
+
+      # returns comma separated values of volume ids
+      local VOLUME_IDS=$(doctl kubernetes cluster list-associated-resources ${CLUSTER_NAME} \
         --access-token ${PARAM_ACCESS_TOKEN} \
+        --format Volumes --no-header --output json | jq -r '.volumes[].id' | paste -s -d',')
+      
+      doctl kubernetes cluster delete-selective ${CLUSTER_NAME} \
+        --access-token ${PARAM_ACCESS_TOKEN} \
+        --volume-list ${VOLUME_IDS} \
         --force
+
+      # if [[ ${VOLUME_IDS} == "" ]]; then
+      #   echo "[-] no VOLUME_IDS found"
+
+      #   doctl kubernetes cluster delete ${CLUSTER_NAME} \
+      #     --access-token ${PARAM_ACCESS_TOKEN} \
+      #     --force
+      # else
+      #   echo "[-] VOLUME_IDS=${VOLUME_IDS}"
+
+      #   doctl kubernetes cluster delete-selective ${CLUSTER_NAME} \
+      #     --access-token ${PARAM_ACCESS_TOKEN} \
+      #     --volume-list ${VOLUME_IDS} \
+      #     --force
+      # fi
     ;;
     *)
       echo "ERROR: unknown command"

@@ -33,6 +33,9 @@ digitalocean:
     loadBalancer:
       # when true and the cluster is deleted, removes the load balancer associated to the domain name
       managed: true
+  volumes:
+    # when true and the cluster is deleted, removes all the volumes, default is true
+    managed: true
 
 # OPTIONAL: all fields are optional
 bootstrap:
