@@ -16,7 +16,7 @@ jobs:
     steps:
       # required to access cluster definition
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Provision
         uses: ./kube-do-action
